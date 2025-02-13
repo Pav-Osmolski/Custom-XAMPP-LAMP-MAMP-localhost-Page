@@ -6,14 +6,29 @@
     <title>Pav's localhost</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
         :root {
             --background-color: #121212e8;
+            --light-mode-bg-overlay: #e7e6f0d9;
             --text-color: #e0dde8;
             --header-background-color: #1d1c1fe8;
-            --border-color: #444444;
+            --border-color: #444;
             --link-color: #4672c9;
             --hover-color: #f15e83;
+            --input-bg: #1d1c1f;
+            --input-text: #e0dde8;
+            --input-placeholder: #888;
         }
+
+        .light-mode {
+            --background-color: #f0f0f0;
+            --text-color: #2a3246;
+            --header-background-color: #dfdde6;
+            --border-color: #626798;
+            --input-bg: #fbf9ff;
+            --input-text: #2a3246;
+        }
+
         body {
             font-family: 'Ubuntu', sans-serif;
             background-color: var(--background-color);
@@ -23,17 +38,31 @@
             height: 100vh;
             overflow-x: hidden;
         }
+
         .background-image {
             background-image: url(/img/background.jpg);
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
+        .light-mode.background-image::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--light-mode-bg-overlay);
+            z-index: -1;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
             /* height: 100vh; */
         }
+
         header {
             padding: 15px;
             background-color: var(--header-background-color);
@@ -48,48 +77,93 @@
             top: 0;
             z-index: 1000;
         }
+
+        .search-bar {
+            font-family: 'Ubuntu', sans-serif;
+            width: 100%;
+            max-width: 300px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--input-text);
+        }
+
+        .search-bar::placeholder {
+            color: var(--input-placeholder);
+        }
+
         header h1, .folders a, a {
             color: var(--link-color);
-            /* animation: hueCycle 10s infinite; */ /* Animation */
+            /* animation: hueCycle 10s infinite; */
         }
+
         header h1 {
             margin: 0;
             font-family: 'Ubuntu', sans-serif;
         }
+
         header .clock {
             font-size: 2.2em;
             font-weight: 700;
         }
+
         .server-info {
             flex: none;
             text-align: right;
+            font-size: 14px;
+            /* bottom: -7px; */
+            position: relative;
         }
+
         section {
             flex: 1;
             padding: 20px 20px 123px;
             animation: fadeIn 1.5s ease-in;
         }
+
         .columns {
             display: flex;
             gap: 30px;
         }
+
         .column {
             flex: 1;
             background-color: var(--header-background-color);
             padding: 10px;
             border-radius: 8px;
         }
+
+        .column h3 a {
+            color: var(--text-color);
+        }
+
         .folders ul {
             list-style: none;
             padding: 0;
         }
+
         .folders li {
             margin: 5px 0;
+            gap: 20px;
         }
+
         .folders a {
             text-decoration: none;
             font-weight: bold;
         }
+
+        .folder-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .url-container {
+            display: flex;
+            gap: 10px;
+        }
+
         footer {
             padding: 20px;
             background-color: var(--header-background-color);
@@ -104,19 +178,47 @@
             box-sizing: border-box;
             overflow: hidden;
         }
+
         footer p {
             font-style: italic;
         }
+
         footer a {
             font-weight: bold;
+            margin: 0 5px;
         }
+
         a {
             text-decoration: none;
             transition: color 0.3s;
         }
+
         a:hover {
             text-decoration: none;
-            color: var(--hover-color);
+            color: var(--hover-color) !important;
+        }
+
+        .toggle-theme {
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            border-radius: 5px;
+            flex: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 11px;
+        }
+
+        .emoji {
+            filter: hue-rotate(170deg) saturate(0.4) brightness(0.8);
+        }
+
+        .light-mode .emoji {
+            filter: none;
         }
 
         /* Media breakpoints */
@@ -124,10 +226,17 @@
             header h1 {
                 animation: fadeOut 0.5s forwards;
             }
+
             .columns {
                 flex-direction: column;
             }
+
+            .toggle-theme {
+                position: static;
+                transform: none;
+            }
         }
+
         @media (min-width: 901px) {
             header h1 {
                 animation: fadeIn 0.5s forwards;
@@ -145,6 +254,7 @@
                 opacity: 1;
             }
         }
+
         @keyframes fadeOut {
             from {
                 opacity: 1;
@@ -165,6 +275,7 @@
                 display: block;
             }
         }
+
         @keyframes slideInUp {
             from {
                 transform: translateY(100%);
@@ -175,6 +286,7 @@
                 opacity: 1;
             }
         }
+
         @keyframes hueCycle {
             0% {
                 color: #4672c9;
@@ -190,128 +302,142 @@
     <script>
         function updateClock() {
             const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            document.querySelector('.clock').textContent = `${hours}:${minutes}:${seconds}`;
+            const hours = now.getHours().toString().padStart( 2, '0' );
+            const minutes = now.getMinutes().toString().padStart( 2, '0' );
+            const seconds = now.getSeconds().toString().padStart( 2, '0' );
+            document.querySelector( '.clock' ).textContent = `${ hours }:${ minutes }:${ seconds }`;
         }
-        setInterval(updateClock, 1000);
-        document.addEventListener('DOMContentLoaded', updateClock);
+
+        setInterval( updateClock, 1000 );
+        document.addEventListener( 'DOMContentLoaded', updateClock );
+
+        function toggleTheme() {
+            document.body.classList.toggle( 'light-mode' );
+        }
+
+        function searchProjects() {
+            let input = document.querySelector( '.search-bar' ).value.toLowerCase();
+            let items = document.querySelectorAll( '.folders li' );
+
+            items.forEach( item => {
+                let text = item.textContent.toLowerCase();
+                if ( text.includes( input ) ) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            } );
+        }
     </script>
 </head>
 <body class="background-image">
-    <div class="container">
-        <header>
-            <h1>localhost is up and running! 👨🏻‍💻</h1>
-            <div class="clock"></div>
-            <div class="server-info">
-                <?php
-                    include 'config.php';
+<div class="container">
+    <header>
+        <h1>localhost is ready, Pav! 👨🏻‍💻</h1>
+        <input type="text" class="search-bar" placeholder="Search projects..." onkeyup="searchProjects()">
+        <div class="clock"></div>
+        <div class="server-info">
+            <?php
+            include 'config.php';
 
-                    // Get the Apache version using shell_exec and the full path to httpd.exe
-                    $apacheVersion = shell_exec('C:\\xampp\\apache\\bin\\httpd.exe -v');
-                    if ($apacheVersion) {
-                        // Extract the version from the output
-                        if (preg_match('/Server version: Apache\/([0-9\.]+)/', $apacheVersion, $matches)) {
-                            echo 'Apache: ' . $matches[1] . ' ✔️<br>';
-                        } else {
-                            echo 'Apache: Could not extract version info ❌<br>';
-                        }
-                    } else {
-                        echo 'Apache: Not available ❌<br>';
+            // Get the Apache version using shell_exec and the full path to httpd.exe
+            $apacheVersion = shell_exec( 'C:\\xampp\\apache\\bin\\httpd.exe -v' );
+            if ( $apacheVersion ) {
+                // Extract the version from the output
+                if ( preg_match( '/Server version: Apache\/([0-9\.]+)/', $apacheVersion, $matches ) ) {
+                    echo 'Apache: ' . $matches[1] . ' ✔️<br>';
+                } else {
+                    echo 'Apache: Could not extract version info ❌<br>';
+                }
+            } else {
+                echo 'Apache: Not available ❌<br>';
+            }
+
+            // Check if PHP version is detected
+            $phpVersion = phpversion();
+            if ( $phpVersion === false ) {
+                echo 'Error: PHP version not detected ❌<br>';
+            } else {
+                echo 'PHP: <a href="/dashboard/phpinfo.php">' . $phpVersion . '</a> ✔️<br>';
+
+                try {
+                    // Create a connection to the MySQL server
+                    $mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD );
+
+                    // Check for connection errors
+                    if ( $mysqli->connect_error ) {
+                        throw new Exception( "Connection failed: " . $mysqli->connect_error );
                     }
 
-                    // Check if PHP version is detected
-                    $phpVersion = phpversion();
-                    if ($phpVersion === false) {
-                        echo 'Error: PHP version not detected ❌<br>';
-                    } else {
-                        echo 'PHP: <a href="/dashboard/phpinfo.php">' . $phpVersion . '</a> ✔️<br>';
+                    // Get the MySQL version
+                    $mysqlVersion = $mysqli->server_info;
 
-                        try {
-                            // Create a connection to the MySQL server
-                            $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
+                    // Output the MySQL version
+                    echo "MySQL: " . $mysqlVersion . " ✔️<br>";
 
-                            // Check for connection errors
-                            if ($mysqli->connect_error) {
-                                throw new Exception("Connection failed: " . $mysqli->connect_error);
-                            }
+                    // Close the connection
+                    $mysqli->close();
+                } catch ( mysqli_sql_exception $e ) {
+                    echo "Error: " . $e->getMessage() . " ❌<br>";
+                } catch ( Exception $e ) {
+                    echo "Unexpected error: " . $e->getMessage() . " ❌<br>";
+                }
+            };
+            ?>
+        </div>
+    </header>
+    <section class="folders">
+        <h2>Document Folders</h2>
+        <div class="columns">
+            <div class="column">
+                <h3>Miscellaneous 🤷🏻‍♂️</h3>
+                <ul>
+                    <?php
+                        $dir     = './projects/Other/';
+                        $folders = array_filter(glob($dir . '*'), 'is_dir');
+                        foreach ($folders as $folder) {
+                            $folderName = basename($folder);
 
-                            // Get the MySQL version
-                            $mysqlVersion = $mysqli->server_info;
-
-                            // Output the MySQL version
-                            echo "MySQL: " . $mysqlVersion . " ✔️<br>";
-
-                            // Close the connection
-                            $mysqli->close();
-                        } catch (mysqli_sql_exception $e) {
-                            echo "Error: " . $e->getMessage() . " ❌<br>";
-                        } catch (Exception $e) {
-                            echo "Unexpected error: " . $e->getMessage() . " ❌<br>";
+                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
                         }
-                    };
-                ?>
+                    ?>
+                </ul>
             </div>
-        </header>
-        <section class="folders">
-            <h2>Document Folders</h2>
-            <div class="columns">
-                <div class="column">
-                    <h3>Other Folders 🤷🏻‍♂️</h3>
-                    <ul>
-                        <?php
-                            $dir = './projects/Other/';
-                            $folders = array_filter(glob($dir . '*'), 'is_dir');
-                            foreach ($folders as $folder) {
-                                $folderName = basename($folder);
+            <div class="column">
+                <h3><a href="">GitHub</a> 🚀</h3>
+                <ul>
+                    <?php
+                        $dir     = './projects/GitHub/';
+                        $folders = array_filter(glob($dir . '*'), 'is_dir');
+                        foreach ($folders as $folder) {
+                            $folderName = basename($folder);
 
-                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                            }
-                        ?>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h3>WP Folders 🚀</h3>
-                    <ul>
-                        <?php
-                            $dir = './projects/WP/';
-                            $excludeList = ['example1', 'example2']; // Add folder names you want to exclude
-                            $folders = array_filter(glob($dir . '*'), 'is_dir');
-                            
-                            foreach ($folders as $folder) {
-                                $folderName = basename($folder);
-
-                                // Check if the folder is in the exclusion list
-                                if (in_array($folderName, $excludeList)) {
-                                    continue;
-                                }
-
-                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                            }
-                        ?>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h3>Pantheon Folders 🏛️</h3>
-                    <ul>
-                        <?php
-                            $dir = './projects/Pantheon/';
-                            $folders = array_filter(glob($dir . '*'), 'is_dir');
-                            foreach ($folders as $folder) {
-                                $folderName = basename($folder);
-
-                                echo "<li><a href=\"http://local.pantheon.$folderName.com\">$folderName</a></li>";
-                            }
-                        ?>
-                    </ul>
-                </div>
+                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                        }
+                    ?>
+                </ul>
             </div>
-        </section>
-        <footer>
-            <a href="/dashboard/">XAMPP Dashboard</a> | <a href="/phpmyadmin/">PHPMyAdmin</a>
-            <p>“It’s not a bug. It’s an undocumented feature!”</p>
-        </footer>
-    </div>
+            <div class="column">
+                <h3><a href="">Pantheon</a> 🏛️</h3>
+                <ul>
+                    <?php
+                        $dir     = './projects/Pantheon/';
+                        $folders = array_filter(glob($dir . '*'), 'is_dir');
+                        foreach ($folders as $folder) {
+                            $folderName = basename($folder);
+
+                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                        }
+                    ?>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <a href="/dashboard/">Dashboard</a> | <a href="/phpmyadmin/">PHPMyAdmin</a>
+        <button class="toggle-theme" onclick="toggleTheme()"><span class="emoji">🌙 ☀️</span></button>
+        <p>“It’s not a bug. It’s an undocumented feature!”</p>
+    </footer>
+</div>
 </body>
 </html>
