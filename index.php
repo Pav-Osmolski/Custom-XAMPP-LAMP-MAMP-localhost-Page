@@ -356,9 +356,21 @@
         setInterval( updateClock, 1000 );
         document.addEventListener( 'DOMContentLoaded', updateClock );
 
-        function toggleTheme() {
-            document.body.classList.toggle( 'light-mode' );
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const theme = localStorage.getItem("theme");
+            if (theme === "light") {
+                document.body.classList.add("light-mode");
+            }
+
+            document.querySelector(".toggle-theme").addEventListener("click", function () {
+                document.body.classList.toggle("light-mode");
+                if (document.body.classList.contains("light-mode")) {
+                    localStorage.setItem("theme", "light");
+                } else {
+                    localStorage.setItem("theme", "dark");
+                }
+            });
+        });
 
         function searchProjects() {
             let input = document.querySelector( '.search-bar' ).value.toLowerCase();
@@ -493,7 +505,7 @@
     </main>
     <footer role="contentinfo">
         <a href="/dashboard/">Dashboard</a> | <a href="/phpmyadmin/">PHPMyAdmin</a>
-        <button class="toggle-theme" onclick="toggleTheme()"><span class="emoji">🌙 ☀️</span></button>
+        <button class="toggle-theme"><span class="emoji">🌙 ☀️</span></button>
         <p><span class="quote">“</span>It’s not a bug. It’s an undocumented feature!<span class="quote">”</span></p>
     </footer>
 </div>
