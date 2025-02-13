@@ -377,10 +377,10 @@
 </head>
 <body class="background-image">
 <div class="container">
-    <header>
+    <header role="banner">
         <h1>localhost is ready, Pav! 👨🏻‍💻</h1>
-        <input type="text" class="search-bar" placeholder="Search projects..." onkeyup="searchProjects()">
-        <div class="clock"></div>
+        <input type="text" class="search-bar" placeholder="Search projects..." onkeyup="searchProjects()" aria-label="Search projects">
+        <div class="clock" aria-live="polite"></div>
         <div class="server-info">
             <?php
             include 'config.php';
@@ -431,65 +431,67 @@
             ?>
         </div>
     </header>
-    <section class="folders">
-        <h2>Document Folders</h2>
-        <div class="columns">
-            <div class="column">
-                <h3>Miscellaneous 🤷🏻‍♂️</h3>
-                <ul>
-                    <?php
-                        $dir     = './projects/Other/';
-                        $folders = array_filter(glob($dir . '*'), 'is_dir');
-                        foreach ($folders as $folder) {
-                            $folderName = basename($folder);
+    <main role="main">
+        <section class="folders">
+            <h2>Document Folders</h2>
+            <div class="columns">
+                <div class="column">
+                    <h3>Miscellaneous 🤷🏻‍♂️</h3>
+                    <ul>
+                        <?php
+                            $dir     = './projects/Other/';
+                            $folders = array_filter(glob($dir . '*'), 'is_dir');
+                            foreach ($folders as $folder) {
+                                $folderName = basename($folder);
 
-                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                        }
-                    ?>
-                </ul>
-            </div>
-            <div class="column">
-                <h3><a href="">GitHub</a> 🚀</h3>
-                <ul>
-                    <?php
-                        $dir     = './projects/GitHub/';
-                        $folders = array_filter(glob($dir . '*'), 'is_dir');
-                        foreach ($folders as $folder) {
-                            $folderName = basename($folder);
+                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                            }
+                        ?>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3><a href="">GitHub</a> 🚀</h3>
+                    <ul>
+                        <?php
+                            $dir     = './projects/GitHub/';
+                            $folders = array_filter(glob($dir . '*'), 'is_dir');
+                            foreach ($folders as $folder) {
+                                $folderName = basename($folder);
 
-                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                        }
-                    ?>
-                </ul>
-            </div>
-            <div class="column">
-                <h3><a href="">Pantheon</a> 🏛️</h3>
-                <ul>
-                    <?php
-                        $dir     = './projects/Pantheon/';
-                        $folders = array_filter(glob($dir . '*'), 'is_dir');
-                        foreach ($folders as $folder) {
-                            $folderName = basename($folder);
+                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                            }
+                        ?>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3><a href="">Pantheon</a> 🏛️</h3>
+                    <ul>
+                        <?php
+                            $dir     = './projects/Pantheon/';
+                            $folders = array_filter(glob($dir . '*'), 'is_dir');
+                            foreach ($folders as $folder) {
+                                $folderName = basename($folder);
 
-                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                        }
-                    ?>
-                </ul>
+                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                            }
+                        ?>
+                    </ul>
+                </div>
+                <div class="dock">
+                    <a href="https://jira.atlassian.com/" target="_blank">
+                        <img src="/img/Jira.png" alt="Jira">
+                    </a>
+                    <a href="https://github.com/" target="_blank">
+                        <img src="/img/GitHub.png" alt="GitHub">
+                    </a>
+                    <a href="https://bitbucket.org/" target="_blank">
+                        <img src="/img/Bitbucket.png" alt="Bitbucket">
+                    </a>
+                </div>
             </div>
-            <div class="dock">
-                <a href="https://jira.atlassian.com/" target="_blank">
-                    <img src="/img/Jira.png" alt="Jira">
-                </a>
-                <a href="https://github.com/" target="_blank">
-                    <img src="/img/GitHub.png" alt="GitHub">
-                </a>
-                <a href="https://bitbucket.org/" target="_blank">
-                    <img src="/img/Bitbucket.png" alt="Bitbucket">
-                </a>
-            </div>
-        </div>
-    </section>
-    <footer>
+        </section>
+    </main>
+    <footer role="contentinfo">
         <a href="/dashboard/">Dashboard</a> | <a href="/phpmyadmin/">PHPMyAdmin</a>
         <button class="toggle-theme" onclick="toggleTheme()"><span class="emoji">🌙 ☀️</span></button>
         <p><span class="quote">“</span>It’s not a bug. It’s an undocumented feature!<span class="quote">”</span></p>
