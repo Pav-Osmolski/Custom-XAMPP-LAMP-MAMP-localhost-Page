@@ -25,6 +25,7 @@
             --text-color: #2a3246;
             --header-background-color: #dfdde6;
             --border-color: #626798;
+            --link-color: #237493;
             --input-bg: #fbf9ff;
             --input-text: #2a3246;
         }
@@ -71,6 +72,8 @@
             align-items: center;
             gap: 20px;
             border-bottom: 1px solid var(--border-color);
+            height: 88px;
+            box-sizing: border-box;
             animation: slideInDown 1s ease-out;
             position: -webkit-sticky; /* For Safari */
             position: sticky;
@@ -104,7 +107,7 @@
         }
 
         header .clock {
-            font-size: 2.2em;
+            font-size: 2.1em;
             font-weight: 700;
         }
 
@@ -201,7 +204,6 @@
         .toggle-theme {
             cursor: pointer;
             font-size: 18px;
-            padding: 4px;
             background: transparent;
             border: none;
             color: var(--text-color);
@@ -221,10 +223,53 @@
             filter: none;
         }
 
+        span.quote {
+            font-size: 25px;
+            line-height: 13px;
+            margin: 0 4px;
+            position: relative;
+            top: 4px;
+        }
+        .dock {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            padding: 10px;
+            /* background: rgba(255, 255, 255, 0.1); */
+            /* border-radius: 15px; */
+            /* backdrop-filter: blur(10px); */
+        }
+
+        .dock a {
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .dock a:hover {
+            transform: scale(1.3);
+        }
+
+        .dock img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+        }
+        .misc {
+            pointer-events: none;
+        }
+
         /* Media breakpoints */
+        @media (max-width: 1110px) {
+            header h1 {
+                font-size: 26px;
+            }
+        }
+
         @media (max-width: 900px) {
             header h1 {
-                animation: fadeOut 0.5s forwards;
+                /* animation: fadeOut 0.5s forwards; */
+                display: none;
             }
 
             .columns {
@@ -239,7 +284,7 @@
 
         @media (min-width: 901px) {
             header h1 {
-                animation: fadeIn 0.5s forwards;
+                /* animation: fadeIn 0.5s forwards; */
             }
         }
 
@@ -431,12 +476,23 @@
                     ?>
                 </ul>
             </div>
+            <div class="dock">
+                <a href="https://jira.atlassian.com/" target="_blank">
+                    <img src="/img/Jira.png" alt="Jira">
+                </a>
+                <a href="https://github.com/" target="_blank">
+                    <img src="/img/GitHub.png" alt="GitHub">
+                </a>
+                <a href="https://bitbucket.org/" target="_blank">
+                    <img src="/img/Bitbucket.png" alt="Bitbucket">
+                </a>
+            </div>
         </div>
     </section>
     <footer>
         <a href="/dashboard/">Dashboard</a> | <a href="/phpmyadmin/">PHPMyAdmin</a>
         <button class="toggle-theme" onclick="toggleTheme()"><span class="emoji">🌙 ☀️</span></button>
-        <p>“It’s not a bug. It’s an undocumented feature!”</p>
+        <p><span class="quote">“</span>It’s not a bug. It’s an undocumented feature!<span class="quote">”</span></p>
     </footer>
 </div>
 </body>
