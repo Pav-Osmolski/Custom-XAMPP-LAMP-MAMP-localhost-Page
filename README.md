@@ -19,8 +19,9 @@ Please feel free to fork and make your own changes!
 ## How to install:
 
 1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
-2. Update the `config.php` with your local MySQL login credentials
-3. Ensure the path to xampp is correct within the `$apacheVersion` variable
-4. Ensure the path to `phpinfo.php` is correct
+2. Run `npm install` in the repo's location to install dev dependencies
+3. Update the `config.php` with your local MySQL login credentials and Apache path
+4. Ensure the link to `phpinfo.php` is correct
 5. Modify the PHP script inside each column to suit your needs
 6. Customise to your delight
+7. Run `npm run build` to compile any changed SCSS or JavaScript

@@ -8,8 +8,8 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
     <link rel="icon" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <script src="assets/js/script.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+    <script src="assets/js/script.min.js"></script>
 </head>
 <body class="background-image">
 <div class="container">
@@ -22,7 +22,7 @@
             include 'config.php';
 
             // Get the Apache version using shell_exec and the full path to httpd.exe
-            $apacheVersion = shell_exec( 'C:\\xampp\\apache\\bin\\httpd.exe -v' );
+            $apacheVersion = shell_exec( APACHE_PATH . 'httpd.exe -v' );
             if ( $apacheVersion ) {
                 // Extract the version from the output
                 if ( preg_match( '/Server version: Apache\/([0-9\.]+)/', $apacheVersion, $matches ) ) {
