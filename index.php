@@ -1,3 +1,5 @@
+<?php include 'config.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +10,21 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
     <link rel="icon" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
-    <script src="assets/js/script.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="assets/css/style.min.css?v=<?= filemtime( 'assets/css/style.min.css' ); ?>">
+    <script src="assets/js/script.min.js?v=<?= filemtime( 'assets/js/script.min.js' ); ?>"></script>
 </head>
-<body class="background-image">
+<body class="<?= $bodyClasses; ?>">
 <div class="container">
     <header role="banner">
         <h1>localhost is ready, Pav! 👨🏻‍💻</h1>
-        <input type="text" class="search-bar" placeholder="Search projects..." onkeyup="searchProjects()" aria-label="Search projects">
+        <input type="text" class="search-bar" placeholder="Search projects..." onkeyup="searchProjects()"
+               aria-label="Search projects">
         <div class="clock" aria-live="polite"></div>
         <div class="server-info">
             <?php
-            include 'config.php';
-
             // Get the Apache version using shell_exec and the full path to httpd.exe
-            $apacheVersion = shell_exec( APACHE_PATH . 'httpd.exe -v' );
+            $apacheVersion = shell_exec( APACHE_PATH . 'bin\\httpd.exe -v' );
             if ( $apacheVersion ) {
                 // Extract the version from the output
                 if ( preg_match( '/Server version: Apache\/([0-9\.]+)/', $apacheVersion, $matches ) ) {
@@ -75,13 +77,13 @@
                     <h3>Miscellaneous 🤷🏻‍♂️</h3>
                     <ul>
                         <?php
-                            $dir     = './projects/Other/';
-                            $folders = array_filter(glob($dir . '*'), 'is_dir');
-                            foreach ($folders as $folder) {
-                                $folderName = basename($folder);
+                        $dir     = './projects/Other/';
+                        $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
+                        foreach ( $folders as $folder ) {
+                            $folderName = basename( $folder );
 
-                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                            }
+                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -89,13 +91,13 @@
                     <h3><a href="">GitHub</a> 🚀</h3>
                     <ul>
                         <?php
-                            $dir     = './projects/GitHub/';
-                            $folders = array_filter(glob($dir . '*'), 'is_dir');
-                            foreach ($folders as $folder) {
-                                $folderName = basename($folder);
+                        $dir     = './projects/GitHub/';
+                        $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
+                        foreach ( $folders as $folder ) {
+                            $folderName = basename( $folder );
 
-                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                            }
+                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -103,13 +105,13 @@
                     <h3><a href="">Pantheon</a> 🏛️</h3>
                     <ul>
                         <?php
-                            $dir     = './projects/Pantheon/';
-                            $folders = array_filter(glob($dir . '*'), 'is_dir');
-                            foreach ($folders as $folder) {
-                                $folderName = basename($folder);
+                        $dir     = './projects/Pantheon/';
+                        $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
+                        foreach ( $folders as $folder ) {
+                            $folderName = basename( $folder );
 
-                                echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
-                            }
+                            echo "<li><a href=\"http://local.$folderName.com\">$folderName</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -126,6 +128,26 @@
                 </div>
             </div>
         </section>
+        <?php if ( $displayApacheErrorLog ): ?>
+            <section id="error-log-section" aria-labelledby="error-log-title">
+                <h2 id="error-log-title">
+                    <button id="toggle-error-log" aria-expanded="false" aria-controls="error-log">
+                        📝 Toggle Apache Error Log
+                    </button>
+                </h2>
+                <pre id="error-log" aria-live="polite" tabindex="0" style="display: none;">
+                    <code>Loading...</code>
+                </pre>
+            </section>
+        <?php endif; ?>
+        <?php if ( $displaySystemStats ): ?>
+            <div id="system-monitor" class="system-monitor" role="region" aria-labelledby="system-monitor-title">
+                <h3 id="system-monitor-title">System Stats</h3>
+                <p>CPU Load: <span id="cpu-load" aria-live="polite">N/A</span></p>
+                <p>RAM Usage: <span id="memory-usage" aria-live="polite">N/A</span></p>
+                <p>Disk Space: <span id="disk-space" aria-live="polite">N/A</span></p>
+            </div>
+        <?php endif; ?>
     </main>
     <footer role="contentinfo">
         <a href="/dashboard/">Dashboard</a> | <a href="/phpmyadmin/">PHPMyAdmin</a>

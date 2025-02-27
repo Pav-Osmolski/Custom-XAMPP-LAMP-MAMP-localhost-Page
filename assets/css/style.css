@@ -60,6 +60,10 @@ button, input, textarea, select {
 .light-mode .emoji {
   filter: none;
 }
+.light-mode .system-monitor {
+  background: none !important;
+  box-shadow: none !important;
+}
 
 body {
   font-family: var(--font-main);
@@ -283,13 +287,58 @@ span.quote {
   pointer-events: none;
 }
 
-#error-log-section {
+.system-monitor, #error-log-section {
   display: none;
+}
+
+body.error-log-section-active #error-log-section {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 1.5s ease-in;
   margin-top: -123px;
+}
+body.error-log-section-active #error-log-section button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  transition: color 0.3s;
+}
+body.error-log-section-active #error-log-section button:hover {
+  color: var(--hover-color) !important;
 }
 
 pre {
   white-space: break-spaces;
+  font-size: 14px;
+}
+
+body.system-monitor-active .system-monitor {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 115px;
+  right: 20px;
+  width: 180px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  animation: fadeIn 1.5s ease-in;
+}
+body.system-monitor-active .system-monitor p {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  gap: 5px;
+  align-items: center;
+}
+body.system-monitor-active .system-monitor p span {
+  text-align: right;
+}
+body.system-monitor-active #error-log-section {
+  padding-right: 220px;
 }
 
 /* Media breakpoints */
@@ -308,6 +357,16 @@ pre {
   .toggle-theme {
     position: static;
     transform: none;
+  }
+  body.system-monitor-active.error-log-section-active #error-log-section {
+    padding-right: 0;
+  }
+  body.system-monitor-active .system-monitor {
+    position: static;
+    width: 100%;
+    margin: -90px auto 90px auto;
+    border-radius: 0;
+    align-items: center;
   }
 }
 /* Keyframe animations */

@@ -2,35 +2,35 @@
 
 /* Reset & Modernizer */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html {
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-size: 16px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  min-height: 100vh;
-  font-family: var(--font-main), sans-serif;
+	min-height: 100vh;
+	font-family: var(--font-main), sans-serif;
 }
 
 img, video {
-  max-width: 100%;
-  height: auto;
+	max-width: 100%;
+	height: auto;
 }
 
 a {
-  text-decoration: none;
-  color: inherit;
+	text-decoration: none;
+	color: inherit;
 }
 
 button, input, textarea, select {
-  font: inherit;
+	font: inherit;
 }
 
 /* Index page styles */
@@ -60,6 +60,11 @@ button, input, textarea, select {
 
 	.emoji {
 		filter: none;
+	}
+
+	.system-monitor {
+		background: none !important;
+		box-shadow: none !important;
 	}
 }
 
@@ -144,6 +149,7 @@ header {
 	h2 {
 		margin: 15px 0 15px;
 	}
+
 	a {
 		color: var(--link-color);
 		text-decoration: none;
@@ -303,13 +309,65 @@ span.quote {
 	pointer-events: none;
 }
 
-#error-log-section {
+.system-monitor, #error-log-section { //Initial display should be none unless class is detected in the body
 	display: none;
+}
+
+body.error-log-section-active #error-log-section {
+	display: flex;
+	flex-direction: column;
+	animation: fadeIn 1.5s ease-in;
 	margin-top: -123px;
+
+	button {
+		cursor: pointer;
+		background: none;
+		border: none;
+		color: inherit;
+		transition: color 0.3s;
+
+		&:hover {
+			color: var(--hover-color) !important;
+		}
+	}
 }
 
 pre {
 	white-space: break-spaces;
+	font-size: 14px;
+}
+
+body.system-monitor-active {
+	.system-monitor {
+		display: flex;
+		flex-direction: column;
+		position: fixed;
+		bottom: 115px;
+		right: 20px;
+		width: 180px;
+		background: rgba(0, 0, 0, 0.5);
+		padding: 15px;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		pointer-events: none;
+		animation: fadeIn 1.5s ease-in;
+
+		p {
+			display: flex;
+			justify-content: space-between;
+			margin: 0;
+			gap: 5px;
+			align-items: center;
+
+			span {
+				text-align: right;
+			}
+		}
+	}
+
+	#error-log-section {
+		padding-right: 220px;
+	}
 }
 
 /* Media breakpoints */
@@ -333,6 +391,16 @@ pre {
 	.toggle-theme {
 		position: static;
 		transform: none;
+	}
+	body.system-monitor-active.error-log-section-active #error-log-section {
+		padding-right: 0;
+	}
+	body.system-monitor-active .system-monitor {
+		position: static;
+		width: 100%;
+		margin: -90px auto 90px auto;
+		border-radius: 0;
+		align-items: center;
 	}
 }
 

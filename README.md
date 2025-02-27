@@ -1,18 +1,20 @@
 # Custom XAMPP localhost index page
-An informative custom XAMPP localhost index page that displays your current projects and provides handy links.
-Technically this localhost index can be easily adapted to suit any other local apache development environment.
+An informative custom XAMPP localhost index page that displays your current projects, useful statistics and provides handy links.
+Technically this localhost index can be adapted to suit any other local apache development environment.
 
 Please feel free to fork and make your own changes!
 
 ## Features:
 
-- Search functionality for all project folders specified
+- Search functionality for all local project folders specified
 - Real-time clock
-- Displays current versions of Apache, PHP and MySQL
+- Displays the current version of Apache, PHP and MySQL
+- System stats showing CPU Load, Memory Usage and Disk Space
+- Button toggle to display the Apache error log
 - Mac OS X style dock with links to relevant web-sites
 - Modern responsive look
 - Theme switcher for light and dark
-- Peace of mind 🧘
+- Peace of mind 🧘 (hopefully!)
 
 ![search functionality](screenshots/index.png)
 
@@ -25,3 +27,4 @@ Please feel free to fork and make your own changes!
 5. Modify the PHP script inside each column to suit your needs
 6. Customise to your delight
 7. Run `npm run build` to compile any changed SCSS or JavaScript
+8. To disable the Apache error log or System stats, change the boolean in `config.php`

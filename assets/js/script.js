@@ -9,21 +9,21 @@ function updateClock() {
 setInterval( updateClock, 1000 );
 document.addEventListener( 'DOMContentLoaded', updateClock );
 
-document.addEventListener("DOMContentLoaded", function () {
-    const theme = localStorage.getItem("theme");
-    if (theme === "light") {
-        document.body.classList.add("light-mode");
+document.addEventListener( "DOMContentLoaded", function () {
+    const theme = localStorage.getItem( "theme" );
+    if ( theme === "light" ) {
+        document.body.classList.add( "light-mode" );
     }
 
-    document.querySelector(".toggle-theme").addEventListener("click", function () {
-        document.body.classList.toggle("light-mode");
-        if (document.body.classList.contains("light-mode")) {
-            localStorage.setItem("theme", "light");
+    document.querySelector( ".toggle-theme" ).addEventListener( "click", function () {
+        document.body.classList.toggle( "light-mode" );
+        if ( document.body.classList.contains( "light-mode" ) ) {
+            localStorage.setItem( "theme", "light" );
         } else {
-            localStorage.setItem("theme", "dark");
+            localStorage.setItem( "theme", "dark" );
         }
-    });
-});
+    } );
+} );
 
 function searchProjects() {
     let input = document.querySelector( '.search-bar' ).value.toLowerCase();
@@ -38,3 +38,65 @@ function searchProjects() {
         }
     } );
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const errorLogSection = document.getElementById('error-log-section');
+    if (errorLogSection) {
+        document.getElementById('toggle-error-log').addEventListener('click', function () {
+            const errorLog = document.getElementById('error-log');
+            const isVisible = errorLog.style.display === 'block';
+
+            errorLog.style.display = isVisible ? 'none' : 'block';
+
+            this.setAttribute('aria-expanded', !isVisible);
+        });
+
+        function fetchErrorLog() {
+            fetch('apache_error_log.php', { cache: 'no-store' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error log unavailable');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('error-log').innerHTML = `<code>${data}</code>`;
+                })
+                .catch(error => {
+                    console.error('Error fetching error log:', error);
+                    clearInterval(errorLogInterval);
+                });
+        }
+
+        let errorLogInterval = setInterval(fetchErrorLog, 3000);
+
+        fetchErrorLog();
+    }
+
+    const systemStatsSection = document.getElementById('system-monitor');
+    if (systemStatsSection) {
+        function fetchSystemStats() {
+            fetch('system_stats.php', { cache: 'no-store' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('System stats unavailable');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('cpu-load').textContent = data.cpu + '%';
+                    document.getElementById('memory-usage').textContent = data.memory + ' MB';
+                    document.getElementById('disk-space').textContent = data.disk + '%';
+                })
+                .catch(error => {
+                    console.error('Error fetching system stats:', error);
+                    clearInterval(statsInterval);
+                });
+        }
+
+        let statsInterval = setInterval(fetchSystemStats, 1000);
+
+        fetchSystemStats();
+    }
+});
