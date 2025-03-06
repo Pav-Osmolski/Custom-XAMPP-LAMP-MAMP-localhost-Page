@@ -1,5 +1,5 @@
-# Custom XAMPP localhost index page
-An informative custom XAMPP localhost index page that displays your current projects, useful statistics and provides handy links.
+# Custom XAMPP/WAMP localhost index page
+An informative custom XAMPP/WAMP localhost index page that displays your current projects, useful statistics and provides handy links.
 Technically this localhost index can be adapted to suit any other local apache development environment.
 
 Please feel free to fork and make your own changes!
@@ -22,9 +22,9 @@ Please feel free to fork and make your own changes!
 
 1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
 2. Run `npm install` in the repo's location to install dev dependencies
-3. Update the `config.php` with your local MySQL login credentials and Apache path
-4. Ensure the link to `phpinfo.php` is correct
+3. Update the `config.php` with your local MySQL login credentials, Apache and HTDOCS path
+4. Ensure the link to `phpinfo.php` in `index.php` is correct
 5. Modify the PHP script inside each column to suit your needs
 6. Customise to your delight
 7. Run `npm run build` to compile any changed SCSS or JavaScript
-8. To disable the Apache error log or System stats, change the boolean in `config.php`
+8. To disable the Apache error log or System stats, change the boolean values in `config.php`

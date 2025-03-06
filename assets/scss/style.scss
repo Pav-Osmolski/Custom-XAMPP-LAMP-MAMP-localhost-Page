@@ -1,38 +1,3 @@
-@import "https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap";
-
-/* Reset & Modernizer */
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-html {
-	font-size: 16px;
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-body {
-	min-height: 100vh;
-	font-family: var(--font-main), sans-serif;
-}
-
-img, video {
-	max-width: 100%;
-	height: auto;
-}
-
-a {
-	text-decoration: none;
-	color: inherit;
-}
-
-button, input, textarea, select {
-	font: inherit;
-}
-
 /* Index page styles */
 :root {
 	--background-color: #121212e8;
@@ -318,6 +283,10 @@ body.error-log-section-active #error-log-section {
 	flex-direction: column;
 	animation: fadeIn 1.5s ease-in;
 	margin-top: -123px;
+
+	h3 {
+		margin-bottom: 5px;
+	}
 
 	button {
 		cursor: pointer;

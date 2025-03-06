@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pav's custom XAMPP localhost index page.">
+    <meta name="description" content="<?php echo htmlspecialchars( $user ); ?>'s custom XAMPP localhost index page.">
     <title>Pav's localhost</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
     <link rel="icon" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
@@ -17,7 +17,7 @@
 <body class="<?= $bodyClasses; ?>">
 <div class="container">
     <header role="banner">
-        <h1>localhost is ready, Pav! 👨🏻‍💻</h1>
+        <h1>localhost is ready, <?php echo htmlspecialchars( $user ); ?>! 👨🏻‍💻</h1>
         <input type="text" class="search-bar" placeholder="Search projects..." onkeyup="searchProjects()"
                aria-label="Search projects">
         <div class="clock" aria-live="polite"></div>
@@ -77,7 +77,7 @@
                     <h3>Miscellaneous 🤷🏻‍♂️</h3>
                     <ul>
                         <?php
-                        $dir     = './projects/Other/';
+                        $dir     = HTDOCS_PATH . 'projects/Other/';
                         $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
                         foreach ( $folders as $folder ) {
                             $folderName = basename( $folder );
@@ -91,7 +91,7 @@
                     <h3><a href="">GitHub</a> 🚀</h3>
                     <ul>
                         <?php
-                        $dir     = './projects/GitHub/';
+                        $dir     = HTDOCS_PATH . 'projects/GitHub/';
                         $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
                         foreach ( $folders as $folder ) {
                             $folderName = basename( $folder );
@@ -105,7 +105,7 @@
                     <h3><a href="">Pantheon</a> 🏛️</h3>
                     <ul>
                         <?php
-                        $dir     = './projects/Pantheon/';
+                        $dir     = HTDOCS_PATH . 'projects/Pantheon/';
                         $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
                         foreach ( $folders as $folder ) {
                             $folderName = basename( $folder );
@@ -130,11 +130,11 @@
         </section>
         <?php if ( $displayApacheErrorLog ): ?>
             <section id="error-log-section" aria-labelledby="error-log-title">
-                <h2 id="error-log-title">
+                <h3 id="error-log-title">
                     <button id="toggle-error-log" aria-expanded="false" aria-controls="error-log">
                         📝 Toggle Apache Error Log
                     </button>
-                </h2>
+                </h3>
                 <pre id="error-log" aria-live="polite" tabindex="0" style="display: none;">
                     <code>Loading...</code>
                 </pre>

@@ -4,8 +4,8 @@
   "description": "A simple SCSS compiler setup using Sass and JS minifier",
   "scripts": {
     "prebuild": "rm -rf assets/css/style.min.css assets/js/script.min.js",
-    "build:scss": "sass assets/scss/style.scss assets/css/style.css",
-    "build:scss:min": "sass assets/scss/style.scss assets/css/style.min.css --style=compressed",
+    "build:scss": "sass assets/scss/_index.scss assets/css/style.css",
+    "build:scss:min": "sass assets/scss/_index.scss assets/css/style.min.css --style=compressed",
     "watch:scss": "sass --watch assets/scss/style.scss:assets/css/style.css",
     "build:js": "uglifyjs assets/js/*.js -o assets/js/script.min.js -c -m",
     "watch:js": "watch 'npm run build:js' assets/js",
