@@ -11,13 +11,17 @@ document.addEventListener( 'DOMContentLoaded', updateClock );
 
 document.addEventListener( "DOMContentLoaded", function () {
     const theme = localStorage.getItem( "theme" );
+
     if ( theme === "light" ) {
+        document.documentElement.classList.add( "light-mode" );
         document.body.classList.add( "light-mode" );
     }
 
     document.querySelector( ".toggle-theme" ).addEventListener( "click", function () {
+        document.documentElement.classList.toggle( "light-mode" );
         document.body.classList.toggle( "light-mode" );
-        if ( document.body.classList.contains( "light-mode" ) ) {
+
+        if ( document.documentElement.classList.contains( "light-mode" ) ) {
             localStorage.setItem( "theme", "light" );
         } else {
             localStorage.setItem( "theme", "dark" );
@@ -40,24 +44,24 @@ function searchProjects() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    const body = document.body;
+    const useAjax = body.getAttribute("data-ajax-enabled") === "true";
 
+    // Error Log Section
     const errorLogSection = document.getElementById('error-log-section');
     if (errorLogSection) {
         document.getElementById('toggle-error-log').addEventListener('click', function () {
             const errorLog = document.getElementById('error-log');
             const isVisible = errorLog.style.display === 'block';
-
             errorLog.style.display = isVisible ? 'none' : 'block';
-
             this.setAttribute('aria-expanded', !isVisible);
         });
 
         function fetchErrorLog() {
-            fetch('apache_error_log.php', { cache: 'no-store' })
+            const url = useAjax ? "ajax_apache_error_log.php" : "apache_error_log.php";
+            fetch(url, { cache: 'no-store' })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error log unavailable');
-                    }
+                    if (!response.ok) throw new Error('Error log unavailable');
                     return response.text();
                 })
                 .then(data => {
@@ -70,24 +74,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         let errorLogInterval = setInterval(fetchErrorLog, 3000);
-
         fetchErrorLog();
     }
 
+    // System Stats Section
     const systemStatsSection = document.getElementById('system-monitor');
     if (systemStatsSection) {
         function fetchSystemStats() {
-            fetch('system_stats.php', { cache: 'no-store' })
+            const url = useAjax ? "ajax_system_stats.php" : "system_stats.php";
+            fetch(url, { cache: 'no-store' })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('System stats unavailable');
-                    }
+                    if (!response.ok) throw new Error('System stats unavailable');
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('cpu-load').textContent = data.cpu + '%';
-                    document.getElementById('memory-usage').textContent = data.memory + ' MB';
-                    document.getElementById('disk-space').textContent = data.disk + '%';
+                    document.getElementById('cpu-load').textContent = `${data.cpu}%`;
+                    document.getElementById('memory-usage').textContent = `${data.memory} MB`;
+                    document.getElementById('disk-space').textContent = `${data.disk}%`;
                 })
                 .catch(error => {
                     console.error('Error fetching system stats:', error);
@@ -96,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         let statsInterval = setInterval(fetchSystemStats, 1000);
-
         fetchSystemStats();
     }
 });

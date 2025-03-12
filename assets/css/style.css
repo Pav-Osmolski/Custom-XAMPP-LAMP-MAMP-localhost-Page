@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* @import "https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap"; *?
 
 /* Fonts */
@@ -154,6 +155,8 @@ button, input, textarea, select {
   --input-bg: #1d1c1f;
   --input-text: #e0dde8;
   --input-placeholder: #888;
+  --scrollbar-primary: #4672c9;
+  --scrollbar-secondary: #1d1c1f;
   --background-image: url(../images/background.jpg);
   --font-main: "Ubuntu", sans-serif;
 }
@@ -166,6 +169,8 @@ button, input, textarea, select {
   --link-color: #237493;
   --input-bg: #fbf9ff;
   --input-text: #2a3246;
+  --scrollbar-primary: #237493;
+  --scrollbar-secondary: #dfdde6;
 }
 .light-mode .emoji {
   filter: none;
@@ -341,6 +346,7 @@ footer {
 }
 footer p {
   font-style: italic;
+  line-height: 1.3;
 }
 footer a {
   font-weight: bold;
@@ -375,6 +381,7 @@ span.quote {
 
 .dock {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
   margin-top: 40px;
@@ -454,6 +461,26 @@ body.system-monitor-active #error-log-section {
   padding-right: 220px;
 }
 
+/* Custom Scrollbar */
+html {
+  scrollbar-width: thin;
+  /* Firefox 🥺 */
+  scrollbar-color: var(--scrollbar-primary) var(--scrollbar-secondary);
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-secondary);
+  border-radius: 100px;
+}
+body::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-image: linear-gradient(180deg, var(--scrollbar-primary) 0%, var(--scrollbar-secondary) 99%);
+  box-shadow: inset 2px 2px 5px 0 rgba(255, 255, 255, 0.5);
+}
+
 /* Media breakpoints */
 @media (max-width: 1110px) {
   header h1 {
@@ -480,6 +507,17 @@ body.system-monitor-active #error-log-section {
     margin: -90px auto 90px auto;
     border-radius: 0;
     align-items: center;
+  }
+}
+@media (max-width: 525px) {
+  header .search-bar {
+    margin-top: -30px;
+  }
+  header .clock {
+    position: absolute;
+    top: 49px;
+    left: 20px;
+    font-size: 1.5em;
   }
 }
 /* Keyframe animations */

@@ -9,6 +9,12 @@ define( 'HTDOCS_PATH', 'C:\\htdocs\\' ); // Where your local projects are stored
 $displaySystemStats    = true;
 $displayApacheErrorLog = true;
 
+// Toggle AJAX loading for system stats and error log
+$useAjaxForStats = true;
+
+// Detect OS
+$isWindows = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
+
 // Get username based on OS
 $user = $_SERVER['USERNAME']
         ?? $_SERVER['USER']
