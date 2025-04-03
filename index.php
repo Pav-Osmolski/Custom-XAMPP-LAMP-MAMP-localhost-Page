@@ -14,7 +14,7 @@
           href="assets/css/style.min.css?v=<?= filemtime( 'assets/css/style.min.css' ); ?>">
     <script src="assets/js/script.min.js?v=<?= filemtime( 'assets/js/script.min.js' ); ?>"></script>
 </head>
-<?php echo ( $useAjaxForStats ? '<body data-ajax-enabled="true"' : '<body' ); ?> class="<?= $bodyClasses; ?>">
+<?php echo( $useAjaxForStats ? '<body data-ajax-enabled="true"' : '<body' ); ?> class="<?= $bodyClasses; ?>">
 <div class="container">
     <header role="banner">
         <h1>localhost is ready, <?php echo htmlspecialchars( $user ); ?>! 👨🏻‍💻</h1>
@@ -36,7 +36,7 @@
                 echo 'Apache: ' . $matches[1] . ' ✔️<br>';
             } else {
                 // If shell_exec fails, check $_SERVER variables
-                if ( !empty( $_SERVER['SERVER_SOFTWARE'] ) && stripos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false ) {
+                if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) && stripos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false ) {
                     echo 'Apache: Version unknown ⚠️<br>';
                 } else {
                     echo 'Apache: Not detected ❌<br>';
@@ -49,7 +49,7 @@
                 echo 'PHP: Version unknown ⚠️<br>';
             } else {
                 $isThreadSafe = ( ZEND_THREAD_SAFE ) ? "TS" : "NTS";
-                $isFastCGI = ( strpos( PHP_SAPI, 'cgi-fcgi' ) !== false ) ? "FastCGI" : "Non-FastCGI";
+                $isFastCGI    = ( strpos( PHP_SAPI, 'cgi-fcgi' ) !== false ) ? "FastCGI" : "Non-FastCGI";
 
                 echo 'PHP: <a href="phpinfo.php">' . $phpVersion . " $isThreadSafe $isFastCGI</a> ✔️<br>";
             }
@@ -82,6 +82,11 @@
     </header>
     <main role="main">
         <section class="folders">
+            <div class="column-controls">
+                <button onclick="setColumnWidth('auto')">X</button>
+                <button onclick="cycleColumnWidth('prev')">−</button>
+                <button onclick="cycleColumnWidth('next')">+</button>
+            </div>
             <h2>Document Folders</h2>
             <div class="columns">
                 <div class="column">
@@ -90,11 +95,11 @@
                         <?php
                         $dir = HTDOCS_PATH . 'projects/Other/';
 
-                        if ( !is_dir( $dir ) ) {
+                        if ( ! is_dir( $dir ) ) {
                             echo "<li style='color: red;'>Error: The directory '$dir' does not exist.</li>";
                         } else {
                             $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
-                            
+
                             if ( empty( $folders ) ) {
                                 echo "<li style='color: orange;'>No projects found in '$dir'.</li>";
                             } else {
@@ -113,11 +118,11 @@
                         <?php
                         $dir = HTDOCS_PATH . 'projects/GitHub/';
 
-                        if ( !is_dir( $dir ) ) {
+                        if ( ! is_dir( $dir ) ) {
                             echo "<li style='color: red;'>Error: The directory '$dir' does not exist.</li>";
                         } else {
                             $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
-                            
+
                             if ( empty( $folders ) ) {
                                 echo "<li style='color: orange;'>No projects found in '$dir'.</li>";
                             } else {
@@ -136,11 +141,11 @@
                         <?php
                         $dir = HTDOCS_PATH . 'projects/Pantheon/';
 
-                        if ( !is_dir( $dir ) ) {
+                        if ( ! is_dir( $dir ) ) {
                             echo "<li style='color: red;'>Error: The directory '$dir' does not exist.</li>";
                         } else {
                             $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
-                            
+
                             if ( empty( $folders ) ) {
                                 echo "<li style='color: orange;'>No projects found in '$dir'.</li>";
                             } else {

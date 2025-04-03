@@ -1,5 +1,5 @@
 # Custom XAMPP/WAMP localhost index page
-An informative custom XAMPP/WAMP localhost index page that displays your current projects, useful statistics and provides handy links.
+An informative custom XAMPP/WAMP localhost index page that displays your current projects, useful statistics and provides handy links. Requires PHP 8.0 or higher.
 Technically this localhost index can be adapted to suit any other local apache development environment. I've attempted to add cross-platform logic so that it works on both Windows and Linux platforms.
 
 Please feel free to fork and make your own changes!
@@ -7,6 +7,7 @@ Please feel free to fork and make your own changes!
 ## Features:
 
 - Search functionality for all local project folders specified
+- Resizable columns
 - Real-time clock
 - Displays the current version of Apache, PHP and MySQL
 - System stats using AJAX showing CPU Load, Memory Usage and Disk Space

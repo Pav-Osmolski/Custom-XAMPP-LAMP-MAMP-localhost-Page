@@ -115,6 +115,9 @@ header {
 }
 
 .folders {
+	position: relative;
+	z-index: 0;
+
 	h2 {
 		margin: 15px 0 15px;
 	}
@@ -148,6 +151,33 @@ a {
 	}
 }
 
+.column-controls {
+	position: absolute;
+	top: 40px;
+	right: 20px;
+	user-select: none;
+
+	button {
+		margin-left: 5px;
+		padding: 5px;
+		width: 23px;
+		background: var(--header-background-color);
+		border: 1px var(--border-color) solid;
+		border-radius: 7px;
+		font-size: 0.9em;
+		color: var(--text-color);
+		line-height: 1;
+		cursor: pointer;
+		transition: all 0.3s;
+		user-select: none;
+
+		&:hover {
+			background: var(--text-color);
+			color: var(--header-background-color);
+		}
+	}
+}
+
 .server-info {
 	flex: none;
 	text-align: right;
@@ -162,8 +192,25 @@ section {
 }
 
 .columns {
+	position: relative;
 	display: flex;
 	gap: 30px;
+	margin: 0 auto;
+	max-width: none;
+
+	// Width modifiers
+	$column-widths: (
+		max-fit-content: fit-content,
+		max-1600: 1600px,
+		max-1300: 1300px,
+		max-800: 800px
+	);
+
+	@each $class, $width in $column-widths {
+		&.#{$class} {
+			max-width: $width;
+		}
+	}
 }
 
 .column {
@@ -214,6 +261,7 @@ footer {
 	right: 0;
 	height: 93px;
 	overflow: hidden;
+	z-index: 2;
 
 	p {
 		font-style: italic;
@@ -285,10 +333,12 @@ span.quote {
 }
 
 body.error-log-section-active #error-log-section {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	animation: fadeIn 1.5s ease-in;
 	margin-top: -123px;
+	z-index: 1;
 
 	h3 {
 		margin-bottom: 5px;
@@ -374,7 +424,7 @@ body {
 @media (max-width: 1110px) {
 	header {
 		h1 {
-			font-size: 26px;
+			font-size: 25px;
 		}
 	}
 }
@@ -387,6 +437,7 @@ body {
 	}
 	.columns {
 		flex-direction: column;
+		max-width: none !important;
 	}
 	.toggle-theme {
 		position: static;
@@ -401,6 +452,9 @@ body {
 		margin: -90px auto 90px auto;
 		border-radius: 0;
 		align-items: center;
+	}
+	.column-controls {
+		display: none;
 	}
 }
 

@@ -252,6 +252,10 @@ header .clock {
   color: var(--input-placeholder);
 }
 
+.folders {
+  position: relative;
+  z-index: 0;
+}
 .folders h2 {
   margin: 15px 0 15px;
 }
@@ -280,6 +284,31 @@ a:hover {
   color: var(--hover-color) !important;
 }
 
+.column-controls {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  user-select: none;
+}
+.column-controls button {
+  margin-left: 5px;
+  padding: 5px;
+  width: 23px;
+  background: var(--header-background-color);
+  border: 1px var(--border-color) solid;
+  border-radius: 7px;
+  font-size: 0.9em;
+  color: var(--text-color);
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s;
+  user-select: none;
+}
+.column-controls button:hover {
+  background: var(--text-color);
+  color: var(--header-background-color);
+}
+
 .server-info {
   flex: none;
   text-align: right;
@@ -294,8 +323,23 @@ section {
 }
 
 .columns {
+  position: relative;
   display: flex;
   gap: 30px;
+  margin: 0 auto;
+  max-width: none;
+}
+.columns.max-fit-content {
+  max-width: fit-content;
+}
+.columns.max-1600 {
+  max-width: 1600px;
+}
+.columns.max-1300 {
+  max-width: 1300px;
+}
+.columns.max-800 {
+  max-width: 800px;
 }
 
 .column {
@@ -343,6 +387,7 @@ footer {
   right: 0;
   height: 93px;
   overflow: hidden;
+  z-index: 2;
 }
 footer p {
   font-style: italic;
@@ -409,10 +454,12 @@ span.quote {
 }
 
 body.error-log-section-active #error-log-section {
+  position: relative;
   display: flex;
   flex-direction: column;
   animation: fadeIn 1.5s ease-in;
   margin-top: -123px;
+  z-index: 1;
 }
 body.error-log-section-active #error-log-section h3 {
   margin-bottom: 5px;
@@ -484,7 +531,7 @@ body::-webkit-scrollbar-thumb {
 /* Media breakpoints */
 @media (max-width: 1110px) {
   header h1 {
-    font-size: 26px;
+    font-size: 25px;
   }
 }
 @media (max-width: 900px) {
@@ -493,6 +540,7 @@ body::-webkit-scrollbar-thumb {
   }
   .columns {
     flex-direction: column;
+    max-width: none !important;
   }
   .toggle-theme {
     position: static;
@@ -507,6 +555,9 @@ body::-webkit-scrollbar-thumb {
     margin: -90px auto 90px auto;
     border-radius: 0;
     align-items: center;
+  }
+  .column-controls {
+    display: none;
   }
 }
 @media (max-width: 525px) {
