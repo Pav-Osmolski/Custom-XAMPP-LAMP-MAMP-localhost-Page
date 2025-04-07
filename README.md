@@ -13,18 +13,23 @@ Please feel free to fork and make your own changes!
 - System stats using AJAX showing CPU Load, Memory Usage and Disk Space
 - Button toggle to display the Apache error log
 - Mac OS X style dock with links to relevant web-sites
+- Configuration page for quick and easy setup
 - Modern responsive look
 - Theme switcher for light and dark
 - Peace of mind 🧘 (hopefully!)
 
 ![search functionality](screenshots/index.png)
 
+![search functionality](screenshots/settings.png)
+
 ## How to install:
 
 1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
 2. Run `npm install` in the repo's location to install dev dependencies
-3. Update the `config.php` with your local MySQL login credentials, Apache and HTDOCS path
-4. Modify the PHP script inside each column to suit your needs
+3. Set your config
+    - Update the default `config.php` with your local MySQL login credentials, Apache and HTDOCS path<br/>
+     — OR —
+    - Set your custom user config by navigating to the Settings page in the footer
+4. Modify the PHP code within `partials/folders.php` to suit your needs
 5. Customise to your delight
 6. Run `npm run build` to compile any changed SCSS or JavaScript
-7. To disable the Apache error log or System stats, change the boolean values in `config.php`

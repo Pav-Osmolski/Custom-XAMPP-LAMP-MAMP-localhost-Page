@@ -146,3 +146,26 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		setColumnWidth( savedSize );
 	}
 } );
+
+document.addEventListener( 'DOMContentLoaded', function () {
+    const foldersView = document.getElementById( 'folders-view' );
+    const settingsView = document.getElementById( 'settings-view' );
+    const toggleIndex = document.getElementById( 'toggle-index' );
+    const toggleSettings = document.getElementById( 'toggle-settings' );
+
+    if ( toggleIndex ) {
+        toggleIndex.addEventListener( 'click', function (e) {
+            e.preventDefault();
+            foldersView.style.display = 'block';
+            settingsView.style.display = 'none';
+        });
+    }
+
+    if ( toggleSettings ) {
+        toggleSettings.addEventListener( 'click', function (e) {
+            e.preventDefault();
+            settingsView.style.display = 'block';
+            foldersView.style.display = 'none';
+        });
+    }
+});

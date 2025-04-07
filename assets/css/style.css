@@ -238,7 +238,14 @@ header .clock {
   font-weight: 700;
 }
 
-.search-bar {
+label {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+input[type=text], input[type=password] {
   font-family: var(--font-main);
   width: 100%;
   max-width: 300px;
@@ -248,13 +255,32 @@ header .clock {
   background-color: var(--input-bg);
   color: var(--input-text);
 }
-.search-bar::placeholder {
+input::placeholder {
   color: var(--input-placeholder);
+}
+
+button {
+  padding: 10px;
+  background: var(--header-background-color);
+  border: 1px var(--border-color) solid;
+  border-radius: 7px;
+  color: var(--text-color);
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s;
+  user-select: none;
+}
+button:hover {
+  background: var(--text-color);
+  color: var(--header-background-color);
 }
 
 .folders {
   position: relative;
   z-index: 0;
+}
+.folders input {
+  margin-left: 5px;
 }
 .folders h2 {
   margin: 15px 0 15px;
@@ -291,22 +317,10 @@ a:hover {
   user-select: none;
 }
 .column-controls button {
-  margin-left: 5px;
   padding: 5px;
+  margin-left: 5px;
   width: 23px;
-  background: var(--header-background-color);
-  border: 1px var(--border-color) solid;
-  border-radius: 7px;
   font-size: 0.9em;
-  color: var(--text-color);
-  line-height: 1;
-  cursor: pointer;
-  transition: all 0.3s;
-  user-select: none;
-}
-.column-controls button:hover {
-  background: var(--text-color);
-  color: var(--header-background-color);
 }
 
 .server-info {
@@ -410,6 +424,9 @@ footer a {
   top: 50%;
   transform: translateY(-50%);
   right: 11px;
+}
+.toggle-theme:hover {
+  background: none;
 }
 
 .emoji {
