@@ -106,21 +106,24 @@ label {
 	margin-bottom: 10px;
 }
 
-input {
-	&[type="text"], &[type="password"] {
-		font-family: var(--font-main);
-		width: 100%;
-		max-width: 300px;
-		padding: 5px;
-		border-radius: 5px;
-		border: 1px solid var(--border-color);
-		background-color: var(--input-bg);
-		color: var(--input-text);
-	}
+input[type="text"], input[type="password"], select {
+	font-family: var(--font-main);
+	width: 100%;
+	max-width: 300px;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid var(--border-color);
+	background-color: var(--input-bg);
+	color: var(--input-text);
 
 	&::placeholder {
 		color: var(--input-placeholder);
 	}
+}
+
+select {
+	width: auto;
+	margin-left: 5px;
 }
 
 button {
@@ -342,6 +345,12 @@ span.quote {
 		width: 60px;
 		height: 60px;
 		border-radius: 10px;
+	}
+}
+
+#settings-view {
+	h3 {
+		margin: 10px 0 10px;
 	}
 }
 

@@ -9,6 +9,7 @@ if (!defined( 'DB_USER' )) define( 'DB_USER', 'user' );
 if (!defined( 'DB_PASSWORD' )) define( 'DB_PASSWORD', 'password' );
 if (!defined( 'APACHE_PATH' )) define( 'APACHE_PATH', 'C:\\xampp\\apache\\' );
 if (!defined( 'HTDOCS_PATH' )) define( 'HTDOCS_PATH', 'C:\\htdocs\\' ); // Where your local projects are stored
+if (!defined( 'PHP_PATH' )) define( 'PHP_PATH', 'C:\\xampp\\php\\' );
 
 if (!isset($displaySystemStats))    $displaySystemStats = true;
 if (!isset($displayApacheErrorLog)) $displayApacheErrorLog = true;
