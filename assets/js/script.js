@@ -103,7 +103,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	}
 } );
 
-const columnSizes = [ 'max-800', 'max-1300', 'max-1600', 'max-fit-content' ];
+const columnSizes = [ 'max-800', 'max-1300', 'max-1600' ];
 
 function setColumnWidth( size ) {
 	localStorage.setItem( 'columnSize', size );

@@ -245,7 +245,7 @@ label {
   margin-bottom: 10px;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], select {
   font-family: var(--font-main);
   width: 100%;
   max-width: 300px;
@@ -255,8 +255,13 @@ input[type=text], input[type=password] {
   background-color: var(--input-bg);
   color: var(--input-text);
 }
-input::placeholder {
+input[type=text]::placeholder, input[type=password]::placeholder, select::placeholder {
   color: var(--input-placeholder);
+}
+
+select {
+  width: auto;
+  margin-left: 5px;
 }
 
 button {
@@ -341,7 +346,8 @@ section {
   display: flex;
   gap: 30px;
   margin: 0 auto;
-  max-width: none;
+  max-width: 1300px;
+  transition: max-width 0.3s ease;
 }
 .columns.max-fit-content {
   max-width: fit-content;
@@ -450,16 +456,31 @@ span.quote {
   padding: 10px;
 }
 .dock a {
+  position: relative;
   display: inline-block;
   transition: transform 0.3s ease-in-out;
 }
 .dock a:hover {
   transform: scale(1.3);
 }
+.dock a span {
+  position: absolute;
+  bottom: 8px;
+  right: 0;
+  color: var(--text-color);
+  font-size: 18px;
+  text-transform: uppercase;
+  text-shadow: -1px -1px 0 var(--header-background-color), 1px -1px 0 var(--header-background-color), -1px 1px 0 var(--header-background-color), 1px 1px 0 var(--header-background-color);
+  user-select: none;
+}
 .dock img {
   width: 60px;
   height: 60px;
   border-radius: 10px;
+}
+
+#settings-view h3 {
+  margin: 10px 0 10px;
 }
 
 .misc {
@@ -523,6 +544,26 @@ body.system-monitor-active .system-monitor p span {
 }
 body.system-monitor-active #error-log-section {
   padding-right: 220px;
+}
+
+/* vhosts manager */
+#vhosts-manager {
+  margin: 2em 0;
+  padding: 0;
+  border-radius: 0.5em;
+}
+
+table {
+  width: auto;
+  border-collapse: collapse;
+  border-radius: 5px;
+  background: var(--header-background-color);
+}
+table th,
+table td {
+  padding: 0.5em;
+  border: 1px solid var(--border-color);
+  text-align: left;
 }
 
 /* Custom Scrollbar */

@@ -56,4 +56,55 @@ $phpPathValid = file_exists(PHP_PATH);
 
         <button type="submit">Save Settings</button>
     </form>
+
+<section id="vhosts-manager">
+    <h2>Virtual Hosts Manager</h2>
+    <table>
+        <thead><tr><th>Server Name</th><th>Status</th></tr></thead>
+        <tbody>
+        <?php
+        $vhostsPath = APACHE_PATH . '/conf/extra/httpd-vhosts.conf';
+        if (file_exists($vhostsPath)) {
+            $lines = file($vhostsPath);
+            $serverNames = [];
+            foreach ($lines as $line) {
+                if (preg_match('/^\s*ServerName\s+(.+)/i', $line, $matches)) {
+                    $serverNames[] = trim($matches[1]);
+                }
+            }
+            $hostsFiles = [
+                'Windows' => getenv('WINDIR') . '/System32/drivers/etc/hosts',
+                'Linux' => '/etc/hosts'
+            ];
+            $hostsEntries = [];
+            foreach ($hostsFiles as $os => $path) {
+                if (file_exists($path)) {
+                    foreach (file($path) as $line) {
+                        $line = trim($line);
+                        if ($line === '' || strpos($line, '#') === 0) continue;
+                        $parts = preg_split('/\s+/', $line);
+                        for ($i = 1; $i < count($parts); $i++) {
+                            $hostsEntries[$os][] = $parts[$i];
+                        }
+                    }
+                }
+            }
+            foreach ($serverNames as $serverName) {
+                $valid = false;
+                foreach ($hostsEntries as $names) {
+                    if (in_array($serverName, $names, true)) {
+                        $valid = true;
+                        break;
+                    }
+                }
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($serverName) . '</td>';
+                echo '<td class="status">' . ($valid ? '<span class="tick">✔️</span>' : '<span class="cross">❌</span>') . '</td>';
+                echo '</tr>';
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</section>
 </div>
