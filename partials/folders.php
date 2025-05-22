@@ -1,3 +1,4 @@
+<?php $columnCounter = 0; ?>
             <div id="folders-view">
                 <div class="column-controls">
                     <button onclick="setColumnWidth('auto')">X</button>
@@ -6,7 +7,8 @@
                 </div>
                 <h2>Document Folders</h2>
                 <div class="columns">
-                    <div class="column">
+                    <div class="column" id="<?php echo 'column_' . (++$columnCounter); ?>">
+                        <div class="drag-handle"><?php echo file_get_contents(__DIR__ . '/../assets/images/hamburger.svg'); ?></div>
                         <h3>Miscellaneous 🤷🏻‍♂️</h3>
                         <ul>
                             <?php
@@ -39,7 +41,8 @@
                             ?>
                         </ul>
                     </div>
-                    <div class="column">
+                    <div class="column" id="<?php echo 'column_' . (++$columnCounter); ?>">
+                        <div class="drag-handle"><?php echo file_get_contents(__DIR__ . '/../assets/images/hamburger.svg'); ?></div>
                         <h3><a href="">GitHub</a> 🚀</h3>
                         <ul>
                             <?php
@@ -72,7 +75,8 @@
                             ?>
                         </ul>
                     </div>
-                    <div class="column">
+                    <div class="column" id="<?php echo 'column_' . (++$columnCounter); ?>">
+                        <div class="drag-handle"><?php echo file_get_contents(__DIR__ . '/../assets/images/hamburger.svg'); ?></div>
                         <h3><a href="">Pantheon</a> 🏛️</h3>
                         <ul>
                             <?php

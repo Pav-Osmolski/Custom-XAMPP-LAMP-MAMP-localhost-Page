@@ -148,24 +148,90 @@ document.addEventListener( 'DOMContentLoaded', function () {
 } );
 
 document.addEventListener( 'DOMContentLoaded', function () {
-    const foldersView = document.getElementById( 'folders-view' );
-    const settingsView = document.getElementById( 'settings-view' );
-    const toggleIndex = document.getElementById( 'toggle-index' );
-    const toggleSettings = document.getElementById( 'toggle-settings' );
+	const foldersView = document.getElementById( 'folders-view' );
+	const settingsView = document.getElementById( 'settings-view' );
+	const toggleIndex = document.getElementById( 'toggle-index' );
+	const toggleSettings = document.getElementById( 'toggle-settings' );
 
-    if ( toggleIndex ) {
-        toggleIndex.addEventListener( 'click', function (e) {
-            e.preventDefault();
-            foldersView.style.display = 'block';
-            settingsView.style.display = 'none';
-        });
-    }
+	if ( toggleIndex ) {
+		toggleIndex.addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			foldersView.style.display = 'block';
+			settingsView.style.display = 'none';
+		} );
+	}
 
-    if ( toggleSettings ) {
-        toggleSettings.addEventListener( 'click', function (e) {
-            e.preventDefault();
-            settingsView.style.display = 'block';
-            foldersView.style.display = 'none';
-        });
-    }
-});
+	if ( toggleSettings ) {
+		toggleSettings.addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			settingsView.style.display = 'block';
+			foldersView.style.display = 'none';
+		} );
+	}
+} );
+
+document.addEventListener( 'DOMContentLoaded', function () {
+	const container = document.querySelector( '.columns' );
+	if ( !container ) return;
+
+	let draggedItem = null;
+
+	// Restore saved order
+	const savedOrder = JSON.parse( localStorage.getItem( 'columnOrder' ) || '[]' );
+	if ( savedOrder.length ) {
+		savedOrder.forEach( id => {
+			const col = document.getElementById( id );
+			if ( col ) container.appendChild( col );
+		} );
+	}
+
+	function saveOrder() {
+		const order = Array.from( container.children )
+			.filter( el => !el.classList.contains( 'column-controls' ) )
+			.map( el => el.id );
+		localStorage.setItem( 'columnOrder', JSON.stringify( order ) );
+	}
+
+	container.querySelectorAll( '.column:not(.column-controls)' ).forEach( column => {
+		const handle = column.querySelector( '.drag-handle' );
+		if ( !handle ) return;
+
+		column.setAttribute( 'draggable', false ); // Default to not draggable
+
+		handle.addEventListener( 'mousedown', () => {
+			column.setAttribute( 'draggable', true );
+		} );
+
+		handle.addEventListener( 'mouseup', () => {
+			column.setAttribute( 'draggable', false );
+		} );
+
+		column.addEventListener( 'dragstart', () => {
+			draggedItem = column;
+			column.style.opacity = '0.5';
+		} );
+
+		column.addEventListener( 'dragend', () => {
+			draggedItem = null;
+			column.style.opacity = '1';
+			column.setAttribute( 'draggable', false );
+			saveOrder();
+		} );
+
+		column.addEventListener( 'dragover', e => e.preventDefault() );
+
+		column.addEventListener( 'drop', e => {
+			e.preventDefault();
+			if ( draggedItem && draggedItem !== column ) {
+				const all = [ ...container.children ];
+				const dropIndex = all.indexOf( column );
+				const dragIndex = all.indexOf( draggedItem );
+				if ( dragIndex < dropIndex ) {
+					column.after( draggedItem );
+				} else {
+					column.before( draggedItem );
+				}
+			}
+		} );
+	} );
+} );

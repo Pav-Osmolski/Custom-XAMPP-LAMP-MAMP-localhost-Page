@@ -4,7 +4,7 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate' );
 header( 'Pragma: no-cache' );
 header( 'Expires: 0' );
 
-if ( PHP_OS_FAMILY === 'Windows' ) {
+if ( $isWindows ) {
     // CPU Load (Windows)
     $cpuLoad = trim( shell_exec( 'wmic cpu get loadpercentage 2>&1' ) );
     preg_match( '/\d+/', $cpuLoad, $matches );

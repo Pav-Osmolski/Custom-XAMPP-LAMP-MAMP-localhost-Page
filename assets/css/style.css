@@ -363,15 +363,36 @@ section {
 }
 
 .column {
+  position: relative;
   flex: 1;
   background-color: var(--header-background-color);
   padding: 16px 13px;
   border-radius: 8px;
 }
+.column .drag-handle {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 3px;
+  right: 3px;
+  padding: 10px;
+  cursor: grab;
+  z-index: 1;
+}
+.column .drag-handle svg {
+  width: 20px;
+  height: 20px;
+  color: var(--input-placeholder);
+  transition: color 0.2s ease;
+}
+.column .drag-handle:hover svg {
+  color: var(--hover-color);
+}
 .column h3 {
   position: relative;
   height: 25px;
   margin-bottom: 15px;
+  user-select: none;
 }
 .column h3 a {
   color: var(--text-color);
