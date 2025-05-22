@@ -567,7 +567,7 @@ body.system-monitor-active #error-log-section {
   padding-right: 220px;
 }
 
-/* vhosts manager */
+/* vHosts Manager */
 #vhosts-manager {
   margin: 2em 0;
   padding: 0;
@@ -585,6 +585,42 @@ table td {
   padding: 0.5em;
   border: 1px solid var(--border-color);
   text-align: left;
+}
+
+/* Dock Configuration Styles */
+#dock-config-editor {
+  margin-top: 1rem;
+}
+#dock-config-editor #dock-list {
+  list-style: none;
+  padding: 0;
+}
+#dock-config-editor #dock-list .dock-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: var(--header-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: move;
+}
+#dock-config-editor #dock-list .dock-item input {
+  flex: 1;
+  padding: 0.3rem;
+  font-size: 0.9rem;
+}
+#dock-config-editor #dock-list .dock-item button.remove {
+  background: var(--hover-color);
+  border: none;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+#dock-config-editor #dock-list .dock-item button.remove:hover {
+  background: var(--text-color);
 }
 
 /* Custom Scrollbar */

@@ -464,7 +464,7 @@ body.system-monitor-active {
 	}
 }
 
-/* vhosts manager */
+/* vHosts Manager */
 #vhosts-manager {
 	margin: 2em 0;
 	padding: 0;
@@ -482,6 +482,58 @@ table {
 		padding: 0.5em;
 		border: 1px solid var(--border-color);
 		text-align: left;
+	}
+}
+
+/* Dock Configuration Styles */
+#dock-config-editor {
+	margin-top: 1rem;
+
+	#dock-list {
+		list-style: none;
+		padding: 0;
+
+		.dock-item {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			margin-bottom: 0.5rem;
+			padding: 0.5rem;
+			background: var(--header-background-color);
+			border: 1px solid var(--border-color);
+			border-radius: 6px;
+			cursor: move;
+
+			input {
+				flex: 1;
+				padding: 0.3rem;
+				font-size: 0.9rem;
+				max-width: none;
+
+				&[placeholder="Label"] {
+					max-width: 150px;
+				}
+				&[placeholder="Icon"] {
+					max-width: 300px;
+				}
+				&[placeholder="Alt Text"] {
+					max-width: 150px;
+				}
+			}
+
+			button.remove {
+				background: var(--hover-color);
+				border: none;
+				padding: 0.3rem 0.6rem;
+				cursor: pointer;
+				font-size: 0.9rem;
+				border-radius: 4px;
+
+				&:hover {
+					background: var(--text-color);
+				}
+			}
+		}
 	}
 }
 
@@ -545,6 +597,20 @@ body {
 	}
 	.column-controls {
 		display: none;
+	}
+	#dock-config-editor {
+		#dock-list {
+			display: flex;
+			flex-direction: column;
+
+			.dock-item {
+				flex-direction: column;
+
+				input {
+					max-width: none !important;
+				}
+			}
+		}
 	}
 }
 
