@@ -147,27 +147,30 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	}
 } );
 
-document.addEventListener( 'DOMContentLoaded', function () {
-	const foldersView = document.getElementById( 'folders-view' );
-	const settingsView = document.getElementById( 'settings-view' );
-	const toggleIndex = document.getElementById( 'toggle-index' );
-	const toggleSettings = document.getElementById( 'toggle-settings' );
+document.addEventListener( 'DOMContentLoaded', () => {
+	const views = {
+		'index': document.getElementById( 'folders-view' ),
+		'settings': document.getElementById( 'settings-view' ),
+		'phpinfo': document.getElementById( 'phpinfo-view' )
+	};
 
-	if ( toggleIndex ) {
-		toggleIndex.addEventListener( 'click', function ( e ) {
-			e.preventDefault();
-			foldersView.style.display = 'block';
-			settingsView.style.display = 'none';
-		} );
-	}
+	const toggles = {
+		'toggle-index': 'index',
+		'toggle-settings': 'settings',
+		'toggle-phpinfo': 'phpinfo'
+	};
 
-	if ( toggleSettings ) {
-		toggleSettings.addEventListener( 'click', function ( e ) {
-			e.preventDefault();
-			settingsView.style.display = 'block';
-			foldersView.style.display = 'none';
-		} );
-	}
+	Object.entries( toggles ).forEach( ( [ toggleId, viewKey ] ) => {
+		const toggle = document.getElementById( toggleId );
+		if ( toggle ) {
+			toggle.addEventListener( 'click', ( e ) => {
+				e.preventDefault();
+				Object.entries( views ).forEach( ( [ key, el ] ) => {
+					el.style.display = (key === viewKey) ? 'block' : 'none';
+				} );
+			} );
+		}
+	} );
 } );
 
 document.addEventListener( 'DOMContentLoaded', function () {

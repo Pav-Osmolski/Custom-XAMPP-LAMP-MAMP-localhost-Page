@@ -358,6 +358,7 @@ span.quote {
 	gap: 20px;
 	margin-top: 40px;
 	padding: 10px;
+	user-select: none;
 
 	a {
 		position: relative;
@@ -464,6 +465,58 @@ body.system-monitor-active {
 	}
 }
 
+hr {
+	margin: 20px 0;
+	ackground-color: var(--text-color);
+	height: 1px;
+	border: none;
+}
+
+/* PHP Info */
+#phpinfo-view {
+	max-width: 1000px;
+	margin: 0 auto;
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 1.5rem;
+		table-layout: fixed;
+		word-wrap: break-word;
+	}
+
+	th,
+	td {
+		padding: 0.5rem;
+		vertical-align: top;
+		text-align: left;
+		font-size: 0.85rem;
+	}
+
+	h1,
+	h2 {
+		margin-top: 2rem;
+		margin-bottom: 0.75rem;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+	}
+
+	h2 {
+		font-size: 1.2rem;
+	}
+
+	p {
+		margin: 0.5rem 0;
+	}
+
+	a {
+		text-decoration: underline;
+		word-break: break-word;
+	}
+}
+
 /* vHosts Manager */
 #vhosts-manager {
 	margin: 2em 0;
@@ -513,9 +566,11 @@ table {
 				&[placeholder="Label"] {
 					max-width: 150px;
 				}
+
 				&[placeholder="Icon"] {
 					max-width: 300px;
 				}
+
 				&[placeholder="Alt Text"] {
 					max-width: 150px;
 				}
@@ -619,6 +674,7 @@ body {
 		.search-bar {
 			margin-top: -30px;
 		}
+
 		.clock {
 			position: absolute;
 			top: 49px;

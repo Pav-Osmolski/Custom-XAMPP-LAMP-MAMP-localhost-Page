@@ -95,7 +95,7 @@ function renderServerInfo() {
     } else {
         $isThreadSafe = ( ZEND_THREAD_SAFE ) ? "TS" : "NTS";
         $isFastCGI    = ( strpos( PHP_SAPI, 'cgi-fcgi' ) !== false ) ? "FastCGI" : "Non-FastCGI";
-        echo 'PHP: <a href="phpinfo.php">' . $phpVersion . " $isThreadSafe $isFastCGI</a> ✔️<br>";
+        echo 'PHP: <a href="#" id="toggle-phpinfo">' . $phpVersion . " $isThreadSafe $isFastCGI</a> ✔️<br>";
     }
 
     // Check MySQL version

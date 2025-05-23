@@ -1,5 +1,5 @@
 # 👨🏻‍💻 Custom XAMPP/LAMP/MAMP localhost index page
-An informative custom xAMP (Apache MySQL PHP) stack localhost index page that displays your current projects, useful statistics and provides handy links. Requires PHP 8.0 or higher.
+An informative custom xAMP stack (Apache MySQL PHP) localhost index page that displays your current projects, useful statistics and provides handy links. Requires PHP 8.0 or higher.
 Technically this localhost index can be adapted to suit any other local Apache PHP development environment. I've added cross-platform logic so that it works on Windows, Linux and Mac platforms.
 
 It is intended to be used with AMP stacks such as:
@@ -10,6 +10,12 @@ It is intended to be used with AMP stacks such as:
 - [MAMP & MAMP PRO](https://www.mamp.info/)
 
 Please feel free to fork and make your own changes!
+
+## 📋 To-do
+
+- Start/stop Apache
+- UI to configure project folders
+- Split JavaScript into partials
 
 ## 📚 Table of Contents
 

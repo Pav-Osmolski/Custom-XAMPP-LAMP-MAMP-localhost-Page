@@ -475,6 +475,7 @@ span.quote {
   gap: 20px;
   margin-top: 40px;
   padding: 10px;
+  user-select: none;
 }
 .dock a {
   position: relative;
@@ -567,6 +568,51 @@ body.system-monitor-active #error-log-section {
   padding-right: 220px;
 }
 
+hr {
+  margin: 20px 0;
+  ackground-color: var(--text-color);
+  height: 1px;
+  border: none;
+}
+
+/* PHP Info */
+#phpinfo-view {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+#phpinfo-view table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+#phpinfo-view th,
+#phpinfo-view td {
+  padding: 0.5rem;
+  vertical-align: top;
+  text-align: left;
+  font-size: 0.85rem;
+}
+#phpinfo-view h1,
+#phpinfo-view h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+#phpinfo-view h1 {
+  font-size: 1.5rem;
+}
+#phpinfo-view h2 {
+  font-size: 1.2rem;
+}
+#phpinfo-view p {
+  margin: 0.5rem 0;
+}
+#phpinfo-view a {
+  text-decoration: underline;
+  word-break: break-word;
+}
+
 /* vHosts Manager */
 #vhosts-manager {
   margin: 2em 0;
@@ -610,6 +656,16 @@ table td {
   flex: 1;
   padding: 0.3rem;
   font-size: 0.9rem;
+  max-width: none;
+}
+#dock-config-editor #dock-list .dock-item input[placeholder=Label] {
+  max-width: 150px;
+}
+#dock-config-editor #dock-list .dock-item input[placeholder=Icon] {
+  max-width: 300px;
+}
+#dock-config-editor #dock-list .dock-item input[placeholder="Alt Text"] {
+  max-width: 150px;
 }
 #dock-config-editor #dock-list .dock-item button.remove {
   background: var(--hover-color);
@@ -673,6 +729,16 @@ body::-webkit-scrollbar-thumb {
   }
   .column-controls {
     display: none;
+  }
+  #dock-config-editor #dock-list {
+    display: flex;
+    flex-direction: column;
+  }
+  #dock-config-editor #dock-list .dock-item {
+    flex-direction: column;
+  }
+  #dock-config-editor #dock-list .dock-item input {
+    max-width: none !important;
   }
 }
 @media (max-width: 525px) {
