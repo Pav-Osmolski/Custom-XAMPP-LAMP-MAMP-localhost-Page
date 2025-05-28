@@ -37,6 +37,8 @@ if ( ! isset( $useAjaxForStats ) ) {
 
 // Detect OS
 $isWindows       = PHP_OS_FAMILY === 'Windows';
+$isLinux         = PHP_OS_FAMILY === 'Linux';
+$isMac           = PHP_OS_FAMILY === 'Darwin';
 $isWindowsPHPOld = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
 
 // Get username based on OS

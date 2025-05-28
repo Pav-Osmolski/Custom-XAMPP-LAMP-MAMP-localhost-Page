@@ -1,21 +1,28 @@
 {
-  "name": "scss-compiler",
+  "name": "pav-localhost",
   "version": "1.0.0",
-  "description": "A simple SCSS compiler setup using Sass and JS minifier",
+  "description": "A modular Webpack setup for compiling SCSS, bundling and minifying JavaScript, and powering a dynamic custom localhost homepage",
   "scripts": {
-    "prebuild": "rm -rf assets/css/style.min.css assets/js/script.min.js",
-    "build:scss": "sass assets/scss/_index.scss assets/css/style.css",
-    "build:scss:min": "sass assets/scss/_index.scss assets/css/style.min.css --style=compressed",
-    "watch:scss": "sass --watch assets/scss/style.scss:assets/css/style.css",
-    "build:js": "uglifyjs assets/js/*.js -o assets/js/script.min.js -c -m",
-    "watch:js": "watch 'npm run build:js' assets/js",
-    "build": "npm run prebuild && npm run build:scss && npm run build:scss:min && npm run build:js",
-    "watch": "concurrently --kill-others-on-fail \"npm run watch:scss\" \"npm run watch:js\""
+    "build": "webpack --mode production",
+    "watch": "webpack --watch"
   },
   "dependencies": {},
   "devDependencies": {
-    "sass": "^1.75.0",
-    "uglify-js": "^3.17.4",
-    "concurrently": "^8.2.2"
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.0.0",
+    "mini-css-extract-plugin": "^2.0.0",
+    "css-loader": "^6.0.0",
+    "sass": "^1.0.0",
+    "sass-loader": "^13.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.0",
+    "terser-webpack-plugin": "^5.0.0",
+    "babel-loader": "^9.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }

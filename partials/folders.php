@@ -1,12 +1,12 @@
 <?php $columnCounter = 0; ?>
             <div id="folders-view">
                 <div class="column-controls">
-                    <button onclick="setColumnWidth('auto')">X</button>
-                    <button onclick="cycleColumnWidth('prev')">−</button>
-                    <button onclick="cycleColumnWidth('next')">+</button>
+                    <button id="reset-width">X</button>
+                    <button id="prev-width">−</button>
+                    <button id="next-width">+</button>
                 </div>
                 <h2>Document Folders</h2>
-                <div class="columns">
+                <div class="columns max-md">
                     <div class="column" id="<?php echo 'column_' . (++$columnCounter); ?>">
                         <div class="drag-handle"><?php echo file_get_contents(__DIR__ . '/../assets/images/hamburger.svg'); ?></div>
                         <h3>Miscellaneous 🤷🏻‍♂️</h3>

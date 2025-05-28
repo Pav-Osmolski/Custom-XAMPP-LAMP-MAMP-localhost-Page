@@ -1,6 +1,10 @@
-# 👨🏻‍💻 Custom XAMPP/LAMP/MAMP localhost index page
-An informative custom xAMP stack (Apache MySQL PHP) localhost index page that displays your current projects, useful statistics and provides handy links. Requires PHP 8.0 or higher.
-Technically this localhost index can be adapted to suit any other local Apache PHP development environment. I've added cross-platform logic so that it works on Windows, Linux and Mac platforms.
+# 👨🏻‍💻 Custom XAMPP/LAMP/MAMP Localhost Index Page
+
+An informative and fully modular custom local homepage for xAMP stacks (Apache, MySQL, PHP). This locahost index page showcases your projects, displays system stats, and provides admin tools — all now powered by a modern Webpack build process. Technically this can be adapted to suit any local Apache PHP development environment.
+
+✅ Requires **PHP 8.0+**  
+✅ Works on **Windows, macOS, and Linux**  
+✅ Built with **Webpack, Babel, Sass, and module-based JS**
 
 It is intended to be used with AMP stacks such as:
 
@@ -15,22 +19,21 @@ Please feel free to fork and make your own changes!
 
 - Start/stop Apache
 - UI to configure project folders
-- Split JavaScript into partials
 
 ## 📚 Table of Contents
 
 - [✨ Features](#-features)
-- [🛠️ How to Install](#️-how-to-install)
+- [🛠️ How to Install](#-how-to-install)
 - [📸 Screenshots](#-screenshots)
 - [📁 Project Structure](#-project-structure)
 
 ## ✨ Features
 
-- Search functionality for all local project folders specified
+- Live search functionality for all local project folders
 - Resizable and draggable columns
 - Real-time clock
 - Displays the current version of Apache, PHP and MySQL
-- System stats using AJAX showing CPU Load, Memory Usage and Disk Space
+- AJAX-powered system stats showing CPU Load, Memory Usage and Disk Space
 - Configuration page for quick and easy setup
 - Toggle PHP error handling and logging
 - Virtual Hosts List
@@ -78,40 +81,55 @@ A quick overview of the core files and folders in this project, so you’re neve
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
 | `system_stats.php`       | Backend logic for system stat readings, used by AJAX. |
 | `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
+| `package.json`           | Lists build dependencies and Webpack/Babel/Sass configuration. |
+| `webpack.config.js`      | Webpack build pipeline for JS and SCSS. |
 
 ---
 
-### 🧩 Partials (Modular Includes)
+### 🧩 Partials (`partials/`)
 
 | File                     | Description |
 |--------------------------|-------------|
-| `partials/dock.json`     | Stores dock layout and links in JSON format. |
-| `partials/dock.php`      | Renders the customizable macOS-style dock. |
-| `partials/folders.php`   | Dynamically scans and lists local project folders. |
-| `partials/footer.php`    | The shared footer, includes theme toggle and settings link. |
-| `partials/header.php`    | Shared `<head>` setup, includes all essential meta and scripts. |
-| `partials/info.php`      | Displays system information like PHP, Apache, and MySQL versions. |
-| `partials/settings.php`  | The settings interface for configuring paths, dock, and logs. |
-| `partials/submit.php`    | Handles the saving of user-configured settings. |
+| `dock.json`              | Stores dock layout and links in JSON format. |
+| `dock.php`               | Renders the customizable macOS-style dock. |
+| `folders.php`            | Dynamically scans and lists local project folders. |
+| `footer.php`             | The shared footer, includes theme toggle and settings link. |
+| `header.php`             | Shared `<head>` setup, includes all essential meta and scripts. |
+| `info.php`               | Displays system information like PHP, Apache, and MySQL versions. |
+| `settings.php`           | The settings interface for configuring paths, dock, and logs. |
+| `submit.php`             | Handles the saving of user-configured settings. |
 
 ---
 
 ### 🛠️ JavaScript (`assets/js/`)
 
-| File                     | Description |
+| File/Folder              | Description |
 |--------------------------|-------------|
-| `script.js`              | Powers frontend features — dock interactions, themes, and AJAX. |
+| `main.js`                | Webpack entry point — initialises all modules. |
+| `modules/`               | Modular ES6 scripts (e.g. `clock.js`, `dock.js`, `columns.js`) |
 
 ---
 
-### 🎨 SCSS Styles (`assets/scss/`)
+### 🎨 SCSS (`assets/scss/`)
 
 | File                     | Description |
 |--------------------------|-------------|
-| `fonts.scss`             | Defines any custom fonts used. |
-| `reset.scss`             | Resets default browser styles for consistency. |
-| `style.scss`             | Main stylesheet that imports all other partials. |
-| `_index.scss`            | Styles for the homepage layout and core components. |
+| `_index.scss`            | Layout and style rules for the homepage. |
+| `fonts.scss`             | Custom fonts used in the project. |
+| `reset.scss`             | Basic reset for cross-browser consistency. |
+| `style.scss`             | SCSS entry point that imports all partials. |
+
+---
+
+### 🔤 Fonts (`fonts/`)
+
+| File                     | Description |
+|--------------------------|-------------|
+| `Ubuntu-Regular.woff2`   | Regular variant. |
+| `Ubuntu-Bold.woff2`      | Bold variant. |
+| `Ubuntu-Light.woff2`     | Light variant. |
+| `Ubuntu-Medium.woff2`    | Medium variant. |
+| `css2.css`               | `@font-face` rules for Ubuntu. |
 
 ---
 

@@ -16,8 +16,8 @@ include 'config.php';
     <link rel="icon" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
     <link rel="stylesheet" type="text/css"
-          href="assets/css/style.min.css?v=<?= filemtime( 'assets/css/style.min.css' ); ?>">
-    <script src="assets/js/script.min.js?v=<?= filemtime( 'assets/js/script.min.js' ); ?>"></script>
+          href="dist/css/style.min.css?v=<?= filemtime( 'dist/css/style.min.css' ); ?>">
+    <script src="dist/js/script.min.js?v=<?= filemtime( 'dist/js/script.min.js' ); ?>"></script>
 </head>
 <?php echo( $useAjaxForStats ? '<body data-ajax-enabled="true"' : '<body' ); ?> class="<?= $bodyClasses; ?>">
 <div class="container">
@@ -26,6 +26,7 @@ include 'config.php';
         <section class="folders">
             <?php require_once 'partials/folders.php'; ?>
             <?php require_once 'partials/settings.php'; ?>
+            <?php require_once 'phpinfo.php'; ?>
             <?php require_once 'partials/dock.php'; ?>
         </section>
         <?php require_once 'partials/info.php'; ?>
