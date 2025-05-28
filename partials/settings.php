@@ -64,9 +64,17 @@ $phpPathValid    = file_exists( PHP_PATH );
 		<br>
 
 		<button type="submit">Save Settings</button>
-	</form>
+	</form><br>
 
-	<section id="vhosts-manager">
+	<!-- Apache Control -->
+	<div class="apache-control">
+		<h2>Apache Control</h3>
+		<button id="restart-apache-button">Restart Apache</button>
+		
+		<div id="apache-status-message" style="margin-top:10px;"></div>
+	</div>
+
+	<div id="vhosts-manager">
 		<h2>Virtual Hosts Manager</h2>
 		<table>
 			<thead>
@@ -122,5 +130,5 @@ $phpPathValid    = file_exists( PHP_PATH );
 			?>
 			</tbody>
 		</table>
-	</section>
+	</div>
 </div>

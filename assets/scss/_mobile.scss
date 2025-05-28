@@ -1,0 +1,66 @@
+/* Media breakpoints */
+@media (max-width: 1110px) {
+    header {
+        h1 {
+            font-size: 25px;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    header {
+        h1 {
+            display: none;
+        }
+    }
+    .columns {
+        flex-direction: column;
+        max-width: none !important;
+    }
+    .toggle-theme {
+        position: static;
+        transform: none;
+    }
+    body.system-monitor-active.error-log-section-active #error-log-section {
+        padding-right: 0;
+    }
+    body.system-monitor-active .system-monitor {
+        position: static;
+        width: 100%;
+        margin: -90px auto 90px auto;
+        border-radius: 0;
+        align-items: center;
+    }
+    .column-controls {
+        display: none;
+    }
+    #dock-config-editor {
+        #dock-list {
+            display: flex;
+            flex-direction: column;
+
+            .dock-item {
+                flex-direction: column;
+
+                input {
+                    max-width: none !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 525px) {
+    header {
+        .search-bar {
+            margin-top: -30px;
+        }
+
+        .clock {
+            position: absolute;
+            top: 49px;
+            left: 20px;
+            font-size: 1.5em;
+        }
+    }
+}

@@ -1,8 +1,10 @@
 // assets/js/modules/system.js
 export function initSystemMonitoring() {
 	document.addEventListener('DOMContentLoaded', () => {
-		// SYSTEM STATS SECTION
+		const body = document.body;
 		const systemStatsSection = document.getElementById('system-monitor');
+		const useAjax = body.getAttribute('data-ajax-enabled') === 'true';
+
 		if (systemStatsSection) {
 			const cpuElem = document.getElementById('cpu-load');
 			const memElem = document.getElementById('memory-usage');

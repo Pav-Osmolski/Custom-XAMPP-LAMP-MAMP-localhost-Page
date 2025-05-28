@@ -2,7 +2,7 @@
 
 An informative and fully modular custom local homepage for xAMP stacks (Apache, MySQL, PHP). This locahost index page showcases your projects, displays system stats, and provides admin tools — all now powered by a modern Webpack build process. Technically this can be adapted to suit any local Apache PHP development environment.
 
-✅ Requires **PHP 8.0+**  
+✅ Requires **PHP 5.4+**  
 ✅ Works on **Windows, macOS, and Linux**  
 ✅ Built with **Webpack, Babel, Sass, and module-based JS**
 
@@ -17,7 +17,6 @@ Please feel free to fork and make your own changes!
 
 ## 📋 To-do
 
-- Start/stop Apache
 - UI to configure project folders
 
 ## 📚 Table of Contents
@@ -33,6 +32,7 @@ Please feel free to fork and make your own changes!
 - Resizable and draggable columns
 - Real-time clock
 - Displays the current version of Apache, PHP and MySQL
+- Safely restart the currently running Apache instance based on detected OS and setup
 - AJAX-powered system stats showing CPU Load, Memory Usage and Disk Space
 - Configuration page for quick and easy setup
 - Toggle PHP error handling and logging
@@ -74,7 +74,8 @@ A quick overview of the core files and folders in this project, so you’re neve
 | File                     | Description |
 |--------------------------|-------------|
 | `ajax_apache_error_log.php` | Fetches and returns Apache error log entries via AJAX. |
-| `ajax_system_stats.php`  | Provides live server stats (CPU, memory, disk) using AJAX. |
+| `ajax_system_stats.php`     | Provides live server stats (CPU, memory, disk) using AJAX. |
+| `ajax_toggle_apache.php`    | Safely restarts the currently running Apache instance. |
 | `apache_error_log.php`   | Displays the Apache error log in a styled UI component. |
 | `config.php`             | Default configuration including MySQL credentials and Apache paths. |
 | `index.php`              | Main entry point. Displays the homepage with all widgets and layout. |
@@ -112,12 +113,15 @@ A quick overview of the core files and folders in this project, so you’re neve
 
 ### 🎨 SCSS (`assets/scss/`)
 
-| File                     | Description |
-|--------------------------|-------------|
-| `_index.scss`            | Layout and style rules for the homepage. |
-| `fonts.scss`             | Custom fonts used in the project. |
-| `reset.scss`             | Basic reset for cross-browser consistency. |
-| `style.scss`             | SCSS entry point that imports all partials. |
+| File              | Description |
+|-------------------|-------------|
+| `_fonts.scss`     | Custom fonts used in the project. |
+| `_keyframes.scss` | Keyframe animations used throughout the site. |
+| `_main.scss`      | Layout and style rules for the homepage. |
+| `_mobile.scss`    | Responsive styles and layout adjustments for mobile devices. |
+| `_reset.scss`     | Basic reset for cross-browser consistency. |
+| `_root.scss`      | Root-level variables and global CSS custom properties. |
+| `style.scss`      | SCSS entry point that imports all partials. |
 
 ---
 

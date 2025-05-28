@@ -1,6 +1,7 @@
 // assets/js/main.js
 import '../scss/style.scss';
 
+import { toggleApache } from './modules/apache.js';
 import { initClock } from './modules/clock.js';
 import { setColumnWidth, cycleColumnWidth, initColumnFeatures } from './modules/columns.js';
 import { initDockConfig } from './modules/dock.js';
