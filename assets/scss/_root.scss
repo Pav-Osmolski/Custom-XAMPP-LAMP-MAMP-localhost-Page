@@ -1,37 +1,38 @@
 :root {
-    --background-color: #121212e8;
-    --light-mode-bg-overlay: #e7e6f0d9;
-    --text-color: #e0dde8;
-    --header-background-color: #1d1c1fe8;
-    --border-color: #444;
-    --link-color: #4672c9;
-    --hover-color: #f15e83;
-    --input-bg: #1d1c1f;
-    --input-text: #e0dde8;
-    --input-placeholder: #888;
-    --scrollbar-primary: #4672c9;
-    --scrollbar-secondary: #1d1c1f;
-    --background-image: url(../../assets/images/background.jpg);
-    --font-main: 'Ubuntu', sans-serif;
+	--background-color: #121212e8;
+	--light-mode-bg-overlay: #e7e6f0d9;
+	--text-color: #e0dde8;
+	--header-background-color: #1d1c1fe8;
+	--border-color: #444;
+	--link-color: #4672c9;
+	--hover-color: #f15e83;
+	--input-bg: #1d1c1f;
+	--input-text: #e0dde8;
+	--input-placeholder: #888;
+	--button-text: #e0dde8;
+	--scrollbar-primary: #4672c9;
+	--scrollbar-secondary: #1d1c1f;
+	--background-image: url(../../assets/images/background.jpg);
+	--font-main: 'Ubuntu', sans-serif;
 }
 
 .light-mode {
-    --background-color: #f0f0f0;
-    --text-color: #2a3246;
-    --header-background-color: #dfdde6;
-    --border-color: #626798;
-    --link-color: #237493;
-    --input-bg: #fbf9ff;
-    --input-text: #2a3246;
-    --scrollbar-primary: #237493;
-    --scrollbar-secondary: #dfdde6;
+	--background-color: #f0f0f0;
+	--text-color: #2a3246;
+	--header-background-color: #dfdde6;
+	--border-color: #626798;
+	--link-color: #237493;
+	--input-bg: #fbf9ff;
+	--input-text: #2a3246;
+	--scrollbar-primary: #237493;
+	--scrollbar-secondary: #dfdde6;
 
-    .emoji {
-        filter: none;
-    }
+	.emoji {
+		filter: none;
+	}
 
-    .system-monitor {
-        background: none !important;
-        box-shadow: none !important;
-    }
+	.system-monitor {
+		background: none !important;
+		box-shadow: none !important;
+	}
 }

@@ -83,6 +83,10 @@ input[type="text"], input[type="password"], select {
 	}
 }
 
+input[type="checkbox"] {
+	margin: 0 5px;
+}
+
 select {
 	width: auto;
 	margin-left: 5px;
@@ -108,10 +112,6 @@ button {
 .folders {
 	position: relative;
 	z-index: 0;
-
-	input {
-		margin-left: 5px;
-	}
 
 	h2 {
 		margin: 15px 0 15px;
@@ -554,6 +554,56 @@ table {
 		}
 	}
 }
+
+#folders-config {
+	background: var(--header-background-color);
+	padding: 1rem;
+	border-radius: 1rem;
+
+	.folder-config-item {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 0.5rem;
+		padding: 1rem;
+		position: relative;
+
+		input {
+			padding: 0.5rem;
+			font-size: 0.9rem;
+		}
+
+		label {
+			margin-left: 5px;
+		}
+
+		button.remove-folder-column {
+			position: absolute;
+			top: 0.5rem;
+			right: 0.5rem;
+			padding: 0.25rem 0.5rem;
+		}
+
+		.special-case {
+			display: flex;
+			gap: .5em;
+			flex-wrap: wrap;
+			margin-bottom: 5px;
+		}
+	}
+
+	button#add-folder-column {
+		margin-top: 1rem;
+		font-weight: bold;
+		background-color: var(--link-color);
+		color: var(--button-text);
+		border: none;
+
+		&:hover {
+			background-color: var(--hover-color);
+		}
+	}
+}
+
 
 /* Custom Scrollbar */
 html {

@@ -7,21 +7,21 @@ $phpPathValid    = file_exists( PHP_PATH );
 <div id="settings-view" style="display: none;">
 	<h2>User Settings Configuration</h2>
 	<form method="post">
-		<label>DB Host: <input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
-		<label>DB User: <input type="text" name="DB_USER" value="<?= DB_USER ?>"></label>
-		<label>DB Password: <input type="password" name="DB_PASSWORD" value="<?= DB_PASSWORD ?>"></label>
+		<label>DB Host:&nbsp;<input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
+		<label>DB User:&nbsp;<input type="text" name="DB_USER" value="<?= DB_USER ?>"></label>
+		<label>DB Password:&nbsp;<input type="password" name="DB_PASSWORD" value="<?= DB_PASSWORD ?>"></label>
 
-		<label>Apache Path:
+		<label>Apache Path:&nbsp;
 			<input type="text" name="APACHE_PATH" value="<?= APACHE_PATH ?>">
 			<?= $apachePathValid ? '✔️' : '❌' ?>
 		</label>
 
-		<label>HTDocs Path:
+		<label>HTDocs Path:&nbsp;
 			<input type="text" name="HTDOCS_PATH" value="<?= HTDOCS_PATH ?>">
 			<?= $htdocsPathValid ? '✔️' : '❌' ?>
 		</label>
 
-		<label>PHP Path:
+		<label>PHP Path:&nbsp;
 			<input type="text" name="PHP_PATH" value="<?= PHP_PATH ?>">
 			<?= $phpPathValid ? '✔️' : '❌' ?>
 		</label>
@@ -42,6 +42,7 @@ $phpPathValid    = file_exists( PHP_PATH );
 		<label>Display Errors:
 			<input type="checkbox" name="displayErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
 		</label>
+
 		<label>Error Reporting Level:
 			<select name="errorReportingLevel">
 				<option value="E_ALL" <?= error_reporting() == E_ALL ? 'selected' : '' ?>>E_ALL</option>
@@ -50,28 +51,43 @@ $phpPathValid    = file_exists( PHP_PATH );
 				<option value="E_NOTICE" <?= error_reporting() == E_NOTICE ? 'selected' : '' ?>>E_NOTICE</option>
 			</select>
 		</label>
+
 		<label>Log Errors:
 			<input type="checkbox" name="logErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
 		</label><br>
 
 		<button type="submit">Save Settings</button>
 
-		<br><br><h3>Dock Configuration</h3>
-		<div id="dock-config-editor">
-			<ul id="dock-list"></ul>
-			<button type="button" id="add-dock-item">+ Add Item</button>
-		</div>
-		<br>
+		<br><br>
+		<h3>Folders Configuration</h2>
+			<div id="folders-config">
+				<ul id="folders-config-list" class="draggable-list"></ul>
+				<button type="button" id="add-folder-column">➕ Add Column</button>
+			</div>
+			<br>
+			<input type="hidden" name="folders_json" id="folders_json_input">
 
-		<button type="submit">Save Settings</button>
-	</form><br>
+			<button type="submit">Save Settings</button>
+
+			<br><br>
+			<h3>Dock Configuration</h3>
+			<div id="dock-config-editor">
+				<ul id="dock-list"></ul>
+				<button type="button" id="add-dock-item">➕ Add Item</button>
+			</div>
+			<br>
+
+			<button type="submit">Save Settings</button>
+
+	</form>
+	<br>
 
 	<!-- Apache Control -->
 	<div class="apache-control">
 		<h2>Apache Control</h3>
-		<button id="restart-apache-button">Restart Apache</button>
-		
-		<div id="apache-status-message" style="margin-top:10px;"></div>
+			<button id="restart-apache-button">Restart Apache</button>
+
+			<div id="apache-status-message" style="margin-top:10px;"></div>
 	</div>
 
 	<div id="vhosts-manager">

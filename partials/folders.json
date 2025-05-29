@@ -1,0 +1,44 @@
+[
+    {
+        "title": "Miscellaneous \ud83e\udd37\ud83c\udffb\u200d\u2642\ufe0f",
+        "href": "",
+        "dir": "projects/Other/",
+        "excludeList": [],
+        "urlRules": {
+            "match": "/^(?!wp-|pantheon-).*/",
+            "replace": "/^wp-/"
+        },
+        "linkTemplate": "basic",
+        "disableLinks": true,
+        "specialCases": []
+    },
+    {
+        "title": "GitHub \ud83d\ude80",
+        "href": "https://github.com/McKissockLP/",
+        "dir": "projects/GitHub/",
+        "excludeList": [],
+        "urlRules": {
+            "match": "/^wp-/",
+            "replace": "/^wp-/"
+        },
+        "linkTemplate": "env-links",
+        "disableLinks": false,
+        "specialCases": []
+    },
+    {
+        "title": "Pantheon \ud83c\udfdb\ufe0f",
+        "href": "https://dashboard.pantheon.io",
+        "dir": "projects/Pantheon/",
+        "excludeList": [
+            "example",
+            "folder"
+        ],
+        "urlRules": {
+            "match": "/^pantheon-/",
+            "replace": "/^pantheon-/"
+        },
+        "linkTemplate": "pantheon",
+        "disableLinks": false,
+        "specialCases": []
+    }
+]

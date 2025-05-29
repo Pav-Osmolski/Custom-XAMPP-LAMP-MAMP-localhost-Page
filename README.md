@@ -15,10 +15,6 @@ It is intended to be used with AMP stacks such as:
 
 Please feel free to fork and make your own changes!
 
-## 📋 To-do
-
-- UI to configure project folders
-
 ## 📚 Table of Contents
 
 - [✨ Features](#-features)
@@ -47,11 +43,8 @@ Please feel free to fork and make your own changes!
 
 1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
 2. Run `npm install` in the repo's location to install dev dependencies
-3. Set your config
-    - Update the default `config.php` with your local MySQL login credentials, Apache and HTDOCS path<br/>
-     — OR —
-    - Set your custom user config by navigating to the Settings page in the footer
-4. Modify the PHP code within `partials/folders.php` to suit your needs
+3. Set your custom user config by navigating to the Settings page in the footer
+4. Modify the PHP code within `partials/folders.php` if required
 5. Customise to your delight
 6. Run `npm run build` to compile any changed SCSS or JavaScript
 
