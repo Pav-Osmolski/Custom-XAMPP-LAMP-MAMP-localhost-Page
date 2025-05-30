@@ -13,7 +13,7 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 	<h2>Document Folders</h2>
 	<div class="columns max-md">
 		<?php foreach ( $configData as $column ): ?>
-			<div class="column" id="<?php echo 'column_' . ( ++ $columnCounter ); ?>">
+			<div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>">
 				<div class="drag-handle"><?php echo file_get_contents( __DIR__ . '/../assets/images/hamburger.svg' ); ?></div>
 				<h3>
 					<?php if ( ! empty( $column['href'] ) ): ?>
@@ -26,12 +26,14 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 					<?php
 					$dir = HTDOCS_PATH . rtrim( $column['dir'], '/' ) . '/';
 					if ( ! is_dir( $dir ) ) {
-						echo "<li style='color: red;'>Error: The directory '{$dir}' does not exist.</li>";
+						echo "<ul><li style='color: red;'>Error: The directory '{$dir}' does not exist.</li></ul>";
+						echo "</div>";
 						continue;
 					}
 					$folders = array_filter( glob( $dir . '*' ), 'is_dir' );
 					if ( empty( $folders ) ) {
-						echo "<li style='color: orange;'>No projects found in '{$dir}'.</li>";
+						echo "<ul><li style='color: orange;'>No projects found in '{$dir}'.</li></ul>";
+						echo "</div>";
 						continue;
 					}
 					foreach ( $folders as $folder ) {
@@ -55,35 +57,25 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 
 						$disableLinks = ! empty( $column['disableLinks'] );
 
-						switch ( $column['linkTemplate'] ) {
-							case 'env-links':
-								if ( $disableLinks ) {
-									echo "<li class='folder-item'>$urlName</li>";
-								} else {
-									echo "<li class='folder-item'><a href='https://local.$urlName.com'>$urlName</a>";
-									echo "<div class='url-container'>
-											<a href='https://dev.$urlName.com'>dev</a>
-											<a href='https://test.$urlName.com'>test</a>
-											<a href='https://stage.$urlName.com'>stage</a>
-											<a href='https://www.$urlName.com'>prod</a>
-										  </div></li>";
-								}
+						$template      = $column['linkTemplate'] ?? 'basic';
+						$templateFile  = __DIR__ . '/link_templates.json';
+						$linkTemplates = json_decode( file_get_contents( $templateFile ), true );
+						$html          = '';
+
+						foreach ( $linkTemplates as $t ) {
+							if ( $t['name'] === $template ) {
+								$html = $t['html'];
 								break;
-							case 'pantheon':
-								if ( $disableLinks ) {
-									echo "<li class='folder-item'>$urlName</li>";
-								} else {
-									echo "<li class='folder-item'><a href='https://local.pantheon.$urlName.com'>$urlName</a></li>";
-								}
-								break;
-							default:
-								if ( $disableLinks ) {
-									echo "<li class='folder-item'>$urlName</li>";
-								} else {
-									echo "<li class='folder-item'><a href='https://local.$urlName.com'>$urlName</a></li>";
-								}
-								break;
+							}
 						}
+
+						$html = str_replace( '{urlName}', $urlName, $html );
+
+						if ( $disableLinks ) {
+							$html = strip_tags( $html, '<li><div>' );
+						}
+
+						echo $html;
 					}
 					?>
 				</ul>

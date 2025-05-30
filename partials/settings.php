@@ -5,6 +5,7 @@ $phpPathValid    = file_exists( PHP_PATH );
 ?>
 
 <div id="settings-view" style="display: none;">
+	<!-- User Settings -->
 	<h2>User Settings Configuration</h2>
 	<form method="post">
 		<label>DB Host:&nbsp;<input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
@@ -59,26 +60,36 @@ $phpPathValid    = file_exists( PHP_PATH );
 		<button type="submit">Save Settings</button>
 
 		<br><br>
-		<h3>Folders Configuration</h2>
-			<div id="folders-config">
-				<ul id="folders-config-list" class="draggable-list"></ul>
-				<button type="button" id="add-folder-column">➕ Add Column</button>
-			</div>
-			<br>
-			<input type="hidden" name="folders_json" id="folders_json_input">
+		<h3>Folders Configuration</h3>
+		<p>Manage which folders appear in each column, their titles, filters, and link behaviour.</p><br>
+		<div id="folders-config">
+			<ul id="folders-config-list" class="draggable-list"></ul>
+			<button type="button" id="add-folder-column">➕ Add Column</button>
+		</div>
+		<input type="hidden" name="folders_json" id="folders_json_input">
+		<br>
 
-			<button type="submit">Save Settings</button>
+		<h3>Folder Link Templates</h3>
+		<p>Define how each folder's website links should appear by customising the HTML templates used per column.</p>
+		<div id="link-templates-config">
+			<ul id="link-templates-list" class="template-list"></ul>
+			<button type="button" id="add-link-template">➕ Add Link Template</button>
+		</div>
+		<input type="hidden" id="link_templates_json_input" name="link_templates" value="">
+		<br>
 
-			<br><br>
-			<h3>Dock Configuration</h3>
-			<div id="dock-config-editor">
-				<ul id="dock-list"></ul>
-				<button type="button" id="add-dock-item">➕ Add Item</button>
-			</div>
-			<br>
+		<button type="submit">Save Settings</button>
 
-			<button type="submit">Save Settings</button>
+		<br><br>
+		<h3>Dock Configuration</h3>
+		<p>Manage the items displayed in the dock, including their order, icons, and link targets.</p>
+		<div id="dock-config-editor">
+			<ul id="dock-list"></ul>
+			<button type="button" id="add-dock-item">➕ Add Item</button>
+		</div>
+		<br>
 
+		<button type="submit">Save Settings</button>
 	</form>
 	<br>
 
@@ -90,6 +101,7 @@ $phpPathValid    = file_exists( PHP_PATH );
 			<div id="apache-status-message" style="margin-top:10px;"></div>
 	</div>
 
+	<!-- vHosts Manager -->
 	<div id="vhosts-manager">
 		<h2>Virtual Hosts Manager</h2>
 		<table>
@@ -110,9 +122,10 @@ $phpPathValid    = file_exists( PHP_PATH );
 						$serverNames[] = trim( $matches[1] );
 					}
 				}
-				$hostsFiles   = [
-					'Windows' => getenv( 'WINDIR' ) . '/System32/drivers/etc/hosts',
-					'Linux'   => '/etc/hosts'
+				$hostsFiles = [
+					'Windows' => getenv('WINDIR') . '/System32/drivers/etc/hosts',
+					'Linux'   => '/etc/hosts',
+					'Mac'     => '/etc/hosts',
 				];
 				$hostsEntries = [];
 				foreach ( $hostsFiles as $os => $path ) {

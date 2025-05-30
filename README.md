@@ -24,29 +24,28 @@ Please feel free to fork and make your own changes!
 
 ## ✨ Features
 
-- Live search functionality for all local project folders
-- Resizable and draggable columns
-- Real-time clock
-- Displays the current version of Apache, PHP and MySQL
-- Safely restart the currently running Apache instance based on detected OS and setup
-- AJAX-powered system stats showing CPU Load, Memory Usage and Disk Space
-- Configuration page for quick and easy setup
-- Toggle PHP error handling and logging
-- Virtual Hosts List
-- Button toggle to display the Apache error log
-- Mac OS X style customizable dock with links to relevant web-sites
-- Modern responsive look
-- Theme switcher for light and dark
-- Peace of mind 🧘 (hopefully!)
+- **Instant Project Search** – Live filter through all your local folders with ease  
+- **Flexible Column Layout** – Draggable, resizable, and fully customisable folder views  
+- **Real-Time Clock** – Because knowing the time is still a thing  
+- **Environment Snapshot** – Instantly see which versions of Apache, PHP, and MySQL you're running  
+- **Smart Apache Control** – Safely restart the active Apache instance based on your OS and setup  
+- **Live System Monitoring** – AJAX-powered CPU, memory, and disk usage at a glance  
+- **Quick Config Panel** – Update paths, ports, and settings without breaking a sweat  
+- **PHP Error Management** – Toggle error display and logging on the fly  
+- **Virtual Hosts Overview** – View and validate your active VHost configurations  
+- **Apache Error Log Toggle** – One-click access to the latest server logs  
+- **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites  
+- **Responsive Interface** – Sleek, modern design that adapts to all screen sizes  
+- **Theme Switcher** – Light mode. Dark mode. You choose.  
+- **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
 
 ## 🛠️ How to Install
 
 1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
 2. Run `npm install` in the repo's location to install dev dependencies
 3. Set your custom user config by navigating to the Settings page in the footer
-4. Modify the PHP code within `partials/folders.php` if required
-5. Customise to your delight
-6. Run `npm run build` to compile any changed SCSS or JavaScript
+4. Customise to your delight
+5. Run `npm run build` to compile any changed SCSS or JavaScript
 
 ## 🖼️ Screenshots
 
@@ -86,10 +85,12 @@ A quick overview of the core files and folders in this project, so you’re neve
 |--------------------------|-------------|
 | `dock.json`              | Stores dock layout and links in JSON format. |
 | `dock.php`               | Renders the customizable macOS-style dock. |
+| `folders.json`           | Defines folder configurations, incl. paths, filters, link templates, and display rules. |
 | `folders.php`            | Dynamically scans and lists local project folders. |
 | `footer.php`             | The shared footer, includes theme toggle and settings link. |
 | `header.php`             | Shared `<head>` setup, includes all essential meta and scripts. |
 | `info.php`               | Displays system information like PHP, Apache, and MySQL versions. |
+| `link_templates.json`    | Defines reusable HTML link templates for folder display, referenced by folders.json. |
 | `settings.php`           | The settings interface for configuring paths, dock, and logs. |
 | `submit.php`             | Handles the saving of user-configured settings. |
 

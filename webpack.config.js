@@ -1,7 +1,8 @@
 const path = require('path');
+const WebpackBar = require('webpackbar');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
   entry: './assets/js/main.js',
@@ -43,6 +44,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new WebpackBar(),
     new MiniCssExtractPlugin({
       filename: 'css/style.min.css'
     }),
@@ -58,4 +60,13 @@ module.exports = {
   },
   devtool: 'source-map',
   mode: 'production'
+};
+
+module.exports.stats = {
+  assets: true,
+  modules: true,
+  entrypoints: true,
+  colors: true,
+  reasons: true,
+  errorDetails: true,
 };

@@ -36,12 +36,18 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 		}
 	}
 
+	// Save link templates
+	if ( ! empty( $_POST['link_templates'] ) ) {
+		$linkTemplatesPath  = __DIR__ . '/link_templates.json';
+		$linkTemplatesArray = json_decode( $_POST['link_templates'], true );
+		file_put_contents( $linkTemplatesPath, json_encode( $linkTemplatesArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
+	}
+
 	// Handle dock settings
 	if ( ! empty( $_POST['dock_json'] ) ) {
 		$dockPath  = __DIR__ . '/dock.json';
 		$dockArray = json_decode( $_POST['dock_json'], true );
 		file_put_contents( $dockPath, json_encode( $dockArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
-
 	}
 
 	file_put_contents( 'user_config.php', $user_config );

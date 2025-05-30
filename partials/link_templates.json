@@ -1,0 +1,14 @@
+[
+  {
+    "name": "basic",
+    "html": "<li class='folder-item'><a href='https://local.{urlName}.com'>{urlName}</a></li>"
+  },
+  {
+    "name": "env-links",
+    "html": "<li class='folder-item'><a href='https://local.{urlName}.com'>{urlName}</a><div class='url-container'><a href='https://dev.{urlName}.com'>dev</a><a href='https://test.{urlName}.com'>test</a><a href='https://stage.{urlName}.com'>stage</a><a href='https://www.{urlName}.com'>prod</a></div></li>"
+  },
+  {
+    "name": "pantheon",
+    "html": "<li class='folder-item'><a href='https://local.pantheon.{urlName}.com'>{urlName}</a></li>"
+  }
+]

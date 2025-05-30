@@ -7,6 +7,7 @@ import {setColumnWidth, cycleColumnWidth, initColumnFeatures} from './modules/co
 import {initDockConfig} from './modules/dock.js';
 import {initApacheErrorLog} from './modules/error.js';
 import {initFoldersConfig} from './modules/folders.js';
+import {initLinkTemplates} from './modules/linkTemplates.js';
 import {initSearch} from './modules/search.js';
 import {initSystemMonitoring} from './modules/system.js';
 import {initThemeToggle} from './modules/theme.js';
@@ -17,6 +18,7 @@ initClock();
 initColumnFeatures();
 initDockConfig();
 initFoldersConfig();
+initLinkTemplates();
 initApacheErrorLog();
 initSearch();
 initSystemMonitoring();

@@ -6,29 +6,37 @@ header( 'Expires: 0' );
 
 require_once 'config.php';
 
-// Determine the Apache log file path
-if ( $isWindows ) {
-    $logFile = APACHE_PATH . 'logs\\error.log';
-} else {
-    // Check the custom Apache path first if defined
-    $logFile = defined( 'APACHE_PATH' ) ? APACHE_PATH . '/logs/error.log' : '';
+$logFile = '';
 
-    // If not found, check standard Linux locations
-    if ( ! file_exists( $logFile ) || empty( $logFile ) ) {
-        $logFile = '/var/log/apache2/error.log'; // Ubuntu/Debian default
-    }
-    if ( ! file_exists( $logFile ) ) {
-        $logFile = '/var/log/httpd/error_log'; // Red Hat/CentOS/Fedora default
-    }
+switch ( PHP_OS_FAMILY ) {
+	case 'Windows':
+		$logFile = APACHE_PATH . 'logs\error.log';
+		break;
+
+	case 'Darwin':
+		$mampLog = '/Applications/MAMP/logs/apache_error.log';
+		if ( file_exists( $mampLog ) ) {
+			$logFile = $mampLog;
+			break;
+		}
+		$logFile = '/usr/local/var/log/httpd/error_log';
+		break;
+
+	default:
+		$logFile = '/var/log/apache2/error.log';
+		if ( ! file_exists( $logFile ) ) {
+			$logFile = '/var/log/httpd/error_log';
+		}
+		break;
 }
 
 $lines = 5;
 
 if ( file_exists( $logFile ) ) {
-    $logContent = file( $logFile );
-    $logContent = array_slice( $logContent, - $lines );
-    echo implode( "", $logContent );
+	$logContent = file( $logFile );
+	$logContent = array_slice( $logContent, - $lines );
+	echo implode( "", $logContent );
 } else {
-    echo "Error log not found.";
+	echo "Error log not found.";
 }
 ?>

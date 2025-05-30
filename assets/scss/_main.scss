@@ -355,6 +355,9 @@ span.quote {
 	h3 {
 		margin: 10px 0 10px;
 	}
+	form > p {
+		font-size: .9rem;
+	}
 }
 
 .misc {
@@ -555,6 +558,7 @@ table {
 	}
 }
 
+/* Folders Config */
 #folders-config {
 	background: var(--header-background-color);
 	padding: 1rem;
@@ -604,6 +608,22 @@ table {
 	}
 }
 
+/* Folder Link Templates */
+#link-templates-config {
+	.template-item {
+		display: flex;
+		gap: .5rem;
+		margin-bottom: 20px;
+
+		input {
+			max-width: none;
+
+			&.template-name {
+				max-width: 300px;
+			}
+		}
+	}
+}
 
 /* Custom Scrollbar */
 html {
