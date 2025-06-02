@@ -2,6 +2,7 @@
 $apachePathValid = file_exists( APACHE_PATH );
 $htdocsPathValid = file_exists( HTDOCS_PATH );
 $phpPathValid    = file_exists( PHP_PATH );
+$apacheToggle    = file_exists( __DIR__ . '/../toggle_apache.php' );
 
 // Centralised tooltip descriptions
 $tooltips = [
@@ -117,10 +118,14 @@ $tooltips = [
 
 	<!-- Apache Control -->
 	<div class="apache-control">
-		<h2>Apache Control</h3>
+		<h2>Apache Control</h2>
+		<?php if ( $apacheToggle ): ?>
 			<button id="restart-apache-button">Restart Apache</button>
-
-			<div id="apache-status-message" style="margin-top:10px;"></div>
+			<div id="apache-status-message" role="status" aria-live="polite"></div>
+		<?php else: ?>
+			<p>Apache control unavailable (toggle_apache.php missing)</p><br>
+			<button disabled id="restart-apache-button">Restart Apache</button>
+		<?php endif; ?>
 	</div>
 
 	<!-- vHosts Manager -->

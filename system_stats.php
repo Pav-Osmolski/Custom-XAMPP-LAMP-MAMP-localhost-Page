@@ -1,17 +1,24 @@
 <?php
 require_once 'config.php';
 
+// Set safe defaults
+$displaySystemStats = $displaySystemStats ?? false;
+$useAjaxForStats = $useAjaxForStats ?? true;
+
 if ( ! $displaySystemStats ) {
-    exit( "System stats display is disabled." );
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'System stats display is disabled.']);
+    exit;
 }
 
 $os = PHP_OS_FAMILY;
 
 // CPU
 if ( $os === 'Windows' ) {
-    $cpuLoad = trim( shell_exec( 'wmic cpu get loadpercentage 2>&1' ) );
-    preg_match( '/\d+/', $cpuLoad, $matches );
-    $cpu = isset( $matches[0] ) ? $matches[0] : 'N/A';
+    //$cpuLoad = trim( shell_exec( 'wmic cpu get loadpercentage 2>&1' ) );
+    $cpuLoad = shell_exec( 'typeperf "\\Processor(_Total)\\% Processor Time" -sc 1' );
+    preg_match( '/"[^"]+","([\d.]+)"/', $cpuLoad, $matches );
+    $cpu = isset( $matches[1] ) ? round( floatval( $matches[1] ) ) : 'N/A';
 } else {
     $load  = sys_getloadavg();
     $cores = (int) shell_exec( "nproc 2>/dev/null || sysctl -n hw.ncpu" );

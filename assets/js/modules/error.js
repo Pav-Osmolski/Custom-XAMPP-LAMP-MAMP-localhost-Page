@@ -4,39 +4,51 @@ export function initApacheErrorLog() {
 		const body = document.body;
 		const errorLogSection = document.getElementById( 'error-log-section' );
 
-		if ( errorLogSection ) {
-			const toggleBtn = document.getElementById( 'toggle-error-log' );
-			const errorLog = document.getElementById( 'error-log' );
+		if ( !errorLogSection ) return;
 
-			// Always allow toggling visibility
-			toggleBtn.addEventListener( 'click', function () {
-				const isVisible = errorLog.style.display === 'block';
-				errorLog.style.display = isVisible ? 'none' : 'block';
-				this.setAttribute( 'aria-expanded', !isVisible );
-			} );
+		const toggleBtn = document.getElementById( 'toggle-error-log' );
+		const errorLog = document.getElementById( 'error-log' );
 
-			// Only run AJAX if enabled
-			const ajaxEnabled = body.getAttribute( 'data-ajax-enabled' ) === 'true';
-			if ( ajaxEnabled ) {
-				function fetchErrorLog() {
-					const url = 'apache_error_log.php';
-					fetch( url, {cache: 'no-store'} )
-						.then( response => {
-							if ( !response.ok ) throw new Error( 'Error log unavailable' );
-							return response.text();
-						} )
-						.then( data => {
-							errorLog.innerHTML = `<code>${ data }</code>`;
-						} )
-						.catch( error => {
-							console.error( 'Error fetching error log:', error );
-							clearInterval( errorLogInterval );
-						} );
-				}
+		// Always allow toggling visibility
+		toggleBtn.addEventListener( 'click', function () {
+			const isVisible = errorLog.style.display === 'block';
+			errorLog.style.display = isVisible ? 'none' : 'block';
+			this.setAttribute( 'aria-expanded', !isVisible );
+		} );
 
-				const errorLogInterval = setInterval( fetchErrorLog, 3000 );
-				fetchErrorLog();
-			}
+		const ajaxEnabled = body.getAttribute( 'data-ajax-enabled' ) === 'true';
+		if ( !ajaxEnabled ) return;
+
+		let errorLogInterval;
+
+		function fetchErrorLog() {
+			fetch( '/apache_error_log.php', { cache: 'no-store' } )
+				.then( response => {
+					if ( !response.ok ) throw new Error( 'Error log unavailable' );
+					return response.text();
+				} )
+				.then( data => {
+					errorLog.innerHTML = `<code>${ data }</code>`;
+				} );
 		}
+
+		function startMonitoring() {
+			errorLogInterval = setInterval( fetchErrorLog, 3000 );
+			fetchErrorLog();
+		}
+
+		// Pre-flight fetch to avoid first-call failure
+		fetch( '/apache_error_log.php', { cache: 'no-store' } )
+			.then( response => {
+				if ( !response.ok ) return;
+				return response.text();
+			} )
+			.then( data => {
+				errorLog.innerHTML = `<code>${ data }</code>`;
+				startMonitoring();
+			} )
+			.catch( () => {
+				// Do nothing on first failure
+			} );
 	} );
 }

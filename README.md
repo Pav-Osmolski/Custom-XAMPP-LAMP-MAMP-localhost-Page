@@ -65,10 +65,9 @@ A quick overview of the core files and folders in this project, so you’re neve
 
 | File                     | Description |
 |--------------------------|-------------|
-| `ajax_apache_error_log.php` | Fetches and returns Apache error log entries via AJAX. |
-| `ajax_system_stats.php`     | Provides live server stats (CPU, memory, disk) using AJAX. |
-| `ajax_toggle_apache.php`    | Safely restarts the currently running Apache instance. |
-| `apache_error_log.php`   | Displays the Apache error log in a styled UI component. |
+| `apache_error_log.php`   | Fetches and returns Apache error log entries via AJAX. |
+| `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
+| `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
 | `config.php`             | Default configuration including MySQL credentials and Apache paths. |
 | `index.php`              | Main entry point. Displays the homepage with all widgets and layout. |
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |

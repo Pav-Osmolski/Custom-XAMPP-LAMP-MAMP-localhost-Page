@@ -1,8 +1,14 @@
 <?php
 require_once 'config.php';
 
+// Set safe defaults
+$displayApacheErrorLog = $displayApacheErrorLog ?? false;
+$useAjaxForStats = $useAjaxForStats ?? true;
+
 if ( ! $displayApacheErrorLog ) {
-    exit( "Apache error log display is disabled." );
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Apache error log display is disabled.']);
+    exit;
 }
 
 $logFile = '';
