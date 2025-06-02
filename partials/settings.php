@@ -2,6 +2,14 @@
 $apachePathValid = file_exists( APACHE_PATH );
 $htdocsPathValid = file_exists( HTDOCS_PATH );
 $phpPathValid    = file_exists( PHP_PATH );
+
+// Centralised tooltip descriptions
+$tooltips = [
+	'php_error'     => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
+	'folders'       => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
+	'link_templates'=> 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
+	'dock'          => 'Manage the items displayed in the dock, including their order, icons, and link targets.'
+];
 ?>
 
 <div id="settings-view" style="display: none;">
@@ -39,7 +47,12 @@ $phpPathValid    = file_exists( PHP_PATH );
 			<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
 		</label><br>
 
-		<h3>PHP Error Handling & Logging</h3>
+		<h3>PHP Error Handling & Logging 
+			<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['php_error']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span>
+		</h3>
+		<span id="tooltip-php_error" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['php_error']) ?></span>
+
 		<label>Display Errors:
 			<input type="checkbox" name="displayErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
 		</label>
@@ -60,8 +73,11 @@ $phpPathValid    = file_exists( PHP_PATH );
 		<button type="submit">Save Settings</button>
 
 		<br><br>
-		<h3>Folders Configuration</h3>
-		<p>Manage which folders appear in each column, their titles, filters, and link behaviour.</p><br>
+		<h3>Folders Configuration <span class="tooltip-icon" aria-describedby="tooltip-folders" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['folders']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span>
+		</h3>
+		<span id="tooltip-folders" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['folders']) ?></span><br>
+
 		<div id="folders-config">
 			<ul id="folders-config-list" class="draggable-list"></ul>
 			<button type="button" id="add-folder-column">➕ Add Column</button>
@@ -69,8 +85,11 @@ $phpPathValid    = file_exists( PHP_PATH );
 		<input type="hidden" name="folders_json" id="folders_json_input">
 		<br>
 
-		<h3>Folder Link Templates</h3>
-		<p>Define how each folder's website links should appear by customising the HTML templates used per column.</p>
+		<h3>Folder Link Templates <span class="tooltip-icon" aria-describedby="tooltip-link_templates" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['link_templates']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span>
+		</h3>
+		<span id="tooltip-link_templates" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['link_templates']) ?></span>
+
 		<div id="link-templates-config">
 			<ul id="link-templates-list" class="template-list"></ul>
 			<button type="button" id="add-link-template">➕ Add Link Template</button>
@@ -81,8 +100,11 @@ $phpPathValid    = file_exists( PHP_PATH );
 		<button type="submit">Save Settings</button>
 
 		<br><br>
-		<h3>Dock Configuration</h3>
-		<p>Manage the items displayed in the dock, including their order, icons, and link targets.</p>
+		<h3>Dock Configuration <span class="tooltip-icon" aria-describedby="tooltip-dock" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['dock']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span>
+		</h3>
+		<span id="tooltip-dock" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['dock']) ?></span>
+
 		<div id="dock-config-editor">
 			<ul id="dock-list"></ul>
 			<button type="button" id="add-dock-item">➕ Add Item</button>

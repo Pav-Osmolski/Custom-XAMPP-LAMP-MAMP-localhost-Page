@@ -353,6 +353,7 @@ span.quote {
 
 #settings-view {
 	h3 {
+		position: relative;
 		margin: 10px 0 10px;
 	}
 	form > p {
@@ -436,6 +437,54 @@ hr {
 	ackground-color: var(--text-color);
 	height: 1px;
 	border: none;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Tooltip */
+.tooltip-icon {
+	cursor: help;
+	margin-left: 6px;
+	vertical-align: text-top;
+
+	svg {
+		width: 17px;
+		height: 17px;
+	}
+
+	&::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: 125%;
+		left: 0;
+		transform: translateX(0);
+		background-color: var(--header-background-color);
+		font-size: 1rem;
+		padding: 6px 10px;
+		border-radius: 5px;
+		white-space: normal;
+		word-wrap: break-word;
+		box-sizing: border-box;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s ease-in-out;
+		z-index: 10;
+	}
+
+	&:hover::after, &:focus::after {
+		opacity: 1;
+	}
 }
 
 /* PHP Info */
