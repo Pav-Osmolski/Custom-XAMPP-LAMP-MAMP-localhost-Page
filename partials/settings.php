@@ -35,7 +35,7 @@ $phpPathValid    = file_exists( PHP_PATH );
 			<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
 		</label>
 
-		<label>Use AJAX for Stats:
+		<label>Use AJAX for Stats and Error log:
 			<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
 		</label><br>
 
