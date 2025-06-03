@@ -22,7 +22,15 @@ if ( $os === 'Windows' ) {
 } else {
     $load  = sys_getloadavg();
     $cores = (int) shell_exec( "nproc 2>/dev/null || sysctl -n hw.ncpu" );
-    $cpu   = isset( $load[0] ) && $cores > 0 ? round( $load[0] * 100 / $cores, 1 ) : 'N/A';
+
+    if ( ! $cores && isset( $load[0] ) ) {
+        // shell_exec failed or returned 0, fall back to raw load average
+        $cpu = round( $load[0], 1 );
+    } else {
+        $cpu = ( isset( $load[0] ) && $cores > 0 )
+            ? round( $load[0] * 100 / $cores, 1 )
+            : 'N/A';
+    }
 }
 
 // Memory

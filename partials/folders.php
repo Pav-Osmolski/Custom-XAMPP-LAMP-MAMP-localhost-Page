@@ -43,16 +43,23 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 							continue;
 						}
 
-						$matchRegex   = $column['urlRules']['match'];
-						$replaceRegex = $column['urlRules']['replace'];
-						$urlName      = preg_replace( $replaceRegex, '', $folderName );
+						if ( isset( $column['urlRules'] ) &&
+							! empty( $column['urlRules']['match'] ) &&
+							! empty( $column['urlRules']['replace'] )
+						) {
+							$matchRegex   = $column['urlRules']['match'];
+							$replaceRegex = $column['urlRules']['replace'];
+							$urlName      = preg_replace( $replaceRegex, '', $folderName );
+
+							if ( ! preg_match( $matchRegex, $folderName ) ) {
+								continue;
+							}
+						} else {
+							$urlName = $folderName;
+						}
 
 						if ( ! empty( $column['specialCases'][ $urlName ] ) ) {
 							$urlName = $column['specialCases'][ $urlName ];
-						}
-
-						if ( ! preg_match( $matchRegex, $folderName ) ) {
-							continue;
 						}
 
 						$disableLinks = ! empty( $column['disableLinks'] );

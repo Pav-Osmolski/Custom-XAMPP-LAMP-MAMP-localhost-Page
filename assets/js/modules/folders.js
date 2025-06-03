@@ -9,7 +9,7 @@ export function initFoldersConfig() {
 
 		if ( !list || !addBtn || !input ) return;
 
-		fetch( 'partials/folders.json' )
+		fetch(`${window.BASE_URL}partials/folders.json`, { cache: 'no-store' })
 			.then( res => res.json() )
 			.then( data => {
 				data.forEach( item => addFolderItem( item ) );
