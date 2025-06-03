@@ -10,7 +10,7 @@ export function initDockConfig() {
 		if ( !dockList || !addBtn || !form ) return;
 
 		// Load current config
-		fetch(`${window.BASE_URL}partials/dock.json` )
+		fetch(`${window.BASE_URL}partials/dock.json`, { cache: 'no-store' })
 			.then( res => res.json() )
 			.then( data => {
 				data.forEach( addDockItem );
@@ -32,6 +32,7 @@ export function initDockConfig() {
                 <input type="text" placeholder="Label" value="${ item.label || '' }">
                 <input type="text" placeholder="URL" value="${ item.url || '' }">
                 <input type="text" placeholder="Icon" value="${ item.icon || '' }">
+                <input type="text" placeholder="Alt Text" value="${ item.alt || '' }">
                 <button type="button" class="remove-dock-item">❌</button>
             `;
 			dockList.appendChild( li );
@@ -53,7 +54,8 @@ export function initDockConfig() {
 				dockItems.push( {
 					label: inputs[0].value.trim(),
 					url: inputs[1].value.trim(),
-					icon: inputs[2].value.trim()
+					icon: inputs[2].value.trim(),
+					alt: inputs[3].value.trim()
 				} );
 			} );
 			const dockJsonInput = document.getElementById( 'dock_json_input' );

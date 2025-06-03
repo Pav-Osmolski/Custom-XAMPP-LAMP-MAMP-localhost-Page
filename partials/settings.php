@@ -83,7 +83,7 @@ $tooltips = [
 			<ul id="folders-config-list" class="draggable-list"></ul>
 			<button type="button" id="add-folder-column">➕ Add Column</button>
 		</div>
-		<input type="hidden" name="folders_json" id="folders_json_input">
+		<input type="hidden" id="folders_json_input" name="folders_json">
 		<br>
 
 		<h3>Folder Link Templates <span class="tooltip-icon" aria-describedby="tooltip-link_templates" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['link_templates']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
@@ -110,6 +110,7 @@ $tooltips = [
 			<ul id="dock-list"></ul>
 			<button type="button" id="add-dock-item">➕ Add Item</button>
 		</div>
+		<input type="hidden" id="dock_json_input" name="dock_json">
 		<br>
 
 		<button type="submit">Save Settings</button>
