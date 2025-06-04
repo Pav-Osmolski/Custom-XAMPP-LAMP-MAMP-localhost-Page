@@ -35,20 +35,51 @@ if ( ! isset( $useAjaxForStats ) ) {
 	$useAjaxForStats = true;
 }
 
+// Safe shell execution wrapper
+function safe_shell_exec( $cmd ) {
+	$allowed = [
+		'apachectl',
+		'httpd',
+		'nproc',
+		'sysctl',
+		'tasklist',
+		'sc',
+		'ps',
+		'awk',
+		'grep',
+		'typeperf',
+		'wmic',
+		'which',
+		'whoami'
+	];
+
+	// Extract base command from quoted or unquoted input
+	preg_match( '/(?:^|["\'])((?:[a-zA-Z]:)?[\\\\\\/a-zA-Z0-9_-]+)(?:\\.exe)?(?=\\s|$)/i', $cmd, $matches );
+	$binary = isset( $matches[1] ) ? basename( $matches[1] ) : '';
+
+	if ( in_array( strtolower( $binary ), $allowed, true ) ) {
+		return shell_exec( $cmd );
+	}
+
+	return null;
+}
+
 // Detect OS for older PHP versions. Not actually used because of $os, but kept here for reference.
 $isWindowsPHPOld = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
-$isLinuxPHPOld = strtoupper(substr(PHP_OS, 0, 5)) === 'LINUX';
-$isMacPHPOld = strtoupper(substr(PHP_OS, 0, 6)) === 'DARWIN' || strtoupper(substr(PHP_OS, 0, 3)) === 'MAC';
+$isLinuxPHPOld   = strtoupper( substr( PHP_OS, 0, 5 ) ) === 'LINUX';
+$isMacPHPOld     = strtoupper( substr( PHP_OS, 0, 6 ) ) === 'DARWIN' || strtoupper( substr( PHP_OS, 0, 3 ) ) === 'MAC';
 
 // Get username based on OS
 $user = $_SERVER['USERNAME']
         ?? $_SERVER['USER']
-           ?? trim( shell_exec( 'whoami' ) )
+           ?? trim( safe_shell_exec( 'whoami' ) )
               ?? get_current_user();
 
-// Remove the computer name if present (Windows)
-if ( str_contains( $user, '\\' ) ) {
+// Extract last part of domain\user or user@domain
+if ( strpos( $user, '\\' ) !== false ) {
 	$user = explode( '\\', $user )[1];
+} elseif ( strpos( $user, '@' ) !== false ) {
+	$user = explode( '@', $user )[0];
 }
 
 $user = $user ?: 'Guest';
@@ -70,19 +101,19 @@ function renderServerInfo() {
 	if ( $os === 'Windows' ) {
 		$httpdPath = APACHE_PATH . 'bin\\httpd.exe';
 		if ( file_exists( $httpdPath ) ) {
-			$apacheVersion = shell_exec( "\"$httpdPath\" -v" );
+			$apacheVersion = safe_shell_exec( $httpdPath . " -v" );
 		}
 	} elseif ( $os === 'Darwin' ) {
 		$mampPath = '/Applications/MAMP/Library/bin/httpd';
-		$brewPath = trim( shell_exec( 'which httpd' ) );
+		$brewPath = trim( safe_shell_exec( 'which httpd' ) );
 
 		if ( file_exists( $mampPath ) ) {
-			$apacheVersion = shell_exec( "\"$mampPath\" -v" );
+			$apacheVersion = safe_shell_exec( $mampPath . " -v" );
 		} elseif ( ! empty( $brewPath ) ) {
-			$apacheVersion = shell_exec( "$brewPath -v" );
+			$apacheVersion = safe_shell_exec( "$brewPath -v" );
 		}
 	} else {
-		$apacheVersion = shell_exec( 'apachectl -v 2>/dev/null' ) ?: shell_exec( 'httpd -v 2>/dev/null' );
+		$apacheVersion = safe_shell_exec( 'apachectl -v 2>/dev/null' ) ?: safe_shell_exec( 'httpd -v 2>/dev/null' );
 	}
 
 	// Attempt to extract the versions

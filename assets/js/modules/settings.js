@@ -7,7 +7,7 @@ export function initClearStorageButton() {
 		clearBtn.addEventListener( 'click', () => {
 			if ( !confirm( "Are you sure you want to reset saved UI settings?" ) ) return;
 
-			const keysToRemove = [ 'theme', 'columnOrder', 'columnSize' ];
+			const prefixesToRemove = [ 'theme', 'columnOrder', 'columnSize' ];
 
 			Object.keys( localStorage ).forEach( ( key ) => {
 				if ( prefixesToRemove.some( prefix => key.startsWith( prefix ) ) ) {

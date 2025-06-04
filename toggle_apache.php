@@ -29,7 +29,7 @@ function findDefaultCommand( $action, $os, $apachePath ) {
 
 				// Check if XAMPP httpd.exe is running
 				$isHttpdRunning = false;
-				$taskList       = shell_exec( 'tasklist /FI "IMAGENAME eq httpd.exe"' );
+				$taskList       = safe_shell_exec( 'tasklist /FI "IMAGENAME eq httpd.exe"' );
 				if ( strpos( $taskList, 'httpd.exe' ) !== false ) {
 					$isHttpdRunning = true;
 				}
@@ -39,7 +39,7 @@ function findDefaultCommand( $action, $os, $apachePath ) {
 				}
 
 				// Fallback: check if Apache service is running
-				$serviceStatus = shell_exec( 'sc query Apache2.4' );
+				$serviceStatus = safe_shell_exec( 'sc query Apache2.4' );
 				if ( strpos( $serviceStatus, 'RUNNING' ) !== false ) {
 					return "net stop Apache2.4 && net start Apache2.4";
 				}
@@ -59,7 +59,7 @@ function findDefaultCommand( $action, $os, $apachePath ) {
 		case 'Darwin':
 		{
 			// 1. Attempt to detect running Apache binary
-			$apacheBinary = trim( shell_exec( "ps -eo comm,args | grep -E 'httpd|apache2' | grep -v grep | awk '{print $1}' | head -n 1" ) );
+			$apacheBinary = trim( safe_shell_exec( "ps -eo comm,args | grep -E 'httpd|apache2' | grep -v grep | awk '{print $1}' | head -n 1" ) );
 			if ( ! empty( $apacheBinary ) && file_exists( $apacheBinary ) ) {
 				return "sudo $apacheBinary -k restart";
 			}
@@ -80,7 +80,7 @@ function findDefaultCommand( $action, $os, $apachePath ) {
 		case 'Linux':
 		{
 			// 1. Detect currently running Apache binary
-			$apacheBinary = trim( shell_exec( "ps -eo comm,args | grep -E 'httpd|apache2' | grep -v grep | awk '{print $1}' | head -n 1" ) );
+			$apacheBinary = trim( safe_shell_exec( "ps -eo comm,args | grep -E 'httpd|apache2' | grep -v grep | awk '{print $1}' | head -n 1" ) );
 			if ( ! empty( $apacheBinary ) && file_exists( $apacheBinary ) ) {
 				return "sudo $apacheBinary -k restart";
 			}
