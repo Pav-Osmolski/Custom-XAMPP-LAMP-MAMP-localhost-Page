@@ -380,6 +380,10 @@ span.quote {
 	pointer-events: none;
 }
 
+#clear-settings-wrapper {
+	position: relative;
+}
+
 /* System Monitor and Error Log */
 .system-monitor, #error-log-section { //Initial display should be none unless class is detected in the body
 	display: none;

@@ -9,26 +9,20 @@ export function initFoldersConfig() {
 
 		if ( !list || !addBtn || !input ) return;
 
-		fetch( `${ window.BASE_URL }partials/folders.json`, {cache: 'no-store'} )
-			.then( res => res.json() )
-			.then( data => {
-				data.forEach( item => addFolderItem( item ) );
-				updateInput();
-				enableDragSort( '#folders-config-list' );
-			} );
+		let linkTemplatesCache = null;
 
-		addBtn.addEventListener( 'click', () => {
-			addFolderItem();
-			updateInput();
-		} );
+		const getLinkTemplates = () => {
+			if ( linkTemplatesCache ) return Promise.resolve( linkTemplatesCache );
+			return fetch( `${ window.BASE_URL }partials/link_templates.json`, {cache: 'no-store'} )
+				.then( res => res.json() )
+				.then( templates => {
+					linkTemplatesCache = templates;
+					return templates;
+				} );
+		};
 
-		function addFolderItem( item = {} ) {
-			const li = document.createElement( 'li' );
-			li.className = 'folder-config-item';
-			li.draggable = true;
-
-			const specialCases = item.specialCases || {};
-			const casesHtml = Object.entries( specialCases ).map(
+		const createSpecialCasesHTML = ( specialCases = {} ) => {
+			return Object.entries( specialCases ).map(
 				( [ key, val ] ) => `
 					<div class="special-case">
 						<input type="text" class="case-key" placeholder="match" value="${ key }">
@@ -37,15 +31,47 @@ export function initFoldersConfig() {
 					</div>
 				`
 			).join( '' );
+		};
+
+		const populateLinkTemplates = ( select, selectedTemplate ) => {
+			getLinkTemplates().then( templates => {
+				let found = false;
+				templates.forEach( template => {
+					const option = document.createElement( 'option' );
+					option.value = template.name;
+					option.textContent = template.name;
+					if ( template.name === selectedTemplate ) {
+						option.selected = true;
+						found = true;
+					}
+					select.appendChild( option );
+				} );
+				if ( !found && selectedTemplate ) {
+					const customOption = document.createElement( 'option' );
+					customOption.value = selectedTemplate;
+					customOption.textContent = selectedTemplate;
+					customOption.selected = true;
+					select.appendChild( customOption );
+				}
+				updateInput();
+			} );
+		};
+
+		const addFolderItem = ( item = {} ) => {
+			const li = document.createElement( 'li' );
+			li.className = 'folder-config-item';
+			li.draggable = true;
+
+			const casesHtml = createSpecialCasesHTML( item.specialCases );
 
 			li.innerHTML = `
-				<input type="text" placeholder="Title" value="${ item.title || '' }">
-				<input type="text" placeholder="Href (optional)" value="${ item.href || '' }">
-				<input type="text" placeholder="Dir (relative to HTDOCS_PATH)" value="${ item.dir || '' }">
-				<input type="text" placeholder="Exclude List (comma-separated)" value="${ (item.excludeList || []).join( ',' ) }">
-				<input type="text" placeholder="Match Regex" value="${ item.urlRules?.match || '' }">
-				<input type="text" placeholder="Replace Regex" value="${ item.urlRules?.replace || '' }">
-				<label>Link Template: <select class="link-template-select"></select></label>
+				<input type="text" data-key="title" placeholder="Title" value="${ item.title || '' }">
+				<input type="text" data-key="href" placeholder="Href (optional)" value="${ item.href || '' }">
+				<input type="text" data-key="dir" placeholder="Dir (relative to HTDOCS_PATH)" value="${ item.dir || '' }">
+				<input type="text" data-key="excludeList" placeholder="Exclude List (comma-separated)" value="${ (item.excludeList || []).join( ',' ) }">
+				<input type="text" data-key="match" placeholder="Match Regex" value="${ item.urlRules?.match ?? '' }">
+				<input type="text" data-key="replace" placeholder="Replace Regex" value="${ item.urlRules?.replace ?? '' }">
+				<label>Link Template: <select class="link-template-select" name="linkTemplate"></select></label>
 				<label><input type="checkbox" class="disable-links" ${ item.disableLinks ? 'checked' : '' }> Disable Links</label>
 				<div class="special-cases-wrapper">
 					<label>Special Cases:</label>
@@ -56,23 +82,10 @@ export function initFoldersConfig() {
 			`;
 
 			list.appendChild( li );
+			li.querySelector( 'input[data-key="title"]' ).focus();
 
 			const select = li.querySelector( '.link-template-select' );
-			select.name = 'linkTemplate';
-
-			fetch( `${ window.BASE_URL }partials/link_templates.json`, {cache: 'no-store'} )
-				.then( res => res.json() )
-				.then( templates => {
-					templates.forEach( template => {
-						const option = document.createElement( 'option' );
-						option.value = template.name;
-						option.textContent = template.name;
-						if ( item.linkTemplate === template.name ) {
-							option.selected = true;
-						}
-						select.appendChild( option );
-					} );
-				} );
+			populateLinkTemplates( select, item.linkTemplate );
 
 			li.querySelector( '.remove-folder-column' ).addEventListener( 'click', () => {
 				li.remove();
@@ -89,57 +102,59 @@ export function initFoldersConfig() {
 					<button type="button" class="remove-special">❌</button>
 				`;
 				container.appendChild( div );
-				div.querySelector( '.remove-special' ).addEventListener( 'click', () => {
-					div.remove();
-					updateInput();
-				} );
 			} );
 
-			li.querySelectorAll( '.remove-special' ).forEach( btn =>
-				btn.addEventListener( 'click', e => {
+			li.querySelector( '.special-cases' ).addEventListener( 'click', e => {
+				if ( e.target.matches( '.remove-special' ) ) {
 					e.target.closest( '.special-case' ).remove();
 					updateInput();
-				} )
-			);
+				}
+			} );
 
-			Array.from( li.querySelectorAll( 'input, select' ) ).forEach( el => {
+			li.querySelectorAll( 'input, select' ).forEach( el => {
 				el.addEventListener( 'input', updateInput );
 				el.addEventListener( 'change', updateInput );
 			} );
-		}
+		};
 
-		function updateInput() {
+		const updateInput = () => {
 			const items = [];
 			list.querySelectorAll( '.folder-config-item' ).forEach( li => {
-				const inputs = li.querySelectorAll( 'input' );
-				const selects = li.querySelectorAll( 'select' );
-
-				const specialCaseElements = li.querySelectorAll( '.special-case' );
+				const getValue = selector => li.querySelector( selector )?.value.trim() || '';
 				const specialCases = {};
-				specialCaseElements.forEach( row => {
+				li.querySelectorAll( '.special-case' ).forEach( row => {
 					const key = row.querySelector( '.case-key' ).value.trim();
 					const val = row.querySelector( '.case-val' ).value.trim();
 					if ( key ) specialCases[key] = val;
 				} );
 
-				const disableLinks = li.querySelector( '.disable-links' )?.checked || false;
-
 				items.push( {
-					title: inputs[0].value.trim(),
-					href: inputs[1].value.trim(),
-					dir: inputs[2].value.trim(),
-					excludeList: inputs[3].value.split( ',' ).map( s => s.trim() ).filter( Boolean ),
+					title: getValue( 'input[data-key="title"]' ),
+					href: getValue( 'input[data-key="href"]' ),
+					dir: getValue( 'input[data-key="dir"]' ),
+					excludeList: getValue( 'input[data-key="excludeList"]' ).split( ',' ).map( s => s.trim() ).filter( Boolean ),
 					urlRules: {
-						match: inputs[4].value.trim(),
-						replace: inputs[5].value.trim()
+						match: getValue( 'input[data-key="match"]' ),
+						replace: getValue( 'input[data-key="replace"]' )
 					},
-					linkTemplate: selects[0].value,
-					disableLinks,
+					linkTemplate: li.querySelector( '.link-template-select' )?.value || '',
+					disableLinks: li.querySelector( '.disable-links' )?.checked || false,
 					specialCases
 				} );
 			} );
-
 			input.value = JSON.stringify( items, null, 2 );
-		}
+		};
+
+		fetch( `${ window.BASE_URL }partials/folders.json`, {cache: 'no-store'} )
+			.then( res => res.json() )
+			.then( data => {
+				data.forEach( item => addFolderItem( item ) );
+				enableDragSort( '#folders-config-list' );
+			} );
+
+		addBtn.addEventListener( 'click', () => {
+			addFolderItem();
+			updateInput();
+		} );
 	} );
 }

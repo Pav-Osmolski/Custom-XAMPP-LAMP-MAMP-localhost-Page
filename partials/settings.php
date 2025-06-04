@@ -133,7 +133,7 @@ $tooltips = [
 	<!-- vHosts Manager -->
 	<?php require_once 'partials/vhosts.php'; ?>
 
-	<div id="clear-storage-wrapper" style="position:relative">
+	<div id="clear-settings-wrapper">
 		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
 		<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['clear_storage']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
 		</span>
