@@ -27,7 +27,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$user_config .= "error_reporting(" . $_POST['errorReportingLevel'] . ");\n";
 	$user_config .= "ini_set('log_errors', " . ( isset( $_POST['logErrors'] ) ? '1' : '0' ) . ");\n";
 
-	// Save folders configuration
+	// Save folders
 	if ( ! empty( $_POST['folders_json'] ) ) {
 		$foldersPath  = __DIR__ . '/folders.json';
 		$foldersArray = json_decode( $_POST['folders_json'], true );
@@ -43,7 +43,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 		file_put_contents( $linkTemplatesPath, json_encode( $linkTemplatesArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
 	}
 
-	// Handle dock settings
+	// Save dock
 	if ( ! empty( $_POST['dock_json'] ) ) {
 		$dockPath  = __DIR__ . '/dock.json';
 		$dockArray = json_decode( $_POST['dock_json'], true );

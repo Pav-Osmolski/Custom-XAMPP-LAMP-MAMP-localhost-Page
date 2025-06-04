@@ -9,7 +9,8 @@ $tooltips = [
 	'php_error'     => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
 	'folders'       => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
 	'link_templates'=> 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
-	'dock'          => 'Manage the items displayed in the dock, including their order, icons, and link targets.'
+	'dock'          => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
+	'clear_storage' => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
 ];
 ?>
 
@@ -71,7 +72,13 @@ $tooltips = [
 			<input type="checkbox" name="logErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
 		</label><br>
 
-		<button type="submit">Save Settings</button>
+		<button type="submit">Save Settings</button><br><br>
+
+		<div id="clear-storage-wrapper" style="position:relative">
+			<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
+			<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['clear_storage']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span>
+		</div>
 
 		<br><br>
 		<h3>Folders Configuration <span class="tooltip-icon" aria-describedby="tooltip-folders" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['folders']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
@@ -130,62 +137,5 @@ $tooltips = [
 	</div>
 
 	<!-- vHosts Manager -->
-	<div id="vhosts-manager">
-		<h2>Virtual Hosts Manager</h2>
-		<table>
-			<thead>
-			<tr>
-				<th>Server Name</th>
-				<th>Status</th>
-			</tr>
-			</thead>
-			<tbody>
-			<?php
-			$vhostsPath = APACHE_PATH . '/conf/extra/httpd-vhosts.conf';
-			if ( file_exists( $vhostsPath ) ) {
-				$lines       = file( $vhostsPath );
-				$serverNames = [];
-				foreach ( $lines as $line ) {
-					if ( preg_match( '/^\s*ServerName\s+(.+)/i', $line, $matches ) ) {
-						$serverNames[] = trim( $matches[1] );
-					}
-				}
-				$hostsFiles = [
-					'Windows' => getenv('WINDIR') . '/System32/drivers/etc/hosts',
-					'Linux'   => '/etc/hosts',
-					'Mac'     => '/etc/hosts',
-				];
-				$hostsEntries = [];
-				foreach ( $hostsFiles as $os => $path ) {
-					if ( file_exists( $path ) ) {
-						foreach ( file( $path ) as $line ) {
-							$line = trim( $line );
-							if ( $line === '' || strpos( $line, '#' ) === 0 ) {
-								continue;
-							}
-							$parts = preg_split( '/\s+/', $line );
-							for ( $i = 1; $i < count( $parts ); $i ++ ) {
-								$hostsEntries[ $os ][] = $parts[ $i ];
-							}
-						}
-					}
-				}
-				foreach ( $serverNames as $serverName ) {
-					$valid = false;
-					foreach ( $hostsEntries as $names ) {
-						if ( in_array( $serverName, $names, true ) ) {
-							$valid = true;
-							break;
-						}
-					}
-					echo '<tr>';
-					echo '<td>' . htmlspecialchars( $serverName ) . '</td>';
-					echo '<td class="status">' . ( $valid ? '<span class="tick">✔️</span>' : '<span class="cross">❌</span>' ) . '</td>';
-					echo '</tr>';
-				}
-			}
-			?>
-			</tbody>
-		</table>
-	</div>
+	<?php require_once 'partials/vhosts.php'; ?>
 </div>
