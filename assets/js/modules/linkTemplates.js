@@ -7,7 +7,7 @@ export function initLinkTemplates() {
 
 		function loadTemplatesFromFile() {
 			list.innerHTML = '';
-			fetch( `partials/link_templates.json?t=${Date.now()}` )
+			fetch( `partials/link_templates.json`, {cache: 'no-store'} )
 				.then( ( res ) => res.json() )
 				.then( ( data ) => {
 					data.forEach( addTemplateItem );
@@ -51,7 +51,7 @@ export function initLinkTemplates() {
 
 		addBtn.addEventListener( 'click', () => addTemplateItem() );
 
-    // Load templates from file on page load
-    loadTemplatesFromFile();
+		// Load templates from file on page load
+		loadTemplatesFromFile();
 	} );
 }

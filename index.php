@@ -11,6 +11,7 @@ include 'config.php';
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="<?php echo htmlspecialchars( $user ); ?>'s custom XAMPP localhost index page.">
+	<meta name="robots" content="noindex, nofollow">
 	<title><?php echo htmlspecialchars( $user ); ?>'s localhost</title>
 	<link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
 	<link rel="icon" sizes="192x192" href="assets/favicon/android-chrome-192x192.png">

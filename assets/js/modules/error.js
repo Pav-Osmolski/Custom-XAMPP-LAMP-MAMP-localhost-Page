@@ -22,7 +22,7 @@ export function initApacheErrorLog() {
 		let errorLogInterval;
 
 		function fetchErrorLog() {
-			fetch(`${window.BASE_URL}apache_error_log.php`, { cache: 'no-store' } )
+			fetch( `${ window.BASE_URL }apache_error_log.php`, {cache: 'no-store'} )
 				.then( response => {
 					if ( !response.ok ) throw new Error( 'Error log unavailable' );
 					return response.text();
@@ -38,7 +38,7 @@ export function initApacheErrorLog() {
 		}
 
 		// Pre-flight fetch to avoid first-call failure
-		fetch(`${window.BASE_URL}apache_error_log.php`, { cache: 'no-store' } )
+		fetch( `${ window.BASE_URL }apache_error_log.php`, {cache: 'no-store'} )
 			.then( response => {
 				if ( !response.ok ) return;
 				return response.text();

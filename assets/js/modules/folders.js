@@ -9,7 +9,7 @@ export function initFoldersConfig() {
 
 		if ( !list || !addBtn || !input ) return;
 
-		fetch(`${window.BASE_URL}partials/folders.json`, { cache: 'no-store' })
+		fetch( `${ window.BASE_URL }partials/folders.json`, {cache: 'no-store'} )
 			.then( res => res.json() )
 			.then( data => {
 				data.forEach( item => addFolderItem( item ) );
@@ -30,38 +30,49 @@ export function initFoldersConfig() {
 			const specialCases = item.specialCases || {};
 			const casesHtml = Object.entries( specialCases ).map(
 				( [ key, val ] ) => `
-                    <div class="special-case">
-                        <input type="text" class="case-key" placeholder="match" value="${ key }">
-                        <input type="text" class="case-val" placeholder="replacement" value="${ val }">
-                        <button type="button" class="remove-special">❌</button>
-                    </div>
-                `
+					<div class="special-case">
+						<input type="text" class="case-key" placeholder="match" value="${ key }">
+						<input type="text" class="case-val" placeholder="replacement" value="${ val }">
+						<button type="button" class="remove-special">❌</button>
+					</div>
+				`
 			).join( '' );
 
 			li.innerHTML = `
-                <input type="text" placeholder="Title" value="${ item.title || '' }">
-                <input type="text" placeholder="Href (optional)" value="${ item.href || '' }">
-                <input type="text" placeholder="Dir (relative to HTDOCS_PATH)" value="${ item.dir || '' }">
-                <input type="text" placeholder="Exclude List (comma-separated)" value="${ (item.excludeList || []).join( ',' ) }">
-                <input type="text" placeholder="Match Regex" value="${ item.urlRules?.match || '' }">
-                <input type="text" placeholder="Replace Regex" value="${ item.urlRules?.replace || '' }">
-                <label>Link Template:
-                  <select>
-                    <option value="basic" ${ item.linkTemplate === 'basic' ? 'selected' : '' }>basic</option>
-                    <option value="env-links" ${ item.linkTemplate === 'env-links' ? 'selected' : '' }>env-links</option>
-                    <option value="pantheon" ${ item.linkTemplate === 'pantheon' ? 'selected' : '' }>pantheon</option>
-                  </select>
-                </label>
-                <label><input type="checkbox" class="disable-links" ${ item.disableLinks ? 'checked' : '' }> Disable Links</label>
-                <div class="special-cases-wrapper">
-                  <label>Special Cases:</label>
-                  <div class="special-cases">${ casesHtml }</div>
-                  <button type="button" class="add-special">➕ Add Rule</button>
-                </div>
-                <button type="button" class="remove-folder-column">❌</button>
-            `;
+				<input type="text" placeholder="Title" value="${ item.title || '' }">
+				<input type="text" placeholder="Href (optional)" value="${ item.href || '' }">
+				<input type="text" placeholder="Dir (relative to HTDOCS_PATH)" value="${ item.dir || '' }">
+				<input type="text" placeholder="Exclude List (comma-separated)" value="${ (item.excludeList || []).join( ',' ) }">
+				<input type="text" placeholder="Match Regex" value="${ item.urlRules?.match || '' }">
+				<input type="text" placeholder="Replace Regex" value="${ item.urlRules?.replace || '' }">
+				<label>Link Template: <select class="link-template-select"></select></label>
+				<label><input type="checkbox" class="disable-links" ${ item.disableLinks ? 'checked' : '' }> Disable Links</label>
+				<div class="special-cases-wrapper">
+					<label>Special Cases:</label>
+					<div class="special-cases">${ casesHtml }</div>
+					<button type="button" class="add-special">➕ Add Rule</button>
+				</div>
+				<button type="button" class="remove-folder-column">❌</button>
+			`;
 
 			list.appendChild( li );
+
+			const select = li.querySelector( '.link-template-select' );
+			select.name = 'linkTemplate';
+
+			fetch( `${ window.BASE_URL }partials/link_templates.json`, {cache: 'no-store'} )
+				.then( res => res.json() )
+				.then( templates => {
+					templates.forEach( template => {
+						const option = document.createElement( 'option' );
+						option.value = template.name;
+						option.textContent = template.name;
+						if ( item.linkTemplate === template.name ) {
+							option.selected = true;
+						}
+						select.appendChild( option );
+					} );
+				} );
 
 			li.querySelector( '.remove-folder-column' ).addEventListener( 'click', () => {
 				li.remove();
@@ -73,10 +84,10 @@ export function initFoldersConfig() {
 				const div = document.createElement( 'div' );
 				div.className = 'special-case';
 				div.innerHTML = `
-                    <input type="text" class="case-key" placeholder="match">
-                    <input type="text" class="case-val" placeholder="replacement">
-                    <button type="button" class="remove-special">❌</button>
-                `;
+					<input type="text" class="case-key" placeholder="match">
+					<input type="text" class="case-val" placeholder="replacement">
+					<button type="button" class="remove-special">❌</button>
+				`;
 				container.appendChild( div );
 				div.querySelector( '.remove-special' ).addEventListener( 'click', () => {
 					div.remove();

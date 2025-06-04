@@ -3,7 +3,7 @@ export function toggleApache( action ) {
 	const messageBox = document.getElementById( 'apache-status-message' );
 	if ( !messageBox ) return;
 	messageBox.innerText = 'Executing ' + action + '...';
-	fetch(`${window.BASE_URL}toggle_apache.php`, {
+	fetch( `${ window.BASE_URL }toggle_apache.php`, {
 		method: 'POST',
 		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 		body: 'action=' + encodeURIComponent( action )

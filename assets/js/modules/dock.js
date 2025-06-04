@@ -10,7 +10,7 @@ export function initDockConfig() {
 		if ( !dockList || !addBtn || !form ) return;
 
 		// Load current config
-		fetch(`${window.BASE_URL}partials/dock.json`, { cache: 'no-store' })
+		fetch( `${ window.BASE_URL }partials/dock.json`, {cache: 'no-store'} )
 			.then( res => res.json() )
 			.then( data => {
 				data.forEach( addDockItem );

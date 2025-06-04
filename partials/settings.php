@@ -72,13 +72,7 @@ $tooltips = [
 			<input type="checkbox" name="logErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
 		</label><br>
 
-		<button type="submit">Save Settings</button><br><br>
-
-		<div id="clear-storage-wrapper" style="position:relative">
-			<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
-			<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['clear_storage']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
-			</span>
-		</div>
+		<button type="submit">Save Settings</button>
 
 		<br><br>
 		<h3>Folders Configuration <span class="tooltip-icon" aria-describedby="tooltip-folders" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['folders']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
@@ -138,4 +132,10 @@ $tooltips = [
 
 	<!-- vHosts Manager -->
 	<?php require_once 'partials/vhosts.php'; ?>
+
+	<div id="clear-storage-wrapper" style="position:relative">
+		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
+		<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['clear_storage']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		</span>
+	</div>
 </div>
