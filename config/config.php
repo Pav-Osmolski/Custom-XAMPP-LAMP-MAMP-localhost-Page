@@ -95,11 +95,11 @@ $user = $user ?: 'Guest';
 
 $bodyClasses = 'background-image';
 
-if ( file_exists( 'system_stats.php' ) && $displaySystemStats ) {
+if ( file_exists( __DIR__ . '/../utils/system_stats.php' ) && $displaySystemStats ) {
 	$bodyClasses .= ' system-monitor-active';
 }
 
-if ( file_exists( 'apache_error_log.php' ) && $displayApacheErrorLog ) {
+if ( file_exists( __DIR__ . '/../utils/apache_error_log.php' ) && $displayApacheErrorLog ) {
 	$bodyClasses .= ' error-log-section-active';
 }
 

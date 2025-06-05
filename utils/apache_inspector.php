@@ -13,7 +13,7 @@
  */
 
 // Load defaults
-include 'config.php';
+require_once __DIR__ . '/../config/config.php';
 
 // SYSTEM INFO
 $os   = PHP_OS_FAMILY;

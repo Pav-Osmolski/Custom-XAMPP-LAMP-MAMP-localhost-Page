@@ -28,13 +28,13 @@
 
 		<?php if ( $displayApacheErrorLog ): ?>
 			<section id="error-log-section" aria-labelledby="error-log-title">
-				<?php include 'apache_error_log.php'; ?>
+				<?php include __DIR__ . '/../utils/apache_error_log.php'; ?>
 			</section>
 		<?php endif; ?>
 
 		<?php if ( $displaySystemStats ): ?>
 			<section id="system-monitor" class="system-monitor" role="region" aria-labelledby="system-monitor-title">
-				<?php include 'system_stats.php'; ?>
+				<?php include __DIR__ . '/../utils/system_stats.php'; ?>
 			</section>
 		<?php endif; ?>
 

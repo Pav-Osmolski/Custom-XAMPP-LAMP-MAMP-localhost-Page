@@ -16,7 +16,7 @@ export function initSystemMonitoring() {
 		let statsInterval;
 
 		function fetchSystemStats() {
-			fetch( `${ window.BASE_URL }system_stats.php`, {cache: 'no-store'} )
+			fetch( `${ window.BASE_URL }utils/system_stats.php`, {cache: 'no-store'} )
 				.then( response => {
 					if ( !response.ok ) throw new Error( 'System stats unavailable' );
 					return response.json();
@@ -34,7 +34,7 @@ export function initSystemMonitoring() {
 		}
 
 		// Only begin polling once we know the backend is returning valid JSON
-		fetch( `${ window.BASE_URL }system_stats.php`, {cache: 'no-store'} )
+		fetch( `${ window.BASE_URL }utils/system_stats.php`, {cache: 'no-store'} )
 			.then( response => {
 				if ( !response.ok ) return;
 				return response.json();

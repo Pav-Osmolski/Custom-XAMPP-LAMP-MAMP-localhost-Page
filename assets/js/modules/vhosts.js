@@ -14,7 +14,7 @@ function bindButtons() {
         button.addEventListener( 'click', () => {
             const name = button.dataset.generateCert;
             if ( confirm( 'Generate a new SSL certificate for ' + name + '?' ) ) {
-                fetch( 'generate_cert.php?name=' + encodeURIComponent( name ) )
+                fetch( `${ window.BASE_URL }utils/generate_cert.php?name=${ encodeURIComponent( name ) }` )
                     .then( res => res.text() )
                     .then( msg => {
                         alert( msg );

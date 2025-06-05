@@ -2,7 +2,7 @@
 $apachePathValid = file_exists( APACHE_PATH );
 $htdocsPathValid = file_exists( HTDOCS_PATH );
 $phpPathValid    = file_exists( PHP_PATH );
-$apacheToggle    = file_exists( __DIR__ . '/../toggle_apache.php' );
+$apacheToggle    = file_exists( __DIR__ . '/../utils/toggle_apache.php' );
 
 // Centralised tooltip descriptions
 $tooltips = [

@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../config/config.php';
+
 header( 'Content-Type: text/plain' );
 
 if ( empty( $_GET['name'] ) ) {

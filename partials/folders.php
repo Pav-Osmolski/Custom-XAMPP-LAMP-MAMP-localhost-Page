@@ -1,6 +1,6 @@
 <?php
 $columnCounter = 0;
-$configPath    = __DIR__ . '/folders.json';
+$configPath    = __DIR__ . '/../config/folders.json';
 $configData    = json_decode( file_get_contents( $configPath ), true );
 ?>
 
@@ -69,7 +69,7 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 						$disableLinks = ! empty( $column['disableLinks'] );
 
 						$template      = $column['linkTemplate'] ?? 'basic';
-						$templateFile  = __DIR__ . '/link_templates.json';
+						$templateFile  = __DIR__ . '/../config/link_templates.json';
 						$linkTemplates = json_decode( file_get_contents( $templateFile ), true );
 						$html          = '';
 

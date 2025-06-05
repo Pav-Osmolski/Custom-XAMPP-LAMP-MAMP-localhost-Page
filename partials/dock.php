@@ -1,5 +1,5 @@
 <?php
-$dockItemsPath = __DIR__ . '/dock.json';
+$dockItemsPath = __DIR__ . '/../config/dock.json';
 if ( file_exists( $dockItemsPath ) ) {
 	$dockItems = json_decode( file_get_contents( $dockItemsPath ), true );
 } else {

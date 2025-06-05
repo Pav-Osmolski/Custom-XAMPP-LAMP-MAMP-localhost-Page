@@ -32,7 +32,7 @@ Please feel free to fork and make your own changes!
 - **Live System Monitoring** – AJAX-powered CPU, memory, and disk usage at a glance  
 - **Quick Config Panel** – Update paths, ports, and settings without breaking a sweat  
 - **PHP Error Management** – Toggle error display and logging on the fly  
-- **Virtual Hosts Overview** – View and validate your active VHost configurations  
+- **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate detection
 - **Apache Error Log Toggle** – One-click access to the latest server logs  
 - **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites  
 - **Responsive Interface** – Sleek, modern design that adapts to all screen sizes  
@@ -65,16 +65,21 @@ A quick overview of the core files and folders in this project, so you’re neve
 
 | File                     | Description |
 |--------------------------|-------------|
-| `apache_error_log.php`   | Fetches and returns Apache error log entries via AJAX. |
-| `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
-| `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
-| `config.php`             | Default configuration including MySQL credentials and Apache paths. |
 | `index.php`              | Main entry point. Displays the homepage with all widgets and layout. |
-| `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
-| `system_stats.php`       | Backend logic for system stat readings, used by AJAX. |
-| `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
 | `package.json`           | Lists build dependencies and Webpack/Babel/Sass configuration. |
 | `webpack.config.js`      | Webpack build pipeline for JS and SCSS. |
+
+---
+
+### ⚙️ Config (`config/`)
+
+| File                     | Description |
+|--------------------------|-------------|
+| `config.php`             | Default configuration including MySQL credentials and Apache paths. |
+| `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
+| `dock.json`              | Stores dock layout and links in JSON format. |
+| `folders.json`           | Defines folder configurations, incl. paths, filters, link templates, and display rules. |
+| `link_templates.json`    | Defines reusable HTML link templates for folder display, referenced by folders.json. |
 
 ---
 
@@ -82,16 +87,25 @@ A quick overview of the core files and folders in this project, so you’re neve
 
 | File                     | Description |
 |--------------------------|-------------|
-| `dock.json`              | Stores dock layout and links in JSON format. |
 | `dock.php`               | Renders the customizable macOS-style dock. |
-| `folders.json`           | Defines folder configurations, incl. paths, filters, link templates, and display rules. |
 | `folders.php`            | Dynamically scans and lists local project folders. |
 | `footer.php`             | The shared footer, includes theme toggle and settings link. |
 | `header.php`             | Shared `<head>` setup, includes all essential meta and scripts. |
 | `info.php`               | Displays system information like PHP, Apache, and MySQL versions. |
-| `link_templates.json`    | Defines reusable HTML link templates for folder display, referenced by folders.json. |
 | `settings.php`           | The settings interface for configuring paths, dock, and logs. |
 | `submit.php`             | Handles the saving of user-configured settings. |
+
+---
+
+### 🧰 Utils (`utils/`)
+
+| File                     | Description |
+|--------------------------|-------------|
+| `apache_error_log.php`   | Fetches and returns Apache error log entries via AJAX. |
+| `generate_cert.php`      | Generates SSL certificates. |
+| `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
+| `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
+| `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
 
 ---
 

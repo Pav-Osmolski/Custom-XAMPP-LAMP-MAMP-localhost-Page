@@ -1,8 +1,8 @@
 <?php
-require_once 'partials/submit.php';
+require_once __DIR__ . '/partials/submit.php';
 
 // Load defaults
-include 'config.php';
+include __DIR__ . '/config/config.php';
 ?>
 
 <!DOCTYPE html>
@@ -25,17 +25,17 @@ include 'config.php';
 </head>
 <?php echo( $useAjaxForStats ? '<body data-ajax-enabled="true"' : '<body' ); ?> class="<?= $bodyClasses; ?>">
 <div class="container">
-	<?php require_once 'partials/header.php'; ?>
+	<?php require_once __DIR__ . '/partials/header.php'; ?>
 	<main role="main">
 		<section class="folders">
-			<?php require_once 'partials/folders.php'; ?>
-			<?php require_once 'partials/settings.php'; ?>
-			<?php require_once 'phpinfo.php'; ?>
-			<?php require_once 'partials/dock.php'; ?>
+			<?php require_once __DIR__ . '/partials/folders.php'; ?>
+			<?php require_once __DIR__ . '/partials/settings.php'; ?>
+			<?php require_once __DIR__ . '/utils/phpinfo.php'; ?>
+			<?php require_once __DIR__ . '/partials/dock.php'; ?>
 		</section>
-		<?php require_once 'partials/info.php'; ?>
+		<?php require_once __DIR__ . '/partials/info.php'; ?>
 	</main>
-	<?php require_once 'partials/footer.php'; ?>
+	<?php require_once __DIR__ . '/partials/footer.php'; ?>
 </div>
 </body>
 </html>
