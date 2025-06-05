@@ -1,9 +1,19 @@
 <?php
 // config.php
+// Load user-specific overrides first
 if ( file_exists( __DIR__ . '/user_config.php' ) ) {
-	include __DIR__ . '/user_config.php';
+	require_once __DIR__ . '/user_config.php';
 }
 
+// Helper: define only if not already defined, with path normalisation
+function define_path_constant( $name, $default ) {
+	if ( ! defined( $name ) ) {
+		$normalised = rtrim( str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $default ), DIRECTORY_SEPARATOR );
+		define( $name, $normalised );
+	}
+}
+
+// DB settings with guards
 if ( ! defined( 'DB_HOST' ) ) {
 	define( 'DB_HOST', 'localhost' );
 }
@@ -13,15 +23,11 @@ if ( ! defined( 'DB_USER' ) ) {
 if ( ! defined( 'DB_PASSWORD' ) ) {
 	define( 'DB_PASSWORD', 'password' );
 }
-if ( ! defined( 'APACHE_PATH' ) ) {
-	define( 'APACHE_PATH', 'C:\\xampp\\apache\\' );
-}
-if ( ! defined( 'HTDOCS_PATH' ) ) {
-	define( 'HTDOCS_PATH', 'C:\\htdocs\\' );
-} // Where your local projects are stored
-if ( ! defined( 'PHP_PATH' ) ) {
-	define( 'PHP_PATH', 'C:\\xampp\\php\\' );
-}
+
+// Paths (user-defined values will pass through untouched)
+define_path_constant( 'APACHE_PATH', 'C:/xampp/apache' );
+define_path_constant( 'HTDOCS_PATH', 'C:/htdocs' );
+define_path_constant( 'PHP_PATH', 'C:/xampp/php' );
 
 if ( ! isset( $displaySystemStats ) ) {
 	$displaySystemStats = true;
@@ -34,6 +40,11 @@ if ( ! isset( $displayApacheErrorLog ) ) {
 if ( ! isset( $useAjaxForStats ) ) {
 	$useAjaxForStats = true;
 }
+
+// Detect OS for older PHP versions. Not actually used because of $os, but kept here for reference.
+$isWindowsPHPOld = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
+$isLinuxPHPOld   = strtoupper( substr( PHP_OS, 0, 5 ) ) === 'LINUX';
+$isMacPHPOld     = strtoupper( substr( PHP_OS, 0, 6 ) ) === 'DARWIN' || strtoupper( substr( PHP_OS, 0, 3 ) ) === 'MAC';
 
 // Safe shell execution wrapper
 function safe_shell_exec( $cmd ) {
@@ -50,11 +61,14 @@ function safe_shell_exec( $cmd ) {
 		'typeperf',
 		'wmic',
 		'which',
-		'whoami'
+		'whoami',
+		'auto-make-cert',
+		'pav-make-cert',
+		'make-cert'
 	];
 
 	// Extract base command from quoted or unquoted input
-	preg_match( '/(?:^|["\'])((?:[a-zA-Z]:)?[\\\\\\/a-zA-Z0-9_-]+)(?:\\.exe)?(?=\\s|$)/i', $cmd, $matches );
+	preg_match( '/(?:^|["\'])((?:[a-zA-Z]:)?[\\\\\\/a-zA-Z0-9_-]+)(?:\\.(exe|bat))?(?=\\s|$)/i', $cmd, $matches );
 	$binary = isset( $matches[1] ) ? basename( $matches[1] ) : '';
 
 	if ( in_array( strtolower( $binary ), $allowed, true ) ) {
@@ -63,11 +77,6 @@ function safe_shell_exec( $cmd ) {
 
 	return null;
 }
-
-// Detect OS for older PHP versions. Not actually used because of $os, but kept here for reference.
-$isWindowsPHPOld = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
-$isLinuxPHPOld   = strtoupper( substr( PHP_OS, 0, 5 ) ) === 'LINUX';
-$isMacPHPOld     = strtoupper( substr( PHP_OS, 0, 6 ) ) === 'DARWIN' || strtoupper( substr( PHP_OS, 0, 3 ) ) === 'MAC';
 
 // Get username based on OS
 $user = $_SERVER['USERNAME']
@@ -99,7 +108,7 @@ function renderServerInfo() {
 
 	$apacheVersion = '';
 	if ( $os === 'Windows' ) {
-		$httpdPath = APACHE_PATH . 'bin\\httpd.exe';
+		$httpdPath = APACHE_PATH . '\\bin\\httpd.exe';
 		if ( file_exists( $httpdPath ) ) {
 			$apacheVersion = safe_shell_exec( $httpdPath . " -v" );
 		}

@@ -13,7 +13,7 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 	<h2>Document Folders</h2>
 	<div class="columns max-md">
 		<?php foreach ( $configData as $column ): ?>
-			<div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>">
+			<div class="column" id="<?php echo 'column_' . ( ++ $columnCounter ); ?>">
 				<div class="drag-handle"><?php echo file_get_contents( __DIR__ . '/../assets/images/hamburger.svg' ); ?></div>
 				<h3>
 					<?php if ( ! empty( $column['href'] ) ): ?>
@@ -24,7 +24,11 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 				</h3>
 				<ul>
 					<?php
-					$dir = HTDOCS_PATH . rtrim( $column['dir'], '/' ) . '/';
+					$subdir = trim( str_replace( [
+						'/',
+						'\\'
+					], DIRECTORY_SEPARATOR, $column['dir'] ), DIRECTORY_SEPARATOR );
+					$dir    = HTDOCS_PATH . DIRECTORY_SEPARATOR . $subdir . DIRECTORY_SEPARATOR;
 					if ( ! is_dir( $dir ) ) {
 						echo "<ul><li style='color: red;'>Error: The directory '{$dir}' does not exist.</li></ul>";
 						echo "</div>";
@@ -44,8 +48,8 @@ $configData    = json_decode( file_get_contents( $configPath ), true );
 						}
 
 						if ( isset( $column['urlRules'] ) &&
-							! empty( $column['urlRules']['match'] ) &&
-							! empty( $column['urlRules']['replace'] )
+						     ! empty( $column['urlRules']['match'] ) &&
+						     ! empty( $column['urlRules']['replace'] )
 						) {
 							$matchRegex   = $column['urlRules']['match'];
 							$replaceRegex = $column['urlRules']['replace'];

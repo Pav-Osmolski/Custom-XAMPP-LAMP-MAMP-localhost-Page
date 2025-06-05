@@ -3,11 +3,11 @@ require_once 'config.php';
 
 // Set safe defaults
 $displayApacheErrorLog = $displayApacheErrorLog ?? false;
-$useAjaxForStats = $useAjaxForStats ?? true;
+$useAjaxForStats       = $useAjaxForStats ?? true;
 
 if ( ! $displayApacheErrorLog ) {
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Apache error log display is disabled.']);
+    header( 'Content-Type: application/json' );
+    echo json_encode( [ 'error' => 'Apache error log display is disabled.' ] );
     exit;
 }
 
@@ -15,7 +15,7 @@ $logFile = '';
 
 switch ( PHP_OS_FAMILY ) {
     case 'Windows':
-        $logFile = APACHE_PATH . 'logs\\error.log';
+        $logFile = APACHE_PATH . '\\logs\\error.log';
         break;
     case 'Darwin':
         $mampLog = '/Applications/MAMP/logs/apache_error.log';

@@ -6,11 +6,11 @@ $apacheToggle    = file_exists( __DIR__ . '/../toggle_apache.php' );
 
 // Centralised tooltip descriptions
 $tooltips = [
-	'php_error'     => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
-	'folders'       => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
-	'link_templates'=> 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
-	'dock'          => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
-	'clear_storage' => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
+	'php_error'      => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
+	'folders'        => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
+	'link_templates' => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
+	'dock'           => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
+	'clear_storage'  => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
 ];
 ?>
 
@@ -49,11 +49,13 @@ $tooltips = [
 			<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
 		</label><br>
 
-		<h3>PHP Error Handling & Logging 
-			<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['php_error']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		<h3>PHP Error Handling & Logging
+			<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0"
+			      data-tooltip="<?= htmlspecialchars( $tooltips['php_error'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
 			</span>
 		</h3>
-		<span id="tooltip-php_error" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['php_error']) ?></span>
+		<span id="tooltip-php_error" class="sr-only"
+		      role="tooltip"><?= htmlspecialchars( $tooltips['php_error'] ) ?></span>
 
 		<label>Display Errors:
 			<input type="checkbox" name="displayErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
@@ -75,10 +77,11 @@ $tooltips = [
 		<button type="submit">Save Settings</button>
 
 		<br><br>
-		<h3>Folders Configuration <span class="tooltip-icon" aria-describedby="tooltip-folders" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['folders']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		<h3>Folders Configuration <span class="tooltip-icon" aria-describedby="tooltip-folders" tabindex="0"
+		                                data-tooltip="<?= htmlspecialchars( $tooltips['folders'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
 			</span>
 		</h3>
-		<span id="tooltip-folders" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['folders']) ?></span><br>
+		<span id="tooltip-folders" class="sr-only" role="tooltip"><?= htmlspecialchars( $tooltips['folders'] ) ?></span><br>
 
 		<div id="folders-config">
 			<ul id="folders-config-list" class="draggable-list"></ul>
@@ -87,10 +90,12 @@ $tooltips = [
 		<input type="hidden" id="folders_json_input" name="folders_json">
 		<br>
 
-		<h3>Folder Link Templates <span class="tooltip-icon" aria-describedby="tooltip-link_templates" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['link_templates']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		<h3>Folder Link Templates <span class="tooltip-icon" aria-describedby="tooltip-link_templates" tabindex="0"
+		                                data-tooltip="<?= htmlspecialchars( $tooltips['link_templates'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
 			</span>
 		</h3>
-		<span id="tooltip-link_templates" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['link_templates']) ?></span>
+		<span id="tooltip-link_templates" class="sr-only"
+		      role="tooltip"><?= htmlspecialchars( $tooltips['link_templates'] ) ?></span>
 
 		<div id="link-templates-config">
 			<ul id="link-templates-list" class="template-list"></ul>
@@ -102,10 +107,11 @@ $tooltips = [
 		<button type="submit">Save Settings</button>
 
 		<br><br>
-		<h3>Dock Configuration <span class="tooltip-icon" aria-describedby="tooltip-dock" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['dock']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		<h3>Dock Configuration <span class="tooltip-icon" aria-describedby="tooltip-dock" tabindex="0"
+		                             data-tooltip="<?= htmlspecialchars( $tooltips['dock'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
 			</span>
 		</h3>
-		<span id="tooltip-dock" class="sr-only" role="tooltip"><?= htmlspecialchars($tooltips['dock']) ?></span>
+		<span id="tooltip-dock" class="sr-only" role="tooltip"><?= htmlspecialchars( $tooltips['dock'] ) ?></span>
 
 		<div id="dock-config-editor">
 			<ul id="dock-list"></ul>
@@ -135,7 +141,8 @@ $tooltips = [
 
 	<div id="clear-settings-wrapper">
 		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
-		<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0" data-tooltip="<?= htmlspecialchars($tooltips['clear_storage']) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0"
+		      data-tooltip="<?= htmlspecialchars( $tooltips['clear_storage'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
 		</span>
 	</div>
 </div>

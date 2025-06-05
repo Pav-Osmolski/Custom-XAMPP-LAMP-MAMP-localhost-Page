@@ -12,6 +12,7 @@ import {initSearch} from './modules/search.js';
 import {initClearStorageButton} from './modules/settings.js';
 import {initSystemMonitoring} from './modules/system.js';
 import {initThemeToggle} from './modules/theme.js';
+import {setupVhostCertButtons} from './modules/vhosts.js';
 import {initViewToggles} from './modules/view.js';
 
 // Initialise on page load
@@ -25,4 +26,5 @@ initSearch();
 initClearStorageButton();
 initSystemMonitoring();
 initThemeToggle();
+setupVhostCertButtons();
 initViewToggles();

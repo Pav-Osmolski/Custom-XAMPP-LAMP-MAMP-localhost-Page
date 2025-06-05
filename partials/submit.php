@@ -1,30 +1,33 @@
 <?php
+function normalise_path( $path ) {
+	$path = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $path );
+
+	return rtrim( $path, DIRECTORY_SEPARATOR );
+}
+
 // Handle form submission
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
-	$user_config = "<?php
-";
-	$user_config .= "define('DB_HOST', '" . addslashes( $_POST['DB_HOST'] ) . "');
-";
-	$user_config .= "define('DB_USER', '" . addslashes( $_POST['DB_USER'] ) . "');
-";
-	$user_config .= "define('DB_PASSWORD', '" . addslashes( $_POST['DB_PASSWORD'] ) . "');
-";
-	$user_config .= "define('APACHE_PATH', '" . addslashes( $_POST['APACHE_PATH'] ) . "');
-";
-	$user_config .= "define('HTDOCS_PATH', '" . addslashes( $_POST['HTDOCS_PATH'] ) . "');
-";
-	$user_config .= "define('PHP_PATH', '" . addslashes( $_POST['PHP_PATH'] ) . "');
-";
-	$user_config .= "\$displaySystemStats = " . ( isset( $_POST['displaySystemStats'] ) ? 'true' : 'false' ) . ";
-";
-	$user_config .= "\$displayApacheErrorLog = " . ( isset( $_POST['displayApacheErrorLog'] ) ? 'true' : 'false' ) . ";
-";
-	$user_config .= "\$useAjaxForStats = " . ( isset( $_POST['useAjaxForStats'] ) ? 'true' : 'false' ) . ";
-";
+	$user_config = "<?php\n";
 
+	// DB settings
+	$user_config .= "define('DB_HOST', '" . addslashes( $_POST['DB_HOST'] ) . "');\n";
+	$user_config .= "define('DB_USER', '" . addslashes( $_POST['DB_USER'] ) . "');\n";
+	$user_config .= "define('DB_PASSWORD', '" . addslashes( $_POST['DB_PASSWORD'] ) . "');\n";
+
+	// Raw user paths (slashes not normalised here — config.php handles it)
+	$user_config .= "define('APACHE_PATH', '" . addslashes( normalise_path( $_POST['APACHE_PATH'] ) ) . "');\n";
+	$user_config .= "define('HTDOCS_PATH', '" . addslashes( normalise_path( $_POST['HTDOCS_PATH'] ) ) . "');\n";
+	$user_config .= "define('PHP_PATH', '" . addslashes( normalise_path( $_POST['PHP_PATH'] ) ) . "');\n";
+
+	// Feature flags
+	$user_config .= "\$displaySystemStats = " . ( isset( $_POST['displaySystemStats'] ) ? 'true' : 'false' ) . ";\n";
+	$user_config .= "\$displayApacheErrorLog = " . ( isset( $_POST['displayApacheErrorLog'] ) ? 'true' : 'false' ) . ";\n";
+	$user_config .= "\$useAjaxForStats = " . ( isset( $_POST['useAjaxForStats'] ) ? 'true' : 'false' ) . ";\n";
+
+	// PHP error handling
 	$user_config .= "ini_set('display_errors', " . ( isset( $_POST['displayErrors'] ) ? '1' : '0' ) . ");\n";
-	$user_config .= "error_reporting(" . $_POST['errorReportingLevel'] . ");\n";
+	$user_config .= "error_reporting(" . (int) $_POST['errorReportingLevel'] . ");\n";
 	$user_config .= "ini_set('log_errors', " . ( isset( $_POST['logErrors'] ) ? '1' : '0' ) . ");\n";
 
 	// Save folders
