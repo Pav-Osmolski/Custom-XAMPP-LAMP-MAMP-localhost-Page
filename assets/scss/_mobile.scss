@@ -61,6 +61,41 @@
 			}
 		}
 	}
+	#vhosts-table {
+		border: 1px solid var(--border-color);
+
+		thead {
+			display: none;
+		}
+
+		tbody {
+			tr {
+				display: block;
+				padding: 1rem;
+				background: var(--header-background-color);
+
+				td {
+					display: flex;
+					justify-content: space-between;
+					align-items: baseline;
+					flex-wrap: wrap;
+					border-bottom: none;
+
+					&:last-child {
+						border-bottom: 1px solid var(--border-color);
+					}
+
+					&::before {
+						content: attr(data-label);
+						font-weight: bold;
+						flex: 1;
+						margin-right: 1rem;
+						color: var(--text-color);
+					}
+				}
+			}
+		}
+	}
 }
 
 @media (max-width: 525px) {

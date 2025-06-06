@@ -10,41 +10,47 @@
 	];
 	$hostsEntries = [];
 	$serverData   = [];
-	$certData     = [];
 
 	if ( file_exists( $vhostsPath ) ) {
-		$lines       = file( $vhostsPath );
-		$currentSSL  = false;
-		$certFile    = '';
-		$keyFile     = '';
-		$currentName = '';
+		$lines        = file( $vhostsPath );
+		$currentBlock = [];
+		$currentSSL   = false;
 
 		foreach ( $lines as $line ) {
 			$line = trim( $line );
 
 			if ( preg_match( '#^<VirtualHost\s+.*:443>#i', $line ) ) {
-				$currentSSL = true;
-				$certFile   = '';
-				$keyFile    = '';
+				$currentSSL   = true;
+				$currentBlock = [ 'ssl' => true ];
+			} elseif ( preg_match( '#^<VirtualHost\s+.*:80>#i', $line ) ) {
+				$currentSSL   = false;
+				$currentBlock = [ 'ssl' => false ];
 			} elseif ( preg_match( '#^</VirtualHost>#i', $line ) ) {
-				$currentSSL  = false;
-				$certFile    = '';
-				$keyFile     = '';
-				$currentName = '';
+				if ( isset( $currentBlock['name'] ) ) {
+					$name = $currentBlock['name'];
+					$serverData[ $name ] = array_merge([
+						'valid'     => false,
+						'cert'      => '',
+						'key'       => '',
+						'certValid' => true,
+						'docRoot'   => '',
+					], $currentBlock);
+				}
+				$currentBlock = [];
 			} elseif ( preg_match( '/^\s*ServerName\s+(.+)/i', $line, $matches ) ) {
-				$currentName                = trim( $matches[1] );
-				$serverData[ $currentName ] = [
-					'valid'     => false,
-					'ssl'       => $currentSSL,
-					'cert'      => '',
-					'key'       => '',
-					'certValid' => true
-				];
-			} elseif ( $currentSSL && $currentName && preg_match( '/^\s*SSLCertificateFile\s+(.+)/i', $line, $matches ) ) {
-				$serverData[ $currentName ]['cert'] = trim( $matches[1] );
-			} elseif ( $currentSSL && $currentName && preg_match( '/^\s*SSLCertificateKeyFile\s+(.+)/i', $line, $matches ) ) {
-				$serverData[ $currentName ]['key'] = trim( $matches[1] );
+				$currentBlock['name'] = trim( $matches[1] );
+			} elseif ( preg_match( '/^\s*DocumentRoot\s+(.+)/i', $line, $matches ) ) {
+				$currentBlock['docRoot'] = trim( $matches[1] );
+			} elseif ( preg_match( '/^\s*SSLCertificateFile\s+(.+)/i', $line, $matches ) ) {
+				$currentBlock['cert'] = trim( $matches[1] );
+			} elseif ( preg_match( '/^\s*SSLCertificateKeyFile\s+(.+)/i', $line, $matches ) ) {
+				$currentBlock['key'] = trim( $matches[1] );
 			}
+		}
+
+		$duplicateTracker = [];
+		foreach ( $serverData as $name => $info ) {
+			$duplicateTracker[ $name ] = isset( $duplicateTracker[ $name ] ) ? $duplicateTracker[ $name ] + 1 : 1;
 		}
 
 		foreach ( $serverData as $name => &$info ) {
@@ -80,32 +86,75 @@
 				}
 			}
 		}
+		?>
+		<div class="vhost-filters">
+			<label>Filter:
+				<select id="vhost-filter">
+					<option value="all">All</option>
+					<option value="missing-cert">Missing Cert</option>
+					<option value="missing-host">Missing Host</option>
+					<option value="ssl-only">SSL Only</option>
+					<option value="non-ssl">Non-SSL</option>
+				</select>
+			</label>
+		</div>
 
-		if ( ! empty( $serverData ) ) {
-			echo '<table>';
-			echo '<thead><tr><th>Server Name</th><th>Status</th><th>SSL</th><th>Cert</th></tr></thead><tbody>';
-			foreach ( $serverData as $name => $info ) {
-				$protocol = $info['ssl'] ? 'https' : 'http';
-				$link     = $info['valid'] ? '<a href="' . $protocol . '://' . $name . '" target="_blank">' . htmlspecialchars( $name ) . '</a>' : htmlspecialchars( $name );
-				echo '<tr>';
-				echo '<td>' . $link . '</td>';
-				echo '<td class="status">' . ( $info['valid'] ? '<span class="tick">✔️</span>' : '<span class="cross">❌</span>' ) . '</td>';
-				echo '<td>' . ( $info['ssl'] ? '<span class="lock">🔒</span>' : '—' ) . '</td>';
-				echo '<td>';
+		<table id="vhosts-table">
+			<thead>
+			<tr>
+				<th>Server Name</th>
+				<th>Document Root</th>
+				<th>Status</th>
+				<th>SSL</th>
+				<th>Cert</th>
+				<th>Open</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php foreach ( $serverData as $host => $info ) :
+				$isDuplicate = ( $duplicateTracker[ $host ] ?? 0 ) > 1;
+				$classes = [];
 				if ( $info['ssl'] ) {
-					echo $info['certValid']
-						? '<span class="tick">✔️</span>'
-						: '<span class="cross">❌</span> <button data-generate-cert="' . htmlspecialchars( $name ) . '">Generate Cert</button>';
-				} else {
-					echo '—';
+					$classes[] = 'vhost-ssl';
 				}
-				echo '</td>';
-				echo '</tr>';
-			}
-			echo '</tbody></table>';
-		} else {
-			echo '<p><strong>Note:</strong> No <code>ServerName</code> entries found in your <code>httpd-vhosts.conf</code>.</p>';
-		}
+				if ( $info['certValid'] ) {
+					$classes[] = 'cert-valid';
+				}
+				if ( $info['valid'] ) {
+					$classes[] = 'host-valid';
+				}
+				if ( $isDuplicate ) {
+					$classes[] = 'vhost-duplicate';
+				}
+				$classAttr = implode( ' ', $classes );
+				$protocol  = $info['ssl'] ? 'https' : 'http';
+				$link      = $info['valid']
+					? '<a href="' . $protocol . '://' . $host . '" target="_blank">' . htmlspecialchars( $host ) . '</a>'
+					: htmlspecialchars( $host );
+				?>
+				<tr class="<?= $classAttr ?>">
+					<td data-label="Server Name"><?= $link ?></td>
+					<td data-label="Document Root">
+						<code><?= $info['docRoot'] !== '' ? htmlspecialchars( $info['docRoot'] ) : 'N/A' ?></code></td>
+					<td data-label="Status"
+					    class="status"><?= $info['valid'] ? '<span class="tick">✔️</span>' : '<span class="cross">❌</span>' ?></td>
+					<td data-label="SSL"><?= $info['ssl'] ? '<span class="lock">🔒</span>' : '<span class="empty">—</span>' ?></td>
+					<td data-label="Cert">
+						<?php if ( $info['ssl'] ) : ?>
+							<?= $info['certValid'] ? '<span class="tick">✔️</span>' : '<span class="cross">❌</span> <button data-generate-cert="' . htmlspecialchars( $host ) . '">Generate Cert</button>' ?>
+						<?php else : ?>
+							<span class="empty">—</span>
+						<?php endif; ?>
+					</td>
+					<td data-label="Open">
+						<?= $info['docRoot'] !== '' ? '<button class="open-folder" data-path="' . htmlspecialchars( $info['docRoot'] ) . '">📂</button>' : '<span class="empty">—</span>' ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+		<div id="vhost-empty-msg" style="display: none; padding: 1em;">No matching entries found.</div>
+		<?php
 	} else {
 		echo '<p><strong>Note:</strong> The <code>httpd-vhosts.conf</code> file was not found at <code>' . htmlspecialchars( $vhostsPath ) . '</code>. Please ensure your Apache setup is correct and virtual hosts are enabled.</p>';
 	}
