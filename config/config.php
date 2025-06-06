@@ -67,15 +67,37 @@ function safe_shell_exec( $cmd ) {
 		'make-cert'
 	];
 
-	// Extract base command from quoted or unquoted input
-	preg_match( '/(?:^|["\'])((?:[a-zA-Z]:)?[\\\\\\/a-zA-Z0-9_-]+)(?:\\.(exe|bat))?(?=\\s|$)/i', $cmd, $matches );
-	$binary = isset( $matches[1] ) ? basename( $matches[1] ) : '';
+	$cmd = rtrim( $cmd, "\r\n" );
 
-	if ( in_array( strtolower( $binary ), $allowed, true ) ) {
+	preg_match( '/(?:^|["\'])((?:[a-zA-Z]:)?[^\\s"\']+)(?:\s|$)/i', $cmd, $matches );
+	$fullPath = $matches[1] ?? '';
+	$binary   = strtolower( pathinfo( $fullPath, PATHINFO_FILENAME ) );
+
+	if ( in_array( $binary, $allowed, true ) ) {
 		return shell_exec( $cmd );
 	}
 
 	return null;
+}
+
+// Debug helper
+function log_command( $command, $context = '' ) {
+	$logDir  = __DIR__ . '/../logs';
+	$logFile = $logDir . '/localhost-page.log';
+
+	if ( ! is_dir( $logDir ) ) {
+		mkdir( $logDir, 0755, true );
+	}
+
+	$timestamp  = date( '[Y-m-d H:i:s]' );
+	$contextStr = $context ? " [$context]" : '';
+
+	// Encode to preserve invisible characters (optional debug enhancement)
+	$visibleCommand = json_encode( $command );
+
+	$logEntry = "$timestamp$contextStr\nRaw: $command\nVisible: " . json_encode( $command ) . "\nLength: " . strlen( $command ) . "\n\n";
+
+	file_put_contents( $logFile, $logEntry, FILE_APPEND );
 }
 
 // Get username based on OS

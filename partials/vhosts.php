@@ -27,14 +27,14 @@
 				$currentBlock = [ 'ssl' => false ];
 			} elseif ( preg_match( '#^</VirtualHost>#i', $line ) ) {
 				if ( isset( $currentBlock['name'] ) ) {
-					$name = $currentBlock['name'];
-					$serverData[ $name ] = array_merge([
+					$name                = $currentBlock['name'];
+					$serverData[ $name ] = array_merge( [
 						'valid'     => false,
 						'cert'      => '',
 						'key'       => '',
 						'certValid' => true,
 						'docRoot'   => '',
-					], $currentBlock);
+					], $currentBlock );
 				}
 				$currentBlock = [];
 			} elseif ( preg_match( '/^\s*ServerName\s+(.+)/i', $line, $matches ) ) {

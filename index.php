@@ -1,4 +1,8 @@
 <?php
+/** @var string $user */
+/** @var bool $useAjaxForStats */
+/** @var string $bodyClasses */
+
 require_once __DIR__ . '/partials/submit.php';
 
 // Load defaults

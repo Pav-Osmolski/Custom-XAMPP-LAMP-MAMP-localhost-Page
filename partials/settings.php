@@ -137,7 +137,7 @@ $tooltips = [
 	</div>
 
 	<!-- vHosts Manager -->
-	<?php require_once 'partials/vhosts.php'; ?>
+	<?php require_once __DIR__ . '/../partials/vhosts.php'; ?>
 
 	<div id="clear-settings-wrapper">
 		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>

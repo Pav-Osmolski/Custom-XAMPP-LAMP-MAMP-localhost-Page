@@ -1,4 +1,9 @@
-<?php if ( $displayApacheErrorLog || $displaySystemStats ): ?>
+<?php
+/** @var bool $displayApacheErrorLog */
+/** @var bool $displaySystemStats */
+/** @var bool $useAjaxForStats */
+
+if ( $displayApacheErrorLog || $displaySystemStats ): ?>
 
 	<?php if ( $useAjaxForStats ): ?>
 
