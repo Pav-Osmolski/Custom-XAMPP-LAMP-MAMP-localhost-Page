@@ -94,6 +94,7 @@ A quick overview of the core files and folders in this project, so you’re neve
 | `info.php`               | Displays system information like PHP, Apache, and MySQL versions. |
 | `settings.php`           | The settings interface for configuring paths, dock, and logs. |
 | `submit.php`             | Handles the saving of user-configured settings. |
+| `vhosts.php`             | Lists and validates Apache virtual hosts, including SSL and hosts file checks. |
 
 ---
 
@@ -102,7 +103,9 @@ A quick overview of the core files and folders in this project, so you’re neve
 | File                     | Description |
 |--------------------------|-------------|
 | `apache_error_log.php`   | Fetches and returns Apache error log entries via AJAX. |
+| `apache_inspector.php`   | Detects Apache installation details like version, modules, and config paths. |
 | `generate_cert.php`      | Generates SSL certificates. |
+| `open_folder.php`        | Opens a specified folder path in the system file explorer (cross-platform). |
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
 | `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
 | `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
