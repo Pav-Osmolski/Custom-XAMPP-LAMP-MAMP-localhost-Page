@@ -2,5 +2,18 @@
 @use 'reset';
 @use 'root';
 @use 'main';
+
+@use 'header';
+@use 'footer';
+@use 'forms';
+
+@use 'system';
+@use 'folders';
+@use 'dock';
+@use 'settings';
+@use 'tooltip';
+@use 'vhosts';
+@use 'phpinfo';
+
 @use 'mobile';
 @use 'keyframes';

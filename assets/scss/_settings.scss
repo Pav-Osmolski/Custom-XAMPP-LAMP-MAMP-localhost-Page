@@ -1,0 +1,16 @@
+#settings-view {
+	flex-direction: column;
+
+	h3 {
+		position: relative;
+		margin: 10px 0 10px;
+	}
+
+	form > p {
+		font-size: .9rem;
+	}
+}
+
+#clear-settings-wrapper {
+	position: relative;
+}

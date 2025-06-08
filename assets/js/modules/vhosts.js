@@ -72,7 +72,7 @@ function setupOpenFolder() {
 		if ( e.target.matches( '.open-folder' ) ) {
 			const path = e.target.dataset.path.replace( /^"(.*)"$/, '$1' );
 			if ( path ) {
-				fetch( `${ window.BASE_URL }utils/open-folder.php`, {
+				fetch( `${ window.BASE_URL }utils/open_folder.php`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'

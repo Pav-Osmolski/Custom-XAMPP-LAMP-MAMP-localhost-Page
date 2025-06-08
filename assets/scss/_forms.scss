@@ -1,0 +1,54 @@
+/* Form Input and Buttons */
+label {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	margin-bottom: 10px;
+}
+
+input[type="text"], input[type="password"], select {
+	font-family: var(--font-main);
+	width: 100%;
+	max-width: 300px;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid var(--border-color);
+	background-color: var(--input-bg);
+	color: var(--input-text);
+
+	&::placeholder {
+		color: var(--input-placeholder);
+	}
+}
+
+input[type="checkbox"] {
+	margin: 0 5px;
+}
+
+select {
+	width: auto;
+	margin-left: 5px;
+}
+
+button {
+	padding: 10px;
+	background: var(--header-background-color);
+	border: 1px var(--border-color) solid;
+	border-radius: 7px;
+	color: var(--text-color);
+	line-height: 1;
+	cursor: pointer;
+	transition: all 0.3s;
+	user-select: none;
+
+	&:hover {
+		background: var(--text-color);
+		color: var(--header-background-color);
+	}
+
+	&:disabled {
+		background: var(--border-color) !important;
+		color: var(--text-color) !important;
+		opacity: 0.75;
+	}
+}

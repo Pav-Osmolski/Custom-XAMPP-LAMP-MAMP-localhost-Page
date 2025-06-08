@@ -19,7 +19,7 @@ export function initViewToggles() {
 				toggle.addEventListener( 'click', ( e ) => {
 					e.preventDefault();
 					Object.entries( views ).forEach( ( [ key, el ] ) => {
-						if ( el ) el.style.display = key === viewKey ? 'block' : 'none';
+						if ( el ) el.style.display = key === viewKey ? 'flex' : 'none';
 					} );
 				} );
 			}

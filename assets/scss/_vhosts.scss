@@ -1,0 +1,46 @@
+/* vHosts Manager */
+.vhost-filters {
+	margin-bottom: 1rem;
+
+	select {
+		margin-left: 0.5rem;
+	}
+}
+
+#vhosts-manager {
+	margin: 2em 0;
+	padding: 0;
+	border-radius: 0.5em;
+
+	span {
+		display: block;
+		width: 24px;
+		height: 24px;
+		text-align: center;
+	}
+
+	.vhost-duplicate {
+		background-color: var(--hover-color) !important;
+	}
+
+	button.open-folder {
+		position: relative;
+		right: -1px;
+		width: 24px;
+		height: 24px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+	}
+}
+
+table {
+	td {
+		&[data-label="Cert"] {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+		}
+	}
+}

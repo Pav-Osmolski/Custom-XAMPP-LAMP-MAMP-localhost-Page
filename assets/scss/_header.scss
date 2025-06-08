@@ -1,0 +1,33 @@
+header {
+	padding: 15px;
+	background-color: var(--header-background-color);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	border-bottom: 1px solid var(--border-color);
+	height: 88px;
+	animation: slideInDown 1s ease-out;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+
+	h1 {
+		color: var(--link-color);
+		margin: 0;
+		font-family: var(--font-main);
+	}
+
+	.clock {
+		font-size: 2.1em;
+		font-weight: 700;
+	}
+}
+
+.server-info {
+	flex: none;
+	text-align: right;
+	font-size: 14px;
+	position: relative;
+}

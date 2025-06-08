@@ -1,0 +1,66 @@
+/* System Monitor and Error Log */
+.system-monitor, #error-log-section { //Initial display should be none unless class is detected in the body
+	display: none;
+}
+
+body.error-log-section-active #error-log-section {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	animation: fadeIn 1.5s ease-in;
+	margin-top: -123px;
+	z-index: 1;
+
+	h3 {
+		margin-bottom: 5px;
+	}
+
+	button {
+		cursor: pointer;
+		background: none;
+		border: none;
+		color: inherit;
+		transition: color 0.3s;
+
+		&:hover {
+			color: var(--hover-color) !important;
+		}
+	}
+}
+
+body.system-monitor-active {
+	.system-monitor {
+		display: flex;
+		flex-direction: column;
+		position: fixed;
+		bottom: 115px;
+		right: 20px;
+		width: 180px;
+		background: rgba(0, 0, 0, 0.5);
+		padding: 15px;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		pointer-events: none;
+		animation: fadeIn 1.5s ease-in;
+
+		p {
+			display: flex;
+			justify-content: space-between;
+			margin: 0;
+			gap: 5px;
+			align-items: center;
+
+			span {
+				text-align: right;
+			}
+		}
+	}
+
+	#error-log-section {
+		padding-right: 220px;
+	}
+}
+
+#apache-status-message {
+	margin-top: 10px;
+}

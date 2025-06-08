@@ -1,0 +1,200 @@
+.folders {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	z-index: 0;
+
+	h2 {
+		margin: 15px 0 15px;
+	}
+
+	a {
+		color: var(--link-color);
+		text-decoration: none;
+		font-weight: bold;
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+		line-height: 1.2;
+	}
+
+	li {
+		margin: 5px 0;
+		gap: 20px;
+	}
+}
+
+.column-controls {
+	position: absolute;
+	top: 40px;
+	right: 20px;
+	user-select: none;
+
+	button {
+		padding: 5px;
+		margin-left: 5px;
+		width: 23px;
+		font-size: 0.9em;
+	}
+}
+
+#folders-view {
+	display: flex;
+	flex-direction: column;
+}
+
+.columns {
+	position: relative;
+	display: flex;
+	gap: 30px;
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1300px;
+	transition: max-width 0.3s ease;
+
+	// Width modifiers
+	$column-widths: (
+		max-xs: 800px,
+		max-sm: 1000px,
+		max-md: 1300px,
+		max-lg: 1600px,
+		max-xl: fit-content
+	);
+
+	@each $class, $width in $column-widths {
+		&.#{$class} {
+			max-width: $width;
+		}
+	}
+}
+
+.column {
+	position: relative;
+	flex: 1;
+	background-color: var(--header-background-color);
+	padding: 16px 13px;
+	border-radius: 8px;
+
+	.drag-handle {
+		position: absolute;
+		width: 40px;
+		height: 40px;
+		top: 3px;
+		right: 3px;
+		padding: 10px;
+		cursor: grab;
+		z-index: 1;
+
+		svg {
+			width: 20px;
+			height: 20px;
+			color: var(--input-placeholder);
+			transition: color .2s ease;
+		}
+
+		&:hover {
+			svg {
+				color: var(--hover-color);
+			}
+		}
+	}
+
+	h3 {
+		position: relative;
+		height: 25px;
+		margin-bottom: 15px;
+		user-select: none;
+
+		a {
+			color: var(--text-color);
+		}
+	}
+
+	img {
+		width: 26px;
+		margin-left: 5px;
+		vertical-align: text-bottom;
+	}
+
+	.folder-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.url-container {
+		display: flex;
+		gap: 10px;
+	}
+}
+
+/* Folders Config */
+#folders-config {
+	background: var(--header-background-color);
+	padding: 1rem;
+	border-radius: 1rem;
+
+	.folder-config-item {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 0.5rem;
+		padding: 1rem;
+		position: relative;
+
+		input {
+			padding: 0.5rem;
+			font-size: 0.9rem;
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+
+		label {
+			margin-left: 5px;
+		}
+
+		button.remove-folder-column {
+			position: absolute;
+			top: 0.5rem;
+			right: 0.5rem;
+			padding: 0.25rem 0.5rem;
+		}
+
+		.special-case {
+			display: flex;
+			gap: .5em;
+			flex-wrap: wrap;
+			margin-bottom: 5px;
+		}
+	}
+
+	button#add-folder-column {
+		margin-top: 1rem;
+		font-weight: bold;
+		background-color: var(--link-color);
+		color: var(--button-text);
+		border: none;
+
+		&:hover {
+			background-color: var(--hover-color);
+		}
+	}
+}
+
+/* Folder Link Templates */
+#link-templates-config {
+	.template-item {
+		display: flex;
+		gap: .5rem;
+		margin-bottom: 20px;
+
+		input {
+			max-width: none;
+
+			&.template-name {
+				max-width: 300px;
+			}
+		}
+	}
+}
