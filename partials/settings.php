@@ -1,8 +1,13 @@
 <?php
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
+
 $apachePathValid = file_exists( APACHE_PATH );
 $htdocsPathValid = file_exists( HTDOCS_PATH );
 $phpPathValid    = file_exists( PHP_PATH );
 $apacheToggle    = file_exists( __DIR__ . '/../utils/toggle_apache.php' );
+$dbUser          = getDecrypted( 'DB_USER' );
+$dbPass          = getDecrypted( 'DB_PASSWORD' );
 
 // Centralised tooltip descriptions
 $tooltips = [
@@ -19,8 +24,8 @@ $tooltips = [
 	<h2>User Settings Configuration</h2>
 	<form method="post">
 		<label>DB Host:&nbsp;<input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
-		<label>DB User:&nbsp;<input type="text" name="DB_USER" value="<?= DB_USER ?>"></label>
-		<label>DB Password:&nbsp;<input type="password" name="DB_PASSWORD" value="<?= DB_PASSWORD ?>"></label>
+		<label>DB User:&nbsp;<input type="text" name="DB_USER" value="<?= htmlspecialchars( $dbUser ) ?>"></label>
+		<label>DB Password:&nbsp;<input type="password" name="DB_PASSWORD" value="<?= htmlspecialchars( $dbPass ) ?>"></label>
 
 		<label>Apache Path:&nbsp;
 			<input type="text" name="APACHE_PATH" value="<?= APACHE_PATH ?>">

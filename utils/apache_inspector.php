@@ -12,7 +12,7 @@
  * - Active Virtual Hosts
  */
 
-// Load defaults
+require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
 // SYSTEM INFO

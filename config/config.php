@@ -1,5 +1,7 @@
 <?php
 // config.php
+require_once __DIR__ . '/security.php';
+
 // Load user-specific overrides first
 if ( file_exists( __DIR__ . '/user_config.php' ) ) {
 	require_once __DIR__ . '/user_config.php';
@@ -45,60 +47,6 @@ if ( ! isset( $useAjaxForStats ) ) {
 $isWindowsPHPOld = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
 $isLinuxPHPOld   = strtoupper( substr( PHP_OS, 0, 5 ) ) === 'LINUX';
 $isMacPHPOld     = strtoupper( substr( PHP_OS, 0, 6 ) ) === 'DARWIN' || strtoupper( substr( PHP_OS, 0, 3 ) ) === 'MAC';
-
-// Safe shell execution wrapper
-function safe_shell_exec( $cmd ) {
-	$allowed = [
-		'apachectl',
-		'httpd',
-		'nproc',
-		'sysctl',
-		'tasklist',
-		'sc',
-		'ps',
-		'awk',
-		'grep',
-		'typeperf',
-		'wmic',
-		'which',
-		'whoami',
-		'auto-make-cert',
-		'pav-make-cert',
-		'make-cert'
-	];
-
-	$cmd = rtrim( $cmd, "\r\n" );
-
-	preg_match( '/(?:^|["\'])((?:[a-zA-Z]:)?[^\\s"\']+)(?:\s|$)/i', $cmd, $matches );
-	$fullPath = $matches[1] ?? '';
-	$binary   = strtolower( pathinfo( $fullPath, PATHINFO_FILENAME ) );
-
-	if ( in_array( $binary, $allowed, true ) ) {
-		return shell_exec( $cmd );
-	}
-
-	return null;
-}
-
-// Debug helper
-function log_command( $command, $context = '' ) {
-	$logDir  = __DIR__ . '/../logs';
-	$logFile = $logDir . '/localhost-page.log';
-
-	if ( ! is_dir( $logDir ) ) {
-		mkdir( $logDir, 0755, true );
-	}
-
-	$timestamp  = date( '[Y-m-d H:i:s]' );
-	$contextStr = $context ? " [$context]" : '';
-
-	// Encode to preserve invisible characters (optional debug enhancement)
-	$visibleCommand = json_encode( $command );
-
-	$logEntry = "$timestamp$contextStr\nRaw: $command\nVisible: " . json_encode( $command ) . "\nLength: " . strlen( $command ) . "\n\n";
-
-	file_put_contents( $logFile, $logEntry, FILE_APPEND );
-}
 
 // Get username based on OS
 $user = $_SERVER['USERNAME']
@@ -169,8 +117,12 @@ function renderServerInfo() {
 	}
 
 	// Check MySQL version
+	$db_user = getDecrypted( 'DB_USER' );
+	$db_pass = getDecrypted( 'DB_PASSWORD' );
+
 	try {
-		$mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD );
+		$mysqli = new mysqli( DB_HOST, $db_user, $db_pass );
+
 		if ( $mysqli->connect_error ) {
 			throw new Exception( "Connection failed: " . $mysqli->connect_error );
 		}

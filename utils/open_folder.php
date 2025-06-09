@@ -24,9 +24,9 @@ try {
 	if ( $os === 'Windows' ) {
 		pclose( popen( "start \"\" $path", 'r' ) );
 	} elseif ( $os === 'Darwin' ) {
-		shell_exec( "open $path" );
+		safe_shell_exec( "open $path" );
 	} elseif ( $os === 'Linux' ) {
-		shell_exec( "xdg-open $path" );
+		safe_shell_exec( "xdg-open $path" );
 	} else {
 		throw new Exception( "Unsupported OS: $os" );
 	}

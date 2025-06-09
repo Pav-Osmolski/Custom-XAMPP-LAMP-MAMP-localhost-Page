@@ -1,4 +1,11 @@
 <?php
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
+
+function defineEncrypted( $name, $value ) {
+	return "define('$name', '" . addslashes( encryptValue( $value ) ) . "');\n";
+}
+
 function normalise_path( $path ) {
 	$path = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $path );
 
@@ -12,8 +19,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	// DB settings
 	$user_config .= "define('DB_HOST', '" . addslashes( $_POST['DB_HOST'] ) . "');\n";
-	$user_config .= "define('DB_USER', '" . addslashes( $_POST['DB_USER'] ) . "');\n";
-	$user_config .= "define('DB_PASSWORD', '" . addslashes( $_POST['DB_PASSWORD'] ) . "');\n";
+	$user_config .= defineEncrypted( 'DB_USER', $_POST['DB_USER'] ?? '' );
+	$user_config .= defineEncrypted( 'DB_PASSWORD', $_POST['DB_PASSWORD'] ?? '' );
 
 	// Raw user paths (slashes not normalised here — config.php handles it)
 	$user_config .= "define('APACHE_PATH', '" . addslashes( normalise_path( $_POST['APACHE_PATH'] ) ) . "');\n";

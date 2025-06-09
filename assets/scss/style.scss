@@ -1,12 +1,15 @@
+/* Style Init */
 @use 'fonts';
 @use 'reset';
 @use 'root';
-@use 'main';
 
+/* Main Elements */
+@use 'main';
 @use 'header';
 @use 'footer';
 @use 'forms';
 
+/* Components */
 @use 'system';
 @use 'folders';
 @use 'dock';
@@ -15,5 +18,6 @@
 @use 'vhosts';
 @use 'phpinfo';
 
+/* Mobile and Misc */
 @use 'mobile';
 @use 'keyframes';

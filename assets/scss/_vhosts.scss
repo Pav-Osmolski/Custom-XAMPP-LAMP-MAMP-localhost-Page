@@ -13,7 +13,7 @@
 	border-radius: 0.5em;
 
 	span {
-		display: block;
+		display: inline-block;
 		width: 24px;
 		height: 24px;
 		text-align: center;
@@ -38,9 +38,7 @@
 table {
 	td {
 		&[data-label="Cert"] {
-			display: flex;
-			align-items: center;
-			gap: 5px;
+			white-space: nowrap;
 		}
 	}
 }
