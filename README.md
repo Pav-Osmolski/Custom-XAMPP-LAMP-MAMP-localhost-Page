@@ -1,5 +1,13 @@
 # 👨🏻‍💻 Custom XAMPP/LAMP/MAMP Localhost Index Page
 
+![PHP Version](https://img.shields.io/badge/PHP-5.4+-blue)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Webpack](https://img.shields.io/badge/Bundler-Webpack-orange)
+![SCSS](https://img.shields.io/badge/Styles-SCSS%20%26%20Babel-purple)
+![Modular JS](https://img.shields.io/badge/JavaScript-ES6%20Modules-yellow)
+![Last Commit](https://img.shields.io/github/last-commit/Pav-Osmolski/Custom-XAMPP-LAMP-MAMP-localhost-Page)
+
 An informative and fully modular custom local homepage for xAMP stacks (Apache, MySQL, PHP). This locahost index page showcases your projects, displays system stats, and provides admin tools — all now powered by a modern Webpack build process. Technically this can be adapted to suit any local Apache PHP development environment.
 
 ✅ Requires **PHP 5.4+**  
