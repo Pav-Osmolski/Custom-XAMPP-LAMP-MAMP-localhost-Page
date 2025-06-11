@@ -40,7 +40,7 @@ Please feel free to fork and make your own changes!
 - **Live System Monitoring** – AJAX-powered CPU, memory, and disk usage at a glance  
 - **Quick Config Panel** – Update paths, ports, and settings without breaking a sweat  
 - **PHP Error Management** – Toggle error display and logging on the fly  
-- **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate detection
+- **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate management
 - **Apache Error Log Toggle** – One-click access to the latest server logs  
 - **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites  
 - **Responsive Interface** – Sleek, modern design that adapts to all screen sizes  
@@ -83,11 +83,25 @@ A quick overview of the core files and folders in this project, so you’re neve
 
 | File                     | Description |
 |--------------------------|-------------|
-| `config.php`             | Default configuration including MySQL credentials and Apache paths. |
+| `config.php`             | Default configuration including MySQL credentials and Apache path settings. |
 | `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
+| `debug.php`              | Logs raw shell commands (with optional context) to `logs/localhost-page.log`. |
 | `dock.json`              | Stores dock layout and links in JSON format. |
 | `folders.json`           | Defines folder configurations, incl. paths, filters, link templates, and display rules. |
 | `link_templates.json`    | Defines reusable HTML link templates for folder display, referenced by folders.json. |
+
+---
+
+### 📜 Certificate Generator Scripts (`crt/`)
+
+These scripts are automatically used by `utils/generate_cert.php` to generate self-signed certificates for local development environments.
+
+| Script                    | Purpose |
+|---------------------------|---------|
+| `make-cert-silent.bat`    | Generates a `.crt` and `.key` using OpenSSL silently via Windows Batch script. |
+| `make-cert-silent.sh`     | Bash script to generate a cert/key pair non-interactively using OpenSSL. |
+
+> 💡 These scripts are auto-copied from `crt/` if missing from `apache/crt/` or outdated.
 
 ---
 

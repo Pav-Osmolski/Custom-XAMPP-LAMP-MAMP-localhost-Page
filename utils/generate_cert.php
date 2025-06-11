@@ -9,11 +9,46 @@ if ( empty( $_GET['name'] ) ) {
 	exit( 'Missing domain name.' );
 }
 
-$domain = preg_replace( '/[^a-zA-Z0-9.-]/', '', $_GET['name'] );
+$domain           = preg_replace( '/[^a-zA-Z0-9.-]/', '', $_GET['name'] );
+$os               = PHP_OS_FAMILY;
+$crtDir           = APACHE_PATH . DIRECTORY_SEPARATOR . 'crt';
+$defaultScriptDir = __DIR__ . '/../crt/';
 
-$os     = PHP_OS_FAMILY;
-$crtDir = APACHE_PATH . DIRECTORY_SEPARATOR . 'crt';
+// Ensure crtDir exists
+if ( ! is_dir( $crtDir ) ) {
+	mkdir( $crtDir, 0775, true );
+}
 
+// Define script variants by OS
+$scriptVariants = [
+	'Windows' => [ 'make-cert-silent.ps1', 'make-cert-silent.bat' ],
+	'Linux'   => [ 'make-cert-silent.sh' ],
+	'Darwin'  => [ 'make-cert-silent.sh' ],
+];
+
+// Copy fallback scripts if missing or outdated
+foreach ( $scriptVariants[ $os ] ?? [] as $script ) {
+	$target = $crtDir . DIRECTORY_SEPARATOR . $script;
+	$source = $defaultScriptDir . DIRECTORY_SEPARATOR . $script;
+
+	if ( file_exists( $source ) ) {
+		$shouldCopy = false;
+
+		if ( ! file_exists( $target ) ) {
+			$shouldCopy = true;
+			error_log( "[generate_cert] Restoring missing script: $script" );
+		} elseif ( filemtime( $source ) > filemtime( $target ) ) {
+			$shouldCopy = true;
+			error_log( "[generate_cert] Updating outdated script: $script" );
+		}
+
+		if ( $shouldCopy ) {
+			copy( $source, $target );
+		}
+	}
+}
+
+// Determine which script to run
 if ( $os === 'Windows' ) {
 	$ps1Path = $crtDir . DIRECTORY_SEPARATOR . 'make-cert-silent.ps1';
 	$batPath = $crtDir . DIRECTORY_SEPARATOR . 'make-cert-silent.bat';
@@ -36,6 +71,11 @@ if ( $os === 'Windows' ) {
 	}
 }
 
+// Run the command and return the output
 $output = safe_shell_exec( $command );
 
-echo $output ?: 'Failed to generate certificate.';
+if ( $output === null ) {
+	echo '❌ Certificate generation failed.';
+} else {
+	echo $output;
+}

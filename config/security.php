@@ -67,6 +67,8 @@ function safe_shell_exec( $cmd ) {
 		'which',
 		'whoami',
 		'explorer',
+		'bash',
+		'start',
 		'open',
 		'xdg-open',
 		'cmd',
@@ -86,10 +88,16 @@ function safe_shell_exec( $cmd ) {
 	$binary = strtolower( pathinfo( $fullPath, PATHINFO_FILENAME ) );
 
 	if ( in_array( $binary, $allowed, true ) ) {
-		return shell_exec( $cmd );
+		$output = shell_exec( $cmd );
+
+		if ( $output === null ) {
+			error_log( "[safe_shell_exec] shell_exec returned null for: $cmd" );
+		}
+
+		return $output;
 	}
 
-	// Optional: debug logging
+	// Blocked
 	error_log( "[safe_shell_exec] Blocked command: $cmd" );
 
 	return null;
