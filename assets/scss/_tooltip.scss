@@ -2,7 +2,6 @@
 .tooltip-icon {
 	cursor: help;
 	margin-left: 6px;
-	vertical-align: text-top;
 
 	svg {
 		width: 17px;
@@ -17,6 +16,7 @@
 		transform: translateX(0);
 		background-color: var(--header-background-color);
 		font-size: 1rem;
+		font-weight: normal;
 		padding: 6px 10px;
 		border-radius: 5px;
 		white-space: normal;

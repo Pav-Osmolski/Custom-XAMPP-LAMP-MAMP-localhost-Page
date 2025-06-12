@@ -15,6 +15,8 @@ $tooltips = [
 	'folders'        => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
 	'link_templates' => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
 	'dock'           => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
+	'apache_control' => 'Restart Apache server.',
+	'vhosts_manager' => 'Browse, check, and open virtual hosts with cert and DNS validation',
 	'clear_storage'  => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
 ];
 ?>
@@ -131,7 +133,10 @@ $tooltips = [
 
 	<!-- Apache Control -->
 	<div class="apache-control">
-		<h2>Apache Control</h2>
+		<h2>Apache Control <span class="tooltip-icon" aria-describedby="tooltip-apache_control" tabindex="0"
+		                             data-tooltip="<?= htmlspecialchars( $tooltips['apache_control'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span></h2>
+		<span id="tooltip-apache_control" class="sr-only" role="tooltip"><?= htmlspecialchars( $tooltips['apache_control'] ) ?></span>
 		<?php if ( $apacheToggle ): ?>
 			<button id="restart-apache-button">Restart Apache</button>
 			<div id="apache-status-message" role="status" aria-live="polite"></div>

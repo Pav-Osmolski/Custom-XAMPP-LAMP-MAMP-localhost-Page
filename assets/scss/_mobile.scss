@@ -1,5 +1,9 @@
 /* Media breakpoints */
-@media (max-width: 1110px) {
+$break-xs: 525px;
+$break-sm: 900px;
+$break-lg: 1110px;
+
+@media (max-width: #{$break-lg}) {
 	header {
 		h1 {
 			font-size: 25px;
@@ -7,7 +11,7 @@
 	}
 }
 
-@media (max-width: 900px) {
+@media (max-width: #{$break-sm}) {
 	header {
 		h1 {
 			display: none;
@@ -99,7 +103,7 @@
 	}
 }
 
-@media (max-width: 525px) {
+@media (max-width: #{$break-xs}) {
 	header {
 		.search-bar {
 			margin-top: -30px;

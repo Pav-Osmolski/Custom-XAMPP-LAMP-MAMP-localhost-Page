@@ -1,5 +1,8 @@
 <div id="vhosts-manager">
-	<h2>Virtual Hosts Manager</h2>
+	<h2>Virtual Hosts Manager <span class="tooltip-icon" aria-describedby="tooltip-vhosts_manager" tabindex="0"
+		                             data-tooltip="<?= htmlspecialchars( $tooltips['vhosts_manager'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+			</span></h2>
+	<span id="tooltip-vhosts_manager" class="sr-only" role="tooltip"><?= htmlspecialchars( $tooltips['vhosts_manager'] ) ?></span>
 	<?php
 	$vhostsPath   = APACHE_PATH . '/conf/extra/httpd-vhosts.conf';
 	$crtPath      = APACHE_PATH . '/crt/';

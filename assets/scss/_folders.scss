@@ -6,6 +6,7 @@
 	z-index: 0;
 
 	h2 {
+		position: relative;
 		margin: 15px 0 15px;
 	}
 
@@ -32,6 +33,7 @@
 	top: 40px;
 	right: 20px;
 	user-select: none;
+	z-index: 1;
 
 	button {
 		padding: 5px;
