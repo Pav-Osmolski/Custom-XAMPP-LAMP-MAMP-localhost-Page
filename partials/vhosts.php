@@ -13,21 +13,24 @@
 
 	if ( file_exists( $vhostsPath ) ) {
 		$lines        = file( $vhostsPath );
-		$currentBlock = [];
-		$currentSSL   = false;
+		$currentBlock = null;
 
 		foreach ( $lines as $line ) {
 			$line = trim( $line );
 
-			if ( preg_match( '#^<VirtualHost\s+.*:443>#i', $line ) ) {
-				$currentSSL   = true;
-				$currentBlock = [ 'ssl' => true ];
-			} elseif ( preg_match( '#^<VirtualHost\s+.*:80>#i', $line ) ) {
-				$currentSSL   = false;
-				$currentBlock = [ 'ssl' => false ];
+			if ( preg_match( '#^<VirtualHost\s+.*:(\d+)>#i', $line, $matches ) ) {
+				$port         = $matches[1];
+				$currentBlock = [ 'ssl' => $port === '443' ];
 			} elseif ( preg_match( '#^</VirtualHost>#i', $line ) ) {
-				if ( isset( $currentBlock['name'] ) ) {
-					$name                = $currentBlock['name'];
+				if ( is_array( $currentBlock ) && isset( $currentBlock['name'] ) ) {
+					$name = $currentBlock['name'];
+
+					// Detect duplicate before overwriting
+					if ( isset( $serverData[ $name ] ) ) {
+						$serverData[ $name ]['_duplicate'] = true;
+						$currentBlock['_duplicate']        = true;
+					}
+
 					$serverData[ $name ] = array_merge( [
 						'valid'     => false,
 						'cert'      => '',
@@ -36,32 +39,47 @@
 						'docRoot'   => '',
 					], $currentBlock );
 				}
-				$currentBlock = [];
-			} elseif ( preg_match( '/^\s*ServerName\s+(.+)/i', $line, $matches ) ) {
-				$currentBlock['name'] = trim( $matches[1] );
-			} elseif ( preg_match( '/^\s*DocumentRoot\s+(.+)/i', $line, $matches ) ) {
-				$currentBlock['docRoot'] = trim( $matches[1] );
-			} elseif ( preg_match( '/^\s*SSLCertificateFile\s+(.+)/i', $line, $matches ) ) {
-				$currentBlock['cert'] = trim( $matches[1] );
-			} elseif ( preg_match( '/^\s*SSLCertificateKeyFile\s+(.+)/i', $line, $matches ) ) {
-				$currentBlock['key'] = trim( $matches[1] );
+				$currentBlock = null;
+			} elseif ( is_array( $currentBlock ) ) {
+				if ( preg_match( '/^\s*ServerName\s+(.+)/i', $line, $matches ) ) {
+					$currentBlock['name'] = trim( $matches[1] );
+				} elseif ( preg_match( '/^\s*DocumentRoot\s+(.+)/i', $line, $matches ) ) {
+					$currentBlock['docRoot'] = trim( $matches[1] );
+				} elseif ( preg_match( '/^\s*SSLCertificateFile\s+(.+)/i', $line, $matches ) ) {
+					$currentBlock['cert'] = trim( $matches[1] );
+				} elseif ( preg_match( '/^\s*SSLCertificateKeyFile\s+(.+)/i', $line, $matches ) ) {
+					$currentBlock['key'] = trim( $matches[1] );
+				}
 			}
 		}
 
-		$duplicateTracker = [];
-		foreach ( $serverData as $name => $info ) {
-			$duplicateTracker[ $name ] = isset( $duplicateTracker[ $name ] ) ? $duplicateTracker[ $name ] + 1 : 1;
+		// Catch final block if file ends without </VirtualHost>
+		if ( is_array( $currentBlock ) && isset( $currentBlock['name'] ) ) {
+			$name = $currentBlock['name'];
+			if ( isset( $serverData[ $name ] ) ) {
+				$serverData[ $name ]['_duplicate'] = true;
+				$currentBlock['_duplicate']        = true;
+			}
+			$serverData[ $name ] = array_merge( [
+				'valid'     => false,
+				'cert'      => '',
+				'key'       => '',
+				'certValid' => true,
+				'docRoot'   => '',
+			], $currentBlock );
 		}
 
 		foreach ( $serverData as $name => &$info ) {
 			if ( $info['ssl'] ) {
-				$certPath          = $crtPath . $name . '/server.crt';
-				$keyPath           = $crtPath . $name . '/server.key';
-				$info['cert']      = $certPath;
-				$info['key']       = $keyPath;
-				$info['certValid'] = file_exists( $certPath ) && file_exists( $keyPath );
+				$certPath = $crtPath . $name . '/server.crt';
+				$keyPath  = $crtPath . $name . '/server.key';
+
+				$info['cert']      = realpath( $certPath ) ?: str_replace( '/', DIRECTORY_SEPARATOR, $certPath );
+				$info['key']       = realpath( $keyPath ) ?: str_replace( '/', DIRECTORY_SEPARATOR, $keyPath );
+				$info['certValid'] = file_exists( $info['cert'] ) && file_exists( $info['key'] );
 			}
 		}
+		unset( $info );
 
 		foreach ( $hostsFiles as $os => $path ) {
 			if ( file_exists( $path ) ) {
@@ -87,6 +105,7 @@
 			}
 		}
 		?>
+
 		<div class="vhost-filters">
 			<label>Filter:
 				<select id="vhost-filter">
@@ -112,7 +131,7 @@
 			</thead>
 			<tbody>
 			<?php foreach ( $serverData as $host => $info ) :
-				$isDuplicate = ( $duplicateTracker[ $host ] ?? 0 ) > 1;
+				$isDuplicate = $info['_duplicate'] ?? false;
 				$classes = [];
 				if ( $info['ssl'] ) {
 					$classes[] = 'vhost-ssl';
@@ -128,9 +147,14 @@
 				}
 				$classAttr = implode( ' ', $classes );
 				$protocol  = $info['ssl'] ? 'https' : 'http';
-				$link      = $info['valid']
+
+				$link = $info['valid']
 					? '<a href="' . $protocol . '://' . $host . '" target="_blank">' . htmlspecialchars( $host ) . '</a>'
 					: htmlspecialchars( $host );
+
+				if ( $isDuplicate ) {
+					$link .= ' <span class="warning" title="Duplicate ServerName">⚠️</span>';
+				}
 				?>
 				<tr class="<?= $classAttr ?>">
 					<td data-label="Server Name"><?= $link ?></td>

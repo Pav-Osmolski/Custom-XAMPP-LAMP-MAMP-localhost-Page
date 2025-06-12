@@ -17,6 +17,9 @@ set "TEMP_CONF=%SCRIPT_DIR%cert.conf"
 set "OUT_DIR=%SCRIPT_DIR%%domain%"
 set "OPENSSL=%SCRIPT_DIR%..\bin\openssl.exe"
 set "LOG=%SCRIPT_DIR%cert.log"
+
+:: Text
+set "SUBJECT=/emailAddress=youremail@example.com/C=US/ST=MO/L=Union/O=Company/CN=%domain%"
 set "SUCCESS=[OK] Certificate and key created in: %OUT_DIR%"
 set "FAILURE=[FAIL] Certificate generation failed."
 
@@ -37,7 +40,7 @@ if not exist "%OUT_DIR%" mkdir "%OUT_DIR%"
 
 if exist "%TEMP_CONF%" del /f /q "%TEMP_CONF%"
 
-for /f "tokens=1,* delims=¶" %%A in ('"findstr /n ^^ %TEMPLATE%"') do (
+for /f "tokens=1,* delims=:" %%A in ('findstr /n "^" "%TEMPLATE%"') do (
     set line=%%A
     for /f "tokens=1,* delims=:" %%a in ("!line!") do (
         set "content=%%b"
@@ -51,7 +54,7 @@ for /f "tokens=1,* delims=¶" %%A in ('"findstr /n ^^ %TEMPLATE%"') do (
 )
 
 :: Run OpenSSL and check result
-"%OPENSSL%" req -config "%TEMP_CONF%" -new -sha256 -newkey rsa:2048 -nodes -keyout "%OUT_DIR%\server.key" -x509 -days 365 -out "%OUT_DIR%\server.crt" -subj "/emailAddress=youremail@example.com/C=US/ST=MO/L=Union/O=Company/CN=%domain%" >> "%LOG%" 2>&1
+"%OPENSSL%" req -config "%TEMP_CONF%" -new -sha256 -newkey rsa:2048 -nodes -keyout "%OUT_DIR%\server.key" -x509 -days 365 -out "%OUT_DIR%\server.crt" -subj "%SUBJECT%" >> "%LOG%" 2>&1
 set "EXIT_CODE=%ERRORLEVEL%"
 
 if exist "%TEMP_CONF%" del /f /q "%TEMP_CONF%"

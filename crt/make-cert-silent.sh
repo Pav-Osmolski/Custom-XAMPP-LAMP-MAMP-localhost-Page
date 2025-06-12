@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Paths
 DOMAIN="$1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OPENSSL="$SCRIPT_DIR/../bin/openssl"
@@ -7,6 +8,9 @@ TEMPLATE="$SCRIPT_DIR/cert-template.conf"
 TEMP_CONF="$SCRIPT_DIR/cert.conf"
 OUT_DIR="$SCRIPT_DIR/$DOMAIN"
 LOG_FILE="$SCRIPT_DIR/cert.log"
+
+# Text
+SUBJECT="/emailAddress=youremail@example.com/C=US/ST=MO/L=Union/O=Company/CN=$DOMAIN"
 
 # Ensure domain is provided
 if [ -z "$DOMAIN" ]; then
@@ -35,17 +39,20 @@ sed "s/{{DOMAIN}}/$DOMAIN/g" "$TEMPLATE" > "$TEMP_CONF"
 # Generate certificate
 "$OPENSSL" req -config "$TEMP_CONF" -new -sha256 -newkey rsa:2048 -nodes \
   -keyout "$OUT_DIR/server.key" -x509 -days 365 -out "$OUT_DIR/server.crt" \
-  -subj "/emailAddress=youremail@example.com/C=US/ST=MO/L=Union/O=Company/CN=$DOMAIN" \
+  -subj "$SUBJECT" \
   >> "$LOG_FILE" 2>&1
 
 EXIT_CODE=$?
 
 rm -f "$TEMP_CONF"
 
+SUCCESS="[OK] Certificate and key created in: $OUT_DIR"
+FAILURE="[FAIL] OpenSSL failed with exit code $EXIT_CODE"
+
 if [ $EXIT_CODE -eq 0 ]; then
-  MSG="[OK] Certificate and key created in: $OUT_DIR"
+  MSG="$SUCCESS"
 else
-  MSG="[FAIL] OpenSSL failed with exit code $EXIT_CODE"
+  MSG="$FAILURE"
 fi
 
 echo "$MSG" | tee -a "$LOG_FILE"
