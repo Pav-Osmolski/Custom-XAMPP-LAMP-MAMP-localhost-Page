@@ -6,8 +6,11 @@ $apachePathValid = file_exists( APACHE_PATH );
 $htdocsPathValid = file_exists( HTDOCS_PATH );
 $phpPathValid    = file_exists( PHP_PATH );
 $apacheToggle    = file_exists( __DIR__ . '/../utils/toggle_apache.php' );
+
 $dbUser          = getDecrypted( 'DB_USER' );
 $dbPass          = getDecrypted( 'DB_PASSWORD' );
+
+$currentLevel    = ini_get('error_reporting');
 
 // Centralised tooltip descriptions
 $tooltips = [
@@ -70,10 +73,10 @@ $tooltips = [
 
 		<label>Error Reporting Level:
 			<select name="errorReportingLevel">
-				<option value="E_ALL" <?= error_reporting() == E_ALL ? 'selected' : '' ?>>E_ALL</option>
-				<option value="E_ERROR" <?= error_reporting() == E_ERROR ? 'selected' : '' ?>>E_ERROR</option>
-				<option value="E_WARNING" <?= error_reporting() == E_WARNING ? 'selected' : '' ?>>E_WARNING</option>
-				<option value="E_NOTICE" <?= error_reporting() == E_NOTICE ? 'selected' : '' ?>>E_NOTICE</option>
+				<option value="E_ALL" <?= $currentLevel == E_ALL ? 'selected' : '' ?>>E_ALL</option>
+				<option value="E_ERROR" <?= $currentLevel == E_ERROR ? 'selected' : '' ?>>E_ERROR</option>
+				<option value="E_WARNING" <?= $currentLevel == E_WARNING ? 'selected' : '' ?>>E_WARNING</option>
+				<option value="E_NOTICE" <?= $currentLevel == E_NOTICE ? 'selected' : '' ?>>E_NOTICE</option>
 			</select>
 		</label>
 

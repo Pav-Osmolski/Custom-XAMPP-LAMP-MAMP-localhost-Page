@@ -15,6 +15,8 @@ function normalise_path( $path ) {
 // Handle form submission
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
+	$level = $_POST['errorReportingLevel'] ?? 'E_ALL';
+
 	$user_config = "<?php\n";
 
 	// DB settings
@@ -34,7 +36,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	// PHP error handling
 	$user_config .= "ini_set('display_errors', " . ( isset( $_POST['displayErrors'] ) ? '1' : '0' ) . ");\n";
-	$user_config .= "error_reporting(" . (int) $_POST['errorReportingLevel'] . ");\n";
+	$user_config .= "error_reporting($level);\n";
 	$user_config .= "ini_set('log_errors', " . ( isset( $_POST['logErrors'] ) ? '1' : '0' ) . ");\n";
 
 	// Save folders
