@@ -97,23 +97,23 @@ function renderServerInfo() {
 
 	// Attempt to extract the versions
 	if ( $apacheVersion && preg_match( '/Server version: Apache\/([\d.]+)/', $apacheVersion, $matches ) ) {
-		echo 'Apache: ' . $matches[1] . ' ✔️<br>';
+		echo '<span class="apache-info">Apache: ' . $matches[1] . ' ✔️</span>';
 	} else {
 		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) && stripos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false ) {
-			echo 'Apache: Version unknown ⚠️<br>';
+			echo '<span class="apache-unknown-info">Apache: Version unknown ⚠️</span>';
 		} else {
-			echo 'Apache: Not detected ❌<br>';
+			echo '<span class="apache-error-info">Apache: Not detected ❌</span>';
 		}
 	}
 
 	// Check if PHP version is detected
 	$phpVersion = phpversion();
 	if ( $phpVersion === false ) {
-		echo 'PHP: Version unknown ⚠️<br>';
+		echo '<span class="php-unknown-info">PHP: Version unknown ⚠️</span>';
 	} else {
 		$isThreadSafe = ( ZEND_THREAD_SAFE ) ? "TS" : "NTS";
 		$isFastCGI    = ( strpos( PHP_SAPI, 'cgi-fcgi' ) !== false ) ? "FastCGI" : "Non-FastCGI";
-		echo 'PHP: <a href="#" id="toggle-phpinfo">' . $phpVersion . " $isThreadSafe $isFastCGI</a> ✔️<br>";
+		echo '<span class="php-info">PHP: <a href="#" id="toggle-phpinfo">' . $phpVersion . " $isThreadSafe $isFastCGI</a> ✔️</span>";
 	}
 
 	// Check MySQL version
@@ -124,12 +124,12 @@ function renderServerInfo() {
 		$mysqli = new mysqli( DB_HOST, $db_user, $db_pass );
 
 		if ( $mysqli->connect_error ) {
-			throw new Exception( "Connection failed: " . $mysqli->connect_error );
+			throw new Exception( "<span class='mysql-error-info'>MySQL: " . $mysqli->connect_error . "</span>" );
 		}
-		echo "MySQL: " . $mysqli->server_info . " ✔️<br>";
+		echo "<span class='mysql-info'>MySQL: " . $mysqli->server_info . " ✔️</span>";
 		$mysqli->close();
 	} catch ( Exception $e ) {
-		echo "MySQL: " . $e->getMessage() . " ❌<br>";
+		echo "<span class='mysql-error-info'>MySQL: " . $e->getMessage() . " ❌</span>";
 	}
 }
 

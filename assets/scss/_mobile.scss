@@ -1,9 +1,10 @@
 /* Media breakpoints */
-$break-xs: 525px;
-$break-sm: 900px;
-$break-lg: 1110px;
+$break-sm: 525px;
+$break-md: 768px;
+$break-lg: 900px;
+$break-xl: 1110px;
 
-@media (max-width: #{$break-lg}) {
+@media (max-width: #{$break-xl}) {
 	header {
 		h1 {
 			font-size: 25px;
@@ -11,7 +12,7 @@ $break-lg: 1110px;
 	}
 }
 
-@media (max-width: #{$break-sm}) {
+@media (max-width: #{$break-lg}) {
 	header {
 		h1 {
 			display: none;
@@ -103,7 +104,28 @@ $break-lg: 1110px;
 	}
 }
 
-@media (max-width: #{$break-xs}) {
+@media (max-width: #{$break-md}) {
+	.server-info {
+		&:before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -30px;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(to right, transparent 0px, var(--header-background-color) 40px);
+			pointer-events: none;
+		}
+
+		span {
+			&[class^="mysql-"] {
+				max-width: 210px; //MySQL info tends to be very, very long
+			}
+		}
+	}
+}
+
+@media (max-width: #{$break-sm}) {
 	header {
 		.search-bar {
 			margin-top: -30px;

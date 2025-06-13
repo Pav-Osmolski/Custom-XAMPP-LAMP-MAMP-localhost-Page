@@ -18,6 +18,12 @@ header {
 		color: var(--link-color);
 		margin: 0;
 		font-family: var(--font-main);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		min-width: 200px;
 	}
 
 	.clock {
@@ -27,8 +33,15 @@ header {
 }
 
 .server-info {
+	display: flex;
+	flex-direction: column;
 	flex: none;
 	text-align: right;
 	font-size: 14px;
 	position: relative;
+
+	span {
+		display: block;
+		z-index: 1;
+	}
 }
