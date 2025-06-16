@@ -65,6 +65,34 @@ table {
 	}
 }
 
+#folders-view,
+#settings-view,
+#phpinfo-view,
+#apache-view {
+	display: none;
+}
+
+.visible {
+	display: flex !important;
+	flex-direction: column;
+}
+
+.loading {
+	color: var(--text-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 3rem;
+	padding: 20px;
+}
+
+.spinner {
+	font-family: none; //The emoji rendering paradox
+	display: inline-block;
+	animation: spin 1.2s linear infinite;
+	transform-origin: center;
+}
+
 /* Background */
 .background-image {
 	background-image: var(--background-image);

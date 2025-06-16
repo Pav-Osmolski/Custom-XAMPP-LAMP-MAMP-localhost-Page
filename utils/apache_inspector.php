@@ -18,6 +18,7 @@ require_once __DIR__ . '/../config/config.php';
 // SYSTEM INFO
 $os   = PHP_OS_FAMILY;
 $arch = ( PHP_INT_SIZE === 8 ) ? '64-bit' : '32-bit';
+echo '<h2>Apache Inspector</h2>';
 echo "<pre>";
 echo "🖥️ Operating System: $os ($arch)\n";
 

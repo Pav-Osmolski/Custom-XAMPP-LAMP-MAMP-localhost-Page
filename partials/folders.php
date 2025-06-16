@@ -4,7 +4,7 @@ $configPath    = __DIR__ . '/../config/folders.json';
 $configData    = json_decode( file_get_contents( $configPath ), true );
 ?>
 
-<div id="folders-view">
+<div id="folders-view" class="visible">
 	<div class="column-controls">
 		<button id="reset-width">X</button>
 		<button id="prev-width">−</button>

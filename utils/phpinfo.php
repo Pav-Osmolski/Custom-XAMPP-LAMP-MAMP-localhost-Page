@@ -1,4 +1,4 @@
-<div id="phpinfo-view" style="display: none;">
+<div id="phpinfo-view">
 	<?php
 	ob_start();
 	phpinfo();

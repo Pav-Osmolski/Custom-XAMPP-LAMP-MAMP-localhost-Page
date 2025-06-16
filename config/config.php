@@ -97,12 +97,12 @@ function renderServerInfo() {
 
 	// Attempt to extract the versions
 	if ( $apacheVersion && preg_match( '/Server version: Apache\/([\d.]+)/', $apacheVersion, $matches ) ) {
-		echo '<span class="apache-info">Apache: ' . $matches[1] . ' ✔️</span>';
+		echo '<span class="apache-info">Apache: <a href="#" id="toggle-apache-inspector">' . $matches[1] . ' ✔️</a></span>';
 	} else {
 		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) && stripos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false ) {
-			echo '<span class="apache-unknown-info">Apache: Version unknown ⚠️</span>';
+			echo '<span class="apache-unknown-info">Apache: <a href="#" id="toggle-apache-inspector">Version unknown ⚠️</a></span>';
 		} else {
-			echo '<span class="apache-error-info">Apache: Not detected ❌</span>';
+			echo '<span class="apache-error-info">Apache: <a href="#" id="toggle-apache-inspector">Not detected ❌</a></span>';
 		}
 	}
 

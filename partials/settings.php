@@ -24,7 +24,7 @@ $tooltips = [
 ];
 ?>
 
-<div id="settings-view" style="display: none;">
+<div id="settings-view">
 	<!-- User Settings -->
 	<h2>User Settings Configuration</h2>
 	<form method="post">
