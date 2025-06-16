@@ -18,8 +18,8 @@ $tooltips = [
 	'folders'        => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
 	'link_templates' => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
 	'dock'           => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
-	'apache_control' => 'Restart Apache server.',
-	'vhosts_manager' => 'Browse, check, and open virtual hosts with cert and DNS validation',
+	'apache_control' => 'Restart the Apache server.',
+	'vhosts_manager' => 'Browse, check, and open virtual hosts with cert and DNS validation.',
 	'clear_storage'  => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
 ];
 ?>

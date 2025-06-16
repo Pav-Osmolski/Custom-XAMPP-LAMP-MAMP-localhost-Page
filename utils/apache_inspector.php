@@ -71,6 +71,9 @@ function getApacheVersion() {
 // Apache binary detection across platforms
 function detectApacheBinary() {
 	$paths = [
+		// User defined
+		APACHE_PATH,
+
 		// Linux
 		'/usr/sbin/apache2',
 		'/usr/sbin/httpd',
@@ -83,10 +86,18 @@ function detectApacheBinary() {
 		'/opt/homebrew/sbin/httpd',
 		'/opt/homebrew/opt/httpd/bin/httpd',
 
-		// Windows
+		// macOS (MAMP)
+		'/Applications/MAMP/Library/bin/httpd',
+
+		// macOS (AMPPS)
+		'/Applications/AMPPS/apache/bin/httpd',
+
+		// Windows (XAMPP + AMPPS)
 		'C:\\xampp\\apache\\bin\\httpd.exe',
 		'C:\\Program Files\\Apache Group\\Apache2\\bin\\httpd.exe',
-		'C:\\Apache24\\bin\\httpd.exe'
+		'C:\\Apache24\\bin\\httpd.exe',
+		'C:\\Program Files (x86)\\Ampps\\apache\\bin\\httpd.exe',
+		'C:\\Program Files\\Ampps\\apache\\bin\\httpd.exe'
 	];
 
 	foreach ( $paths as $p ) {

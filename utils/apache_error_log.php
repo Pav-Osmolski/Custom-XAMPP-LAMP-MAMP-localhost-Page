@@ -15,20 +15,44 @@ $logFile = '';
 
 switch ( PHP_OS_FAMILY ) {
 	case 'Windows':
-		$logFile = APACHE_PATH . '\\logs\\error.log';
+		$possibleLogs = [
+			APACHE_PATH . '\\logs\\error.log',
+			'C:\\Program Files\\Ampps\\apache\\logs\\error.log',
+			'C:\\Program Files (x86)\\Ampps\\apache\\logs\\error.log'
+		];
+		foreach ( $possibleLogs as $path ) {
+			if ( file_exists( $path ) ) {
+				$logFile = $path;
+				break;
+			}
+		}
 		break;
 	case 'Darwin':
-		$mampLog = '/Applications/MAMP/logs/apache_error.log';
-		if ( file_exists( $mampLog ) ) {
-			$logFile = $mampLog;
-			break;
+		$possibleLogs = [
+			APACHE_PATH . '/logs/error.log',
+			'/Applications/MAMP/logs/apache_error.log',
+			'/Applications/AMPPS/logs/apache_error.log',
+			'/Library/Application Support/appsolute/MAMP PRO/logs/apache_error.log',
+			'/usr/local/var/log/httpd/error_log',
+			'/usr/local/var/log/apache2/error_log'
+		];
+		foreach ( $possibleLogs as $path ) {
+			if ( file_exists( $path ) ) {
+				$logFile = $path;
+				break;
+			}
 		}
-		$logFile = '/usr/local/var/log/httpd/error_log';
 		break;
 	default:
-		$logFile = '/var/log/apache2/error.log';
-		if ( ! file_exists( $logFile ) ) {
-			$logFile = '/var/log/httpd/error_log';
+		$possibleLogs = [
+			APACHE_PATH . '/logs/error.log',
+			'/var/log/apache2/error.log'
+		];
+		foreach ( $possibleLogs as $path ) {
+			if ( file_exists( $path ) ) {
+				$logFile = $path;
+				break;
+			}
 		}
 		break;
 }
