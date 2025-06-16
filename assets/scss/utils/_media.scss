@@ -1,10 +1,8 @@
-/* Media breakpoints */
-$break-sm: 525px;
-$break-md: 768px;
-$break-lg: 900px;
-$break-xl: 1110px;
+@use '../utils/variables' as *;
+@use '../utils/mixins' as *;
 
-@media (max-width: #{$break-xl}) {
+/* Media */
+@include respond($break-xl) {
 	header {
 		h1 {
 			font-size: 25px;
@@ -12,7 +10,7 @@ $break-xl: 1110px;
 	}
 }
 
-@media (max-width: #{$break-lg}) {
+@include respond($break-lg) {
 	header {
 		h1 {
 			display: none;
@@ -104,7 +102,7 @@ $break-xl: 1110px;
 	}
 }
 
-@media (max-width: #{$break-md}) {
+@include respond($break-md) {
 	.server-info {
 		&:before {
 			content: '';
@@ -125,7 +123,7 @@ $break-xl: 1110px;
 	}
 }
 
-@media (max-width: #{$break-sm}) {
+@include respond($break-sm) {
 	header {
 		.search-bar {
 			margin-top: -30px;

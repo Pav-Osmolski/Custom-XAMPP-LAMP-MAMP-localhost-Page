@@ -1,23 +1,37 @@
-/* Style Init */
-@use 'fonts';
-@use 'reset';
-@use 'root';
+/* =====================
+   📦 Base
+   ===================== */
+@use 'base/reset';
+@use 'base/fonts';
+@use 'base/root';
 
-/* Main Elements */
-@use 'main';
-@use 'header';
-@use 'footer';
-@use 'forms';
+/* =====================
+   📐 Layout
+   ===================== */
+@use 'layout/header';
+@use 'layout/main';
+@use 'layout/footer';
 
-/* Components */
-@use 'system';
-@use 'folders';
-@use 'dock';
-@use 'settings';
-@use 'tooltip';
-@use 'vhosts';
-@use 'phpinfo';
+/* =====================
+   🧩 Components
+   ===================== */
+@use 'components/dock';
+@use 'components/folders';
+@use 'components/forms';
+@use 'components/system';
+@use 'components/tooltip';
+@use 'components/vhosts';
 
-/* Mobile and Misc */
-@use 'mobile';
-@use 'keyframes';
+/* =====================
+   📄 Pages
+   ===================== */
+@use 'pages/phpinfo';
+@use 'pages/settings';
+
+/* =====================
+   🛠 Utils
+   ===================== */
+@use 'utils/variables' as *;
+@use 'utils/mixins' as *;
+@use 'utils/keyframes';
+@use 'utils/media';
