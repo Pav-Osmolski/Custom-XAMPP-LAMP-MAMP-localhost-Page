@@ -33,8 +33,11 @@ switch ( PHP_OS_FAMILY ) {
 			'/Applications/MAMP/logs/apache_error.log',
 			'/Applications/AMPPS/logs/apache_error.log',
 			'/Library/Application Support/appsolute/MAMP PRO/logs/apache_error.log',
+			'/opt/homebrew/var/log/httpd/error_log',
 			'/usr/local/var/log/httpd/error_log',
-			'/usr/local/var/log/apache2/error_log'
+			'/usr/local/var/log/apache2/error_log',
+			'/home/linuxbrew/.linuxbrew/var/log/httpd/error_log',
+			'/opt/lampp/logs/error_log'
 		];
 		foreach ( $possibleLogs as $path ) {
 			if ( file_exists( $path ) ) {
@@ -46,7 +49,10 @@ switch ( PHP_OS_FAMILY ) {
 	default:
 		$possibleLogs = [
 			APACHE_PATH . '/logs/error.log',
-			'/var/log/apache2/error.log'
+			'/var/log/apache2/error.log',
+			'/var/log/httpd/error_log',
+			'/opt/lampp/logs/error_log',
+			$_SERVER['HOME'] . '/snap/httpd/common/error.log'
 		];
 		foreach ( $possibleLogs as $path ) {
 			if ( file_exists( $path ) ) {

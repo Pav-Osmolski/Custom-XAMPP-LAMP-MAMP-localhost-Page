@@ -14,6 +14,7 @@ $currentLevel    = ini_get('error_reporting');
 
 // Centralised tooltip descriptions
 $tooltips = [
+	'user_settings'  => 'Manage extra UI components and set your database credentials, Apache configuration, HTDocs directory, and PHP executable path.',
 	'php_error'      => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
 	'folders'        => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
 	'link_templates' => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
@@ -26,7 +27,10 @@ $tooltips = [
 
 <div id="settings-view">
 	<!-- User Settings -->
-	<h2>User Settings Configuration</h2>
+	<h2>User Settings Configuration <span class="tooltip-icon" aria-describedby="tooltip-user_settings" tabindex="0"
+	                             data-tooltip="<?= htmlspecialchars( $tooltips['user_settings'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
+		</span></h2>
+	<span id="tooltip-user_settings" class="sr-only" role="tooltip"><?= htmlspecialchars( $tooltips['user_settings'] ) ?></span>
 	<form method="post">
 		<label>DB Host:&nbsp;<input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
 		<label>DB User:&nbsp;<input type="text" name="DB_USER" value="<?= htmlspecialchars( $dbUser ) ?>"></label>

@@ -10,10 +10,15 @@
  * - Main config path
  * - Included config files
  * - Active Virtual Hosts
+ * - Apache environment variables
+ * - PHP config info
  */
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
+
+// Fast mode flag (can be set via ?fast=1 or ?fast=true)
+$fastMode = isset( $_GET['fast'] ) && filter_var( $_GET['fast'], FILTER_VALIDATE_BOOLEAN );
 
 // SYSTEM INFO
 $os   = PHP_OS_FAMILY;
@@ -21,6 +26,7 @@ $arch = ( PHP_INT_SIZE === 8 ) ? '64-bit' : '32-bit';
 echo '<h2>Apache Inspector</h2>';
 echo "<pre>";
 echo "🖥️ Operating System: $os ($arch)\n";
+echo "🚀 Fast Mode: " . ( $fastMode ? 'Enabled (some checks skipped)' : 'Disabled (full inspection)' ) . "\n";
 
 // Utility: shell command executor with fallbacks
 function tryShell( $cmd ) {
@@ -81,6 +87,12 @@ function detectApacheBinary() {
 		'/usr/local/apache2/bin/httpd',
 		'/opt/lampp/bin/httpd',
 		'/usr/libexec/apache2/httpd',
+		'/usr/local/sbin/httpd',
+		'/snap/bin/httpd',
+
+		// Linuxbrew
+		'/home/linuxbrew/.linuxbrew/bin/httpd',
+		'/home/linuxbrew/.linuxbrew/opt/httpd/bin/httpd',
 
 		// macOS (Homebrew)
 		'/opt/homebrew/bin/httpd',
@@ -161,16 +173,63 @@ function getVirtualHosts( $binary ) {
 	return null;
 }
 
+// Apache SAPI detection from phpinfo()
+function detectApacheSAPI() {
+	ob_start();
+	phpinfo( INFO_MODULES );
+	$data = ob_get_clean();
+	if ( strpos( $data, 'apache2handler' ) !== false ) {
+		return 'apache2handler (Apache SAPI)';
+	}
+
+	return null;
+}
+
+// Apache environment variables from getenv and /proc/self/environ
+function getApacheEnvVars() {
+	$envVars = [];
+	foreach ( [ 'APACHE_RUN_DIR', 'APACHE_PID_FILE', 'APACHE_LOCK_DIR', 'INVOCATION_ID' ] as $var ) {
+		$val = getenv( $var );
+		if ( $val ) {
+			$envVars[ $var ] = $val;
+		}
+	}
+	if ( ! $GLOBALS['fastMode'] ) {
+		$procPath = '/proc/self/environ';
+		if ( file_exists( $procPath ) && is_readable( $procPath ) ) {
+			$data  = file_get_contents( $procPath );
+			$pairs = explode( "\0", $data );
+			foreach ( $pairs as $pair ) {
+				if ( stripos( $pair, 'apache' ) !== false && strpos( $pair, '=' ) !== false ) {
+					list( $k, $v ) = explode( '=', $pair, 2 );
+					$envVars[ $k ] = $v;
+				}
+			}
+		}
+	}
+
+	return $envVars;
+}
+
+// PHP ini files
+function getIniFilesInfo() {
+	return [
+		'Loaded php.ini'     => php_ini_loaded_file() ?: 'N/A',
+		'Scanned .ini files' => php_ini_scanned_files() ?: 'N/A'
+	];
+}
+
 // ==== OUTPUT ====
 echo "🧠 Apache Context Detected: " . ( isApache() ? 'Yes' : 'No' ) . "\n";
+echo "🗏️ Apache SAPI: " . ( detectApacheSAPI() ?? 'Unknown or not Apache' ) . "\n";
 
 $version = getApacheVersion();
 echo "📦 Apache Version: $version\n";
 
 $binary = detectApacheBinary();
-echo "🧾 Apache Binary: " . ( $binary ?: "Not found" ) . "\n";
+echo "🗒 Apache Binary: " . ( $binary ?: "Not found" ) . "\n";
 
-if ( $binary ) {
+if ( $binary && ! $fastMode ) {
 	$config = getApacheConfigPath( $binary );
 	echo "📝 Config File: " . ( $config ?: "Not detected" ) . "\n";
 
@@ -192,7 +251,27 @@ if ( $binary ) {
 	} else {
 		echo "❌ VirtualHost information not available (likely restricted).\n";
 	}
+} elseif ( $binary ) {
+	echo "🔴 Fast mode: Config/VHosts skipped.\n";
 } else {
 	echo "❌ Apache Binary Not Found. Config/VHosts skipped.\n";
 }
-echo "</pre>";
+
+// Output Apache environment vars
+echo "\n🌱 Apache Environment Variables:\n";
+$envVars = getApacheEnvVars();
+if ( $envVars ) {
+	foreach ( $envVars as $k => $v ) {
+		echo "  $k: $v\n";
+	}
+} else {
+	echo "  None detected.\n";
+}
+
+// Output PHP .ini info
+echo "\n⚙️ PHP Configuration:\n";
+foreach ( getIniFilesInfo() as $k => $v ) {
+	echo "  $k: $v\n";
+}
+
+echo "\n📅 Inspection complete.</pre>";
