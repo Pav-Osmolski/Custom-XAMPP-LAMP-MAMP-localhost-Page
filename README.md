@@ -145,15 +145,14 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 
 ### 🎨 SCSS (`assets/scss/`)
 
-| File              | Description |
-|-------------------|-------------|
-| `_fonts.scss`     | Custom fonts used in the project. |
-| `_keyframes.scss` | Keyframe animations used throughout the site. |
-| `_main.scss`      | Layout and style rules for the homepage. |
-| `_mobile.scss`    | Responsive styles and layout adjustments for mobile devices. |
-| `_reset.scss`     | Basic reset for cross-browser consistency. |
-| `_root.scss`      | Root-level variables and global CSS custom properties. |
-| `style.scss`      | SCSS entry point that imports all partials. |
+| Folder           | Description |
+|------------------|-------------|
+| `base/`          | Base-level styles including fonts, resets, and root CSS variables. |
+| `components/`    | Reusable UI components such as dock, folders, forms, tooltips, and system modules. |
+| `layout/`        | Page layout structure including header, footer, and main content styles. |
+| `pages/`         | Styles specific to individual pages like settings and PHP info. |
+| `utils/`         | SCSS utilities including keyframes, media queries, mixins, and variables. |
+| `style.scss`     | The main SCSS entry point that imports all partials. |
 
 ---
 
