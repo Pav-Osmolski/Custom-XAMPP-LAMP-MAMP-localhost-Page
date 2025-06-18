@@ -31,6 +31,12 @@ define_path_constant( 'APACHE_PATH', 'C:/xampp/apache' );
 define_path_constant( 'HTDOCS_PATH', 'C:/htdocs' );
 define_path_constant( 'PHP_PATH', 'C:/xampp/php' );
 
+if ( ! isset( $displayClock ) ) {
+	$displayClock = true;
+}
+if ( ! isset( $displaySearch ) ) {
+	$displaySearch = true;
+}
 if ( ! isset( $displaySystemStats ) ) {
 	$displaySystemStats = true;
 }

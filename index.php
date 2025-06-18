@@ -27,7 +27,7 @@ require_once __DIR__ . '/partials/submit.php';
 	</script>
 	<script src="dist/js/script.min.js?v=<?= filemtime( 'dist/js/script.min.js' ); ?>"></script>
 </head>
-<?php echo( $useAjaxForStats ? '<body data-ajax-enabled="true"' : '<body' ); ?> class="<?= $bodyClasses; ?>">
+<body<?= $useAjaxForStats ? ' data-ajax-enabled="true"' : '' ?> class="<?= $bodyClasses ?>">
 <div class="container">
 	<?php require_once __DIR__ . '/partials/header.php'; ?>
 	<main role="main">

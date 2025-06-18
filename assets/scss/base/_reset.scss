@@ -1,15 +1,16 @@
 /* Reset & Modernizer */
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
 html {
+	box-sizing: border-box;
 	font-size: 16px;
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
 }
 
 body {
@@ -17,9 +18,11 @@ body {
 	font-family: var(--font-main), sans-serif;
 }
 
-img, video {
+img,
+video {
 	max-width: 100%;
 	height: auto;
+	display: block;
 }
 
 a {
@@ -27,6 +30,18 @@ a {
 	color: inherit;
 }
 
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
 	font: inherit;
+	background: none;
+	border: none;
+	color: inherit;
+}
+
+/* Basic focus visibility for accessibility */
+:focus-visible {
+	outline: 2px solid Highlight;
+	outline-offset: 2px;
 }

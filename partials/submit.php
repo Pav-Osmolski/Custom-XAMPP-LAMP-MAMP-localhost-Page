@@ -30,6 +30,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$user_config .= "define('PHP_PATH', '" . addslashes( normalise_path( $_POST['PHP_PATH'] ) ) . "');\n";
 
 	// Feature flags
+	$user_config .= "\$displayClock = " . ( isset( $_POST['displayClock'] ) ? 'true' : 'false' ) . ";\n";
+	$user_config .= "\$displaySearch = " . ( isset( $_POST['displaySearch'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$displaySystemStats = " . ( isset( $_POST['displaySystemStats'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$displayApacheErrorLog = " . ( isset( $_POST['displayApacheErrorLog'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$useAjaxForStats = " . ( isset( $_POST['useAjaxForStats'] ) ? 'true' : 'false' ) . ";\n";

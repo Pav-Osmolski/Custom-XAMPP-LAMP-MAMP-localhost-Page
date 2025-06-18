@@ -25,12 +25,12 @@ Please feel free to fork and make your own changes!
 
 ## 📚 Table of Contents
 
-- [✨ Features](#-features)
-- [🛠️ How to Install](#-how-to-install)
-- [📸 Screenshots](#-screenshots)
-- [📁 Project Structure](#-project-structure)
+- [✨ Features](#features)
+- [🛠️ How to Install](#how-to-install)
+- [📸 Screenshots](#screenshots)
+- [📁 Project Structure](#project-structure)
 
-## ✨ Features
+## Features
 
 - **Instant Project Search** – Live filter through all your local folders with ease  
 - **Flexible Column Layout** – Draggable, resizable, and fully customisable folder views  
@@ -47,7 +47,7 @@ Please feel free to fork and make your own changes!
 - **Theme Switcher** – Light mode. Dark mode. You choose.  
 - **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
 
-## 🛠️ How to Install
+## How to Install
 
 1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
 2. Run `npm install` in the repo's location to install dev dependencies
@@ -55,7 +55,7 @@ Please feel free to fork and make your own changes!
 4. Customise to your delight
 5. Run `npm run build` to compile any changed SCSS or JavaScript
 
-## 🖼️ Screenshots
+## Screenshots
 
 ![search functionality](screenshots/index-dark.png)
 
@@ -63,7 +63,7 @@ Please feel free to fork and make your own changes!
 
 ![search functionality](screenshots/index-light.png)
 
-## 🗂️ Project Structure
+## Project Structure
 
 A quick overview of the core files and folders in this project, so you’re never left wondering what does what.
 

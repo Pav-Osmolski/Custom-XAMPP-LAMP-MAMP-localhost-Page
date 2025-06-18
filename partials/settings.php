@@ -1,4 +1,10 @@
 <?php
+/** @var bool $displayClock */
+/** @var bool $displaySearch */
+/** @var bool $displayApacheErrorLog */
+/** @var bool $displaySystemStats */
+/** @var bool $useAjaxForStats */
+
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
@@ -51,17 +57,27 @@ $tooltips = [
 			<?= $phpPathValid ? '✔️' : '❌' ?>
 		</label>
 
-		<label>Display System Stats:
-			<input type="checkbox" name="displaySystemStats" <?= $displaySystemStats ? 'checked' : '' ?>>
-		</label>
+		<div class="ui-features">
+			<label>Display Clock:
+				<input type="checkbox" name="displayClock" <?= $displayClock ? 'checked' : '' ?>>
+			</label>
 
-		<label>Display Apache Error Log:
-			<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
-		</label>
+			<label>Display Search:
+				<input type="checkbox" name="displaySearch" <?= $displaySearch ? 'checked' : '' ?>>
+			</label>
 
-		<label>Use AJAX for Stats and Error log:
-			<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
-		</label><br>
+			<label>Display System Stats:
+				<input type="checkbox" name="displaySystemStats" <?= $displaySystemStats ? 'checked' : '' ?>>
+			</label>
+
+			<label>Display Apache Error Log:
+				<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
+			</label>
+
+			<label>Use AJAX for Stats and Error log:
+				<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
+			</label><br>
+		</div>
 
 		<h3>PHP Error Handling & Logging
 			<span class="tooltip-icon" aria-describedby="tooltip-php_error" tabindex="0"
