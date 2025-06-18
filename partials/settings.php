@@ -1,4 +1,33 @@
 <?php
+/**
+ * Settings Panel Renderer
+ *
+ * Displays a comprehensive settings interface for configuring:
+ * - Database credentials (host, user, password)
+ * - Paths for Apache, PHP, and HTDocs
+ * - UI features (clock, search, stats, error log)
+ * - PHP error reporting and logging options
+ * - Custom folder column layout and filters
+ * - Folder link templates for URL rendering
+ * - Dock item configuration
+ * - Apache restart integration (if `toggle_apache.php` exists)
+ *
+ * Tooltips are dynamically populated from the `$tooltips` array for accessibility.
+ * Also includes a vHosts manager panel and local storage reset button.
+ *
+ * Dependencies:
+ * - `security.php` for access control
+ * - `config.php` for constants and path definitions
+ * - `vhosts.php` for embedded virtual host listing
+ *
+ * Output:
+ * - Full HTML form and dynamic JavaScript UI hooks for settings control
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 /** @var bool $displayClock */
 /** @var bool $displaySearch */
 /** @var bool $displayApacheErrorLog */

@@ -1,4 +1,19 @@
 <?php
+/**
+ * SSL Certificate Generator Script
+ *
+ * Automatically runs a local script to generate a self-signed SSL certificate
+ * for a given domain name. Supports PowerShell, BAT, and Bash scripts depending
+ * on the current OS. Will copy default scripts to the cert directory if missing
+ * or outdated.
+ *
+ * Usage (GET): generate_cert.php?name=example.test
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 

@@ -1,4 +1,24 @@
 <?php
+/**
+ * Folder Opener API Endpoint
+ *
+ * Accepts a POST request with a JSON payload containing a `path`,
+ * and attempts to open the folder using the system's default file explorer.
+ *
+ * Supports:
+ * - Windows: via `start`
+ * - macOS (Darwin): via `open`
+ * - Linux: via `xdg-open`
+ *
+ * Requires a valid and existing absolute path.
+ *
+ * Usage (POST JSON): { "path": "C:/xampp/htdocs" }
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 header( 'Content-Type: application/json' );
 
 if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {

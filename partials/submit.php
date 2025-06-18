@@ -1,4 +1,31 @@
 <?php
+/**
+ * User Configuration Submit Handler
+ *
+ * Processes POST submissions from the settings UI and updates:
+ * - `user_config.php` with DB credentials, paths, flags, and PHP settings
+ * - `folders.json` for custom folder column config
+ * - `link_templates.json` for link generation patterns
+ * - `dock.json` for the quick-access dock
+ * - Updates the active `php.ini` file with display_errors and error_reporting settings
+ * - Invalidates OPcache to apply config changes immediately
+ *
+ * Security:
+ * - Paths are normalised
+ * - DB user/pass are encrypted using `encryptValue()`
+ *
+ * Dependencies:
+ * - `security.php` for authentication
+ * - `config.php` for constants
+ *
+ * Redirects:
+ * - Returns to `index.php` on successful submission
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 

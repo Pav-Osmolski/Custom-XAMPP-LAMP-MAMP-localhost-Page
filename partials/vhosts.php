@@ -1,3 +1,25 @@
+<?php
+/**
+ * Virtual Hosts Manager
+ *
+ * Parses the Apache `httpd-vhosts.conf` file to list all defined virtual hosts,
+ * checks for associated SSL certificate files, and validates presence of each
+ * ServerName entry in the system's hosts file.
+ *
+ * Output:
+ * - HTML table with host info, SSL status, cert validation, and open-folder actions
+ * - Dynamic filter UI for SSL, host file presence, and cert state
+ *
+ * Assumptions:
+ * - Apache path is defined via `APACHE_PATH`
+ * - Tooltips are provided via the `$tooltips` array
+ * - Certificate files (CRT/KEY) are stored per-host in `APACHE_PATH/crt/{servername}/`
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+?>
 <div id="vhosts-manager">
 	<h2>Virtual Hosts Manager <span class="tooltip-icon" aria-describedby="tooltip-vhosts_manager" tabindex="0"
 		                             data-tooltip="<?= htmlspecialchars( $tooltips['vhosts_manager'] ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>

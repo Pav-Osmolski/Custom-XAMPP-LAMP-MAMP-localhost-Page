@@ -1,4 +1,23 @@
 <?php
+/**
+ * System Statistics Endpoint
+ *
+ * Returns basic system statistics including:
+ * - CPU usage (platform-specific)
+ * - Peak memory usage of PHP process
+ * - Disk space usage on the root filesystem
+ *
+ * Output can be either JSON (for AJAX use) or embedded HTML markup.
+ *
+ * Configuration is controlled via:
+ * - `$displaySystemStats` boolean
+ * - `$useAjaxForStats` boolean
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 

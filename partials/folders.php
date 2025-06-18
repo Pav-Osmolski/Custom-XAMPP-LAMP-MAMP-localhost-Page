@@ -1,4 +1,28 @@
 <?php
+/**
+ * Document Folders Viewer
+ *
+ * Dynamically generates a folder listing UI based on a JSON configuration file.
+ * Each column in the layout corresponds to a configured directory and can:
+ * - Apply exclusion lists
+ * - Transform URLs via regex
+ * - Use a named link template from `link_templates.json`
+ * - Support custom folder name replacements (`specialCases`)
+ * - Disable links entirely if required
+ *
+ * Configuration is read from:
+ * - `/config/folders.json`
+ * - `/config/link_templates.json`
+ *
+ * Output:
+ * - HTML markup with columns and folder links
+ * - Error or warning messages for invalid or empty directories
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 $columnCounter = 0;
 $configPath    = __DIR__ . '/../config/folders.json';
 $configData    = json_decode( file_get_contents( $configPath ), true );

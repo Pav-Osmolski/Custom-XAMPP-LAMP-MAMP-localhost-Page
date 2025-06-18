@@ -1,5 +1,31 @@
 <?php
-// config.php
+/**
+ * Global Configuration Loader
+ *
+ * Defines constants, environment variables, and fallback defaults for the application.
+ * It also prepares global variables and helper functions used across the project.
+ *
+ * Key Responsibilities:
+ * - Loads `user_config.php` overrides if present
+ * - Defines path constants (`APACHE_PATH`, `HTDOCS_PATH`, `PHP_PATH`)
+ * - Sets default DB credentials if not already defined
+ * - Handles display flag defaults for UI components
+ * - Determines the current user and prepares `$bodyClasses`
+ * - Provides `renderServerInfo()` for summarising detected versions of Apache, PHP, and MySQL
+ *
+ * Assumptions:
+ * - Uses `encryptValue()`/`getDecrypted()` for secure DB credentials
+ * - Apache/PHP detection varies per OS (Windows, macOS, Linux)
+ *
+ * Outputs:
+ * - `$user`, `$bodyClasses`, `$display*` flags
+ * - Optional system badges for display in header/footer
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/security.php';
 
 // Load user-specific overrides first

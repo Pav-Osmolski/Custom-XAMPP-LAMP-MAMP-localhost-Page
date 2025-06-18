@@ -1,5 +1,29 @@
 <?php
-// config/security.php
+/**
+ * Security Utilities and Encryption Handler
+ *
+ * Provides cryptographic functionality for securely storing and retrieving sensitive values,
+ * such as database credentials. Also includes a safe shell execution wrapper to restrict
+ * command usage to a known list of binaries.
+ *
+ * Features:
+ * - Symmetric encryption using AES-256-CBC with a generated key file (`.key`)
+ * - `encryptValue()` and `decryptValue()` for encoding/decoding strings
+ * - `getDecrypted()` for secure constant value retrieval (e.g. `DB_USER`)
+ * - `safe_shell_exec()` allows execution of whitelisted system commands only
+ *
+ * Constants:
+ * - `CRYPTO_KEY_FILE` defines the encryption key file location
+ *
+ * Safety:
+ * - Prevents execution of untrusted shell commands
+ * - Gracefully handles missing or malformed encrypted values
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 define( 'CRYPTO_KEY_FILE', __DIR__ . '/../.key' );
 
 function getEncryptionKey() {

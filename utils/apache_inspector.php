@@ -12,6 +12,10 @@
  * - Active Virtual Hosts
  * - Apache environment variables
  * - PHP config info
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
  */
 
 require_once __DIR__ . '/../config/security.php';

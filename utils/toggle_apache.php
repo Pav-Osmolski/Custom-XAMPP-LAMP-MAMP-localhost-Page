@@ -1,4 +1,23 @@
 <?php
+/**
+ * Apache Restart Handler
+ *
+ * This script accepts a POST request with an `action` key (currently only `restart`)
+ * and attempts to restart the Apache web server depending on the OS and available tools.
+ *
+ * Supported Environments:
+ * - Windows (XAMPP, AMPPS, manual installations)
+ * - macOS (MAMP, brew, system apachectl)
+ * - Linux (apache2ctl, apachectl, systemd)
+ *
+ * Output:
+ * - JSON object with success status, message, and any command output.
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 ob_start();
 error_reporting( E_ERROR | E_PARSE );
 ini_set( 'display_errors', 0 );

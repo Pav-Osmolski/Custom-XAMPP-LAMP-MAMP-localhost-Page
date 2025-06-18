@@ -1,4 +1,17 @@
 <?php
+/**
+ * Apache Error Log Viewer
+ *
+ * This script displays the most recent Apache error log entries
+ * either as JSON (for AJAX consumption) or embedded HTML.
+ * It automatically detects the error log location based on the OS
+ * and the defined `APACHE_PATH` constant.
+ *
+ * @author Pav
+ * @license MIT
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/../config/config.php';
 
 // Set safe defaults
