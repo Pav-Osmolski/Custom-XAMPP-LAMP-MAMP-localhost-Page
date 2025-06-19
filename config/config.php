@@ -57,6 +57,10 @@ define_path_constant( 'APACHE_PATH', 'C:/xampp/apache' );
 define_path_constant( 'HTDOCS_PATH', 'C:/htdocs' );
 define_path_constant( 'PHP_PATH', 'C:/xampp/php' );
 
+// Theme and UI display defaults (overridden by user_config.php)
+if ( ! isset( $theme ) ) {
+	$theme = 'default';
+}
 if ( ! isset( $displayClock ) ) {
 	$displayClock = true;
 }
@@ -103,6 +107,18 @@ if ( file_exists( __DIR__ . '/../utils/system_stats.php' ) && $displaySystemStat
 
 if ( file_exists( __DIR__ . '/../utils/apache_error_log.php' ) && $displayApacheErrorLog ) {
 	$bodyClasses .= ' error-log-section-active';
+}
+
+if ( isset( $theme ) && $theme !== 'default' ) {
+	$themeFile = __DIR__ . '/../assets/scss/themes/_' . $theme . '.scss';
+
+	if ( file_exists( $themeFile ) ) {
+		$content = file_get_contents( $themeFile );
+
+		if ( preg_match( '#\$theme-type\s*:\s*[\'"]Light[\'"]#i', $content ) ) {
+			$bodyClasses .= ' light-mode';
+		}
+	}
 }
 
 function renderServerInfo() {

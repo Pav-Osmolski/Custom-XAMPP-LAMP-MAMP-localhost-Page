@@ -35,24 +35,6 @@ footer {
 	}
 }
 
-.toggle-theme {
-	cursor: pointer;
-	font-size: 18px;
-	background: transparent;
-	border: none;
-	color: var(--text-color);
-	border-radius: 5px;
-	flex: none;
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	right: 11px;
-
-	&:hover {
-		background: none;
-	}
-}
-
 .emoji {
 	filter: hue-rotate(170deg) saturate(0.4) brightness(0.8);
 }

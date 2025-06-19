@@ -43,6 +43,7 @@ function normalise_path( $path ) {
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	$level = $_POST['errorReportingLevel'] ?? 'E_ALL';
+	$theme = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
 
 	$user_config = "<?php\n";
 
@@ -57,6 +58,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$user_config .= "define('PHP_PATH', '" . addslashes( normalise_path( $_POST['PHP_PATH'] ) ) . "');\n";
 
 	// Feature flags
+	$user_config .= "\$theme = '$theme';\n";
 	$user_config .= "\$displayClock = " . ( isset( $_POST['displayClock'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$displaySearch = " . ( isset( $_POST['displaySearch'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$displaySystemStats = " . ( isset( $_POST['displaySystemStats'] ) ? 'true' : 'false' ) . ";\n";

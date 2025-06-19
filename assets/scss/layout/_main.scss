@@ -77,6 +77,18 @@ table {
 	flex-direction: column;
 }
 
+/* Unique theme type settings */
+.light-mode {
+	.emoji {
+      filter: none;
+    }
+
+    .system-monitor {
+      background: none !important;
+      box-shadow: none !important;
+    }
+}
+
 /* Loader and spinner */
 .loader {
 	color: var(--text-color);
@@ -115,9 +127,7 @@ table {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-}
 
-.light-mode.background-image {
 	&::after {
 		content: "";
 		position: fixed;
@@ -125,8 +135,14 @@ table {
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: var(--light-mode-bg-overlay);
+		background: var(--background-overlay);
 		z-index: -1;
+	}
+}
+
+.light-mode.background-image {
+	&::after {
+		background: var(--light-mode-bg-overlay);
 	}
 }
 

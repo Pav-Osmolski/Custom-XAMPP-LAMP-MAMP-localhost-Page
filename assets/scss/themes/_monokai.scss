@@ -1,0 +1,19 @@
+$theme-name: 'Monokai';
+$theme-type: 'Dark';
+
+:root.monokai-theme {
+	--background-color: #272822e8;
+	--background-overlay: #3e3d32c9;
+	--text-color: #f8f8f2;
+	--header-background-color: #3e3d32e8;
+	--border-color: #75715e;
+	--link-color: #66d9ef;
+	--hover-color: #a6e22e;
+	--input-bg: #3e3d32;
+	--input-text: #f8f8f2;
+	--input-placeholder: #888;
+	--button-text: #f8f8f2;
+	--error-bg: #f92672;
+	--scrollbar-primary: #fd971f;
+	--scrollbar-secondary: #3e3d32;
+}

@@ -11,7 +11,7 @@ import {initLinkTemplates} from './modules/linkTemplates.js';
 import {initSearch} from './modules/search.js';
 import {initClearStorageButton} from './modules/settings.js';
 import {initSystemMonitoring} from './modules/system.js';
-import {initThemeToggle} from './modules/theme.js';
+import {initThemeSwitcher} from './modules/theme.js';
 import {setupVhostCertButtons} from './modules/vhosts.js';
 import {initViewToggles} from './modules/view.js';
 
@@ -25,6 +25,6 @@ initApacheErrorLog();
 initSearch();
 initClearStorageButton();
 initSystemMonitoring();
-initThemeToggle();
+initThemeSwitcher();
 setupVhostCertButtons();
 initViewToggles();

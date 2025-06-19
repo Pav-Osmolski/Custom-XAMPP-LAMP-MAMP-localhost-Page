@@ -4,11 +4,20 @@ label {
 	align-items: center;
 	flex-direction: row;
 	margin-bottom: 10px;
+
+	&.select {
+		flex-basis: 100%;
+
+		select {
+			flex-grow: 1;
+		}
+	}
 }
 
 input[type="text"], input[type="password"], select {
 	font-family: var(--font-main);
 	width: 100%;
+	min-height: 36px;
 	max-width: 300px;
 	padding: 5px;
 	border-radius: 5px;

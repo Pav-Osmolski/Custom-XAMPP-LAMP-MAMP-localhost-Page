@@ -1,0 +1,15 @@
+$theme-name: 'Overcast';
+$theme-type: 'Light';
+
+:root.overcast-theme {
+	--background-color: #f0f0f0e8;
+	--text-color: #2a3246;
+	--header-background-color: #dfdde6;
+	--border-color: #626798;
+	--link-color: #237493;
+	--input-bg: #fbf9ff;
+	--input-text: #2a3246;
+	--error-bg: #ffa9c0;
+	--scrollbar-primary: #237493;
+	--scrollbar-secondary: #dfdde6;
+}

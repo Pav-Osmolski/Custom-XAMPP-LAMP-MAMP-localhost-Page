@@ -6,6 +6,13 @@
 @use 'base/root';
 
 /* =====================
+   🎨 Themes
+   ===================== */
+@use 'themes/dracula';
+@use 'themes/monokai';
+@use 'themes/overcast';
+
+/* =====================
    📐 Layout
    ===================== */
 @use 'layout/header';
