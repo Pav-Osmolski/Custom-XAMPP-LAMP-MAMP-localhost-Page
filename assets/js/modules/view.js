@@ -49,8 +49,9 @@ export function initViewToggles() {
 					target.classList.add( 'visible' );
 
 					// Only fetch and overwrite if not already loaded
+					// To use a spinning emoji, add the class "emoji" to "loader" and insert your emoji within the <span>
 					if ( !target.dataset.loaded ) {
-						target.innerHTML = '<div class="loading"><span class="spinner" role="img" aria-label="Loading">↻</span></div>';
+						target.innerHTML = '<div class="loader"><span class="spinner" role="img" aria-label="Loading"></span></div>';
 
 						try {
 							const res = await fetch( `${ window.BASE_URL || '/' }${ url }` );

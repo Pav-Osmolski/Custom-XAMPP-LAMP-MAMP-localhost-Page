@@ -49,12 +49,12 @@
 
 @keyframes hueCycle {
 	0% {
-		color: #4672c9;
+		color: var(--link-color);
 	}
 	50% {
-		color: #ff00ff;
+		color: var(--hover-color);
 	}
 	100% {
-		color: #4672c9;
+		color: var(--link-color);
 	}
 }
