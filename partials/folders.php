@@ -23,6 +23,9 @@
  * @version 1.0
  */
 
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
+
 $columnCounter = 0;
 $configPath    = __DIR__ . '/../config/folders.json';
 $configData    = json_decode( file_get_contents( $configPath ), true );

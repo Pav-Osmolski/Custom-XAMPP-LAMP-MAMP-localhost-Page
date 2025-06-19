@@ -20,6 +20,9 @@
  * @version 1.0
  */
 
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
+
 $dockItemsPath = __DIR__ . '/../config/dock.json';
 if ( file_exists( $dockItemsPath ) ) {
 	$dockItems = json_decode( file_get_contents( $dockItemsPath ), true );

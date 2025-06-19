@@ -1,29 +1,38 @@
 <?php
 /**
- * Global Configuration Loader
+ * Global Configuration and Initialisation
  *
- * Defines constants, environment variables, and fallback defaults for the application.
- * It also prepares global variables and helper functions used across the project.
+ * Centralised loader for core settings, user preferences, path definitions,
+ * theme parsing, UI flag defaults, and server environment metadata.
  *
  * Key Responsibilities:
- * - Loads `user_config.php` overrides if present
- * - Defines path constants (`APACHE_PATH`, `HTDOCS_PATH`, `PHP_PATH`)
- * - Sets default DB credentials if not already defined
- * - Handles display flag defaults for UI components
- * - Determines the current user and prepares `$bodyClasses`
- * - Provides `renderServerInfo()` for summarising detected versions of Apache, PHP, and MySQL
+ * - Loads user-defined overrides from `user_config.php` if available
+ * - Defines application path constants (`APACHE_PATH`, `HTDOCS_PATH`, `PHP_PATH`)
+ * - Sets database and UI configuration defaults (e.g. `$displayClock`, `$theme`)
+ * - Parses theme SCSS metadata for `themeOptions` and `themeTypes` arrays
+ * - Resolves current user identity and adjusts `$bodyClasses` accordingly
+ * - Provides `renderServerInfo()` for displaying Apache/PHP/MySQL details
+ * - Provides `renderTooltip()` to inject labelled headings with accessible tooltips
  *
  * Assumptions:
- * - Uses `encryptValue()`/`getDecrypted()` for secure DB credentials
- * - Apache/PHP detection varies per OS (Windows, macOS, Linux)
+ * - `encryptValue()` and `getDecrypted()` handle DB credential obfuscation
+ * - Server detection is OS-aware (Windows, macOS, Linux)
+ * - Optional utilities in `/utils/` may affect display state via `$bodyClasses`
  *
- * Outputs:
- * - `$user`, `$bodyClasses`, `$display*` flags
- * - Optional system badges for display in header/footer
+ * Global Outputs:
+ * - `$theme`, `$currentTheme`, `$themeOptions`, `$themeTypes`
+ * - `$bodyClasses`, `$user`, `$dbUser`, `$dbPass`
+ * - `$display*` flags (UI toggles)
+ * - `$tooltips`, `$defaultTooltipMessage`
+ *
+ * Functions Provided:
+ * - `renderServerInfo()`: Print current server versions
+ * - `renderTooltip()`: Render tooltip-linked headers
+ * - `getTooltip()`: Return tooltip content with fallback handling
  *
  * @author Pav
  * @license MIT
- * @version 1.0
+ * @version 2.0
  */
 
 require_once __DIR__ . '/security.php';
@@ -84,6 +93,19 @@ $isWindowsPHPOld = strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN';
 $isLinuxPHPOld   = strtoupper( substr( PHP_OS, 0, 5 ) ) === 'LINUX';
 $isMacPHPOld     = strtoupper( substr( PHP_OS, 0, 6 ) ) === 'DARWIN' || strtoupper( substr( PHP_OS, 0, 3 ) ) === 'MAC';
 
+// Check for valid paths and files
+$apachePathValid = file_exists( APACHE_PATH );
+$htdocsPathValid = file_exists( HTDOCS_PATH );
+$phpPathValid    = file_exists( PHP_PATH );
+$apacheToggle    = file_exists( __DIR__ . '/../utils/toggle_apache.php' );
+
+// Decrypt current DB User and Password
+$dbUser = getDecrypted( 'DB_USER' );
+$dbPass = getDecrypted( 'DB_PASSWORD' );
+
+// Get current PHP Error Level
+$currentErrorLevel = ini_get( 'error_reporting' );
+
 // Get username based on OS
 $user = $_SERVER['USERNAME']
         ?? $_SERVER['USER']
@@ -99,6 +121,7 @@ if ( strpos( $user, '\\' ) !== false ) {
 
 $user = $user ?: 'Guest';
 
+// Injected <body> classes
 $bodyClasses = 'background-image';
 
 if ( file_exists( __DIR__ . '/../utils/system_stats.php' ) && $displaySystemStats ) {
@@ -121,6 +144,74 @@ if ( isset( $theme ) && $theme !== 'default' ) {
 	}
 }
 
+// Add default theme manually
+$themeOptions = [
+	'default' => 'Default',
+];
+
+// Load custom themes from /themes/
+$themeDir   = __DIR__ . '/../assets/scss/themes/';
+$themeFiles = glob( $themeDir . '_*.scss' );
+$themeTypes = [];
+
+foreach ( $themeFiles as $file ) {
+	$basename = basename( $file, '.scss' );
+	$themeId  = str_replace( '_', '', $basename );
+	$content  = file_get_contents( $file );
+
+	$themeName = ucfirst( $themeId );
+	$themeType = null;
+
+	// Remove comments before matching
+	$content = preg_replace( '#//.*#', '', $content );
+
+	if ( preg_match( '/\$theme-name\s*:\s*[\'"](.+?)[\'"]/', $content, $matches ) ) {
+		$themeName = $matches[1];
+	}
+	if ( preg_match( '/\$theme-type\s*:\s*[\'"](light|dark)[\'"]/i', $content, $matches ) ) {
+		$themeTypes[ $themeId ] = strtolower( $matches[1] );
+	}
+
+	$themeOptions[ $themeId ] = $themeName;
+}
+
+$currentTheme      = $theme ?? 'default';
+
+// Centralised tooltip descriptions
+$tooltips = [
+	'user_settings'  => 'Set your database credentials, Apache configuration, HTDocs directory, and PHP executable path.',
+	'user_interface' => 'Toggle visual and interactive elements like themes, layouts, and visibility of dashboard components.',
+	'php_error'      => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
+	'folders'        => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
+	'link_templates' => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
+	'dock'           => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
+	'apache_control' => 'Restart the Apache server.',
+	'vhosts_manager' => 'Browse, check, and open virtual hosts with cert and DNS validation.',
+	'clear_storage'  => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
+];
+
+$defaultTooltipMessage = 'No description available for this setting.';
+
+function getTooltip( $key, $tooltips, $default ) {
+	return isset( $tooltips[ $key ] )
+		? htmlspecialchars( $tooltips[ $key ] )
+		: htmlspecialchars( $default . " (Missing tooltip key: $key)" );
+}
+
+function renderTooltip( string $key, array $tooltips, string $defaultTooltipMessage, string $headingTag = 'h3', string $label = '' ): string {
+	$desc  = getTooltip( $key, $tooltips, $defaultTooltipMessage );
+	$title = $label ?: ucwords( str_replace( '_', ' ', $key ) );
+	ob_start(); ?>
+	<<?= $headingTag ?>><?= htmlspecialchars( $title ) ?>
+	<span class="tooltip-icon" aria-describedby="tooltip-<?= $key ?>" tabindex="0"
+	      data-tooltip="<?= $desc ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?></span>
+	</<?= $headingTag ?>>
+	<span id="tooltip-<?= $key ?>" class="sr-only" role="tooltip"><?= $desc ?></span>
+	<?php
+	return ob_get_clean();
+}
+
+// Summarise detected versions of Apache, PHP, and MySQL
 function renderServerInfo() {
 	$os = PHP_OS_FAMILY;
 

@@ -19,12 +19,12 @@
  * @license MIT
  * @version 1.0
  */
+
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
 ?>
 <div id="vhosts-manager">
-	<h2>Virtual Hosts Manager <span class="tooltip-icon" aria-describedby="tooltip-vhosts_manager" tabindex="0"
-		                             data-tooltip="<?= getTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage ) ?>"><?php include __DIR__ . '/../assets/images/tooltip-icon.svg'; ?>
-			</span></h2>
-	<span id="tooltip-vhosts_manager" class="sr-only" role="tooltip"><?= htmlspecialchars( $tooltips['vhosts_manager'] ) ?></span>
+	<?= renderTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h2', 'Virtual Hosts Manager' ) ?>
 	<?php
 	$vhostsPath   = APACHE_PATH . '/conf/extra/httpd-vhosts.conf';
 	$crtPath      = APACHE_PATH . '/crt/';

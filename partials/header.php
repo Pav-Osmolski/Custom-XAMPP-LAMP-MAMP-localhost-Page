@@ -2,6 +2,9 @@
 /** @var string $user */
 /** @var bool $displayClock */
 /** @var bool $displaySearch */
+
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
 ?>
 <header role="banner">
 	<h1>localhost is ready, <?php echo htmlspecialchars( $user ); ?>! 👨🏻‍💻</h1>
