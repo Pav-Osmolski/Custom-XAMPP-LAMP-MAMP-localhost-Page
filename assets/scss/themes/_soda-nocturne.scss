@@ -1,0 +1,19 @@
+$theme-name: 'SoDa Nocturne';
+$theme-type: 'Dark';
+
+:root.soda-nocturne-theme {
+    --background-color: #1e1f26e8;
+    --background-overlay: #2c2f3c69;
+    --text-color: #e0e0e0;
+    --header-background-color: #2a2d3ae8;
+    --border-color: #3a3d4d;
+    --link-color: #6ca6ec;
+    --hover-color: #f38ba8;
+    --input-bg: #262833;
+    --input-text: #e0e0e0;
+    --input-placeholder: #7c7f99;
+    --button-text: #ffffff;
+    --error-bg: #d94f4f;
+    --scrollbar-primary: #6f7adb;
+    --scrollbar-secondary: #353848;
+}

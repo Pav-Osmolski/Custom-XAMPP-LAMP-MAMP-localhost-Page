@@ -11,6 +11,7 @@
 @use 'themes/dracula';
 @use 'themes/monokai';
 @use 'themes/overcast';
+@use 'themes/soda-nocturne';
 
 /* =====================
    📐 Layout
@@ -22,6 +23,7 @@
 /* =====================
    🧩 Components
    ===================== */
+@use 'components/apache';
 @use 'components/dock';
 @use 'components/folders';
 @use 'components/forms';

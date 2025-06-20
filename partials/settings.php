@@ -62,7 +62,7 @@ require_once __DIR__ . '/../config/config.php';
 
 <div id="settings-view">
 	<!-- User Settings -->
-	<?= renderTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h2', 'User Settings Configuration' ) ?>
+	<?= renderTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h2', 'User Configuration' ) ?>
 	<form method="post">
 		<label>DB Host:&nbsp;<input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
 		<label>DB User:&nbsp;<input type="text" name="DB_USER" value="<?= htmlspecialchars( $dbUser ) ?>"></label>

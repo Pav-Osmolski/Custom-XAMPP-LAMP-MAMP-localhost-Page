@@ -67,25 +67,19 @@ define_path_constant( 'HTDOCS_PATH', 'C:/htdocs' );
 define_path_constant( 'PHP_PATH', 'C:/xampp/php' );
 
 // Theme and UI display defaults (overridden by user_config.php)
-if ( ! isset( $theme ) ) {
-	$theme = 'default';
-}
-if ( ! isset( $displayClock ) ) {
-	$displayClock = true;
-}
-if ( ! isset( $displaySearch ) ) {
-	$displaySearch = true;
-}
-if ( ! isset( $displaySystemStats ) ) {
-	$displaySystemStats = true;
-}
-if ( ! isset( $displayApacheErrorLog ) ) {
-	$displayApacheErrorLog = true;
-}
+$defaults = [
+	'theme'                => 'default',
+	'displayClock'         => true,
+	'displaySearch'        => true,
+	'displaySystemStats'   => true,
+	'displayApacheErrorLog'=> true,
+	'useAjaxForStats'      => true,
+];
 
-// Toggle AJAX loading for system stats and error log
-if ( ! isset( $useAjaxForStats ) ) {
-	$useAjaxForStats = true;
+foreach ( $defaults as $key => $value ) {
+	if ( ! isset( $$key ) ) {
+		$$key = $value;
+	}
 }
 
 // Detect OS for older PHP versions. Not actually used because of $os, but kept here for reference.
@@ -122,27 +116,23 @@ if ( strpos( $user, '\\' ) !== false ) {
 $user = $user ?: 'Guest';
 
 // Injected <body> classes
-$bodyClasses = 'background-image';
-
-if ( file_exists( __DIR__ . '/../utils/system_stats.php' ) && $displaySystemStats ) {
-	$bodyClasses .= ' system-monitor-active';
-}
-
-if ( file_exists( __DIR__ . '/../utils/apache_error_log.php' ) && $displayApacheErrorLog ) {
-	$bodyClasses .= ' error-log-section-active';
-}
+$classes = [ 'background-image' ];
+$classes[] = $displayClock ? 'clock-active' : 'clock-inactive';
+$classes[] = $displaySearch ? 'search-active' : 'search-inactive';
+$classes[] = ( file_exists( __DIR__ . '/../utils/system_stats.php' ) && $displaySystemStats )
+	? 'system-monitor-active' : 'system-monitor-inactive';
+$classes[] = ( file_exists( __DIR__ . '/../utils/apache_error_log.php' ) && $displayApacheErrorLog )
+	? 'error-log-section-active' : 'error-log-section-inactive';
 
 if ( isset( $theme ) && $theme !== 'default' ) {
 	$themeFile = __DIR__ . '/../assets/scss/themes/_' . $theme . '.scss';
 
-	if ( file_exists( $themeFile ) ) {
-		$content = file_get_contents( $themeFile );
-
-		if ( preg_match( '#\$theme-type\s*:\s*[\'"]Light[\'"]#i', $content ) ) {
-			$bodyClasses .= ' light-mode';
-		}
+	if ( file_exists( $themeFile ) && preg_match( '#\$theme-type\s*:\s*[\'"]Light[\'"]#i', file_get_contents( $themeFile ) ) ) {
+		$classes[] = 'light-mode';
 	}
 }
+
+$bodyClasses = implode( ' ', $classes );
 
 // Add default theme manually
 $themeOptions = [
@@ -175,7 +165,7 @@ foreach ( $themeFiles as $file ) {
 	$themeOptions[ $themeId ] = $themeName;
 }
 
-$currentTheme      = $theme ?? 'default';
+$currentTheme = $theme ?? 'default';
 
 // Centralised tooltip descriptions
 $tooltips = [
