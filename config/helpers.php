@@ -233,12 +233,12 @@ function renderServerInfo( $dbUser, $dbPass ) {
         $mysqli = new mysqli( DB_HOST, $dbUser, $dbPass );
 
         if ( $mysqli->connect_error ) {
-            throw new Exception( "<span class='mysql-error-info'>MySQL: " . $mysqli->connect_error . "</span>" );
+            throw new Exception( "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $mysqli->connect_error . "</a></span>" );
         }
-        echo "<span class='mysql-info'>MySQL: " . $mysqli->server_info . " ✔️</span>";
+        echo "<span class='mysql-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $mysqli->server_info . " ✔️</a></span>";
         $mysqli->close();
     } catch ( Exception $e ) {
-        echo "<span class='mysql-error-info'>MySQL: " . $e->getMessage() . " ❌</span>";
+        echo "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $e->getMessage() . " ❌</a></span>";
     }
 }
 

@@ -6,6 +6,7 @@ export function initViewToggles() {
 			settings: document.getElementById( 'settings-view' ),
 			phpinfo: document.getElementById( 'phpinfo-view' ),
 			apache: document.getElementById( 'apache-view' ),
+			mysql: document.getElementById( 'mysql-view' ),
 		};
 
 		const toggles = {
@@ -30,6 +31,10 @@ export function initViewToggles() {
 			'toggle-apache-inspector': {
 				targetKey: 'apache',
 				url: 'utils/apache_inspector.php',
+			},
+			'toggle-mysql-inspector': {
+				targetKey: 'mysql',
+				url: 'utils/mysql_inspector.php',
 			},
 		};
 

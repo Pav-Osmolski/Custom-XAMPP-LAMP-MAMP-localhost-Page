@@ -54,11 +54,13 @@ function define_path_constant( $name, $default ) {
 }
 
 // DB settings with guards
-foreach ( [
-	'DB_HOST'     => 'localhost',
-	'DB_USER'     => 'user',
-	'DB_PASSWORD' => 'password',
-] as $const => $default ) {
+foreach (
+	[
+		'DB_HOST'     => 'localhost',
+		'DB_USER'     => 'user',
+		'DB_PASSWORD' => 'password',
+	] as $const => $default
+) {
 	if ( ! defined( $const ) ) {
 		define( $const, $default );
 	}
@@ -71,12 +73,14 @@ define_path_constant( 'PHP_PATH', 'C:/xampp/php' );
 
 // Theme and UI display defaults (overridden by user_config.php)
 $defaults = [
-	'theme'                => 'default',
-	'displayClock'         => true,
-	'displaySearch'        => true,
-	'displaySystemStats'   => true,
-	'displayApacheErrorLog'=> true,
-	'useAjaxForStats'      => true,
+	'theme'                 => 'default',
+	'apacheFastMode'        => false,
+	'mysqlFastMode'         => false,
+	'displayClock'          => true,
+	'displaySearch'         => true,
+	'displaySystemStats'    => true,
+	'displayApacheErrorLog' => true,
+	'useAjaxForStats'       => true,
 ];
 
 foreach ( $defaults as $key => $value ) {
@@ -113,7 +117,7 @@ $bodyClasses = buildBodyClasses(
 
 $currentTheme = $theme;
 
-$tooltips = getDefaultTooltips();
+$tooltips              = getDefaultTooltips();
 $defaultTooltipMessage = getDefaultTooltipMessage();
 
 ?>

@@ -42,8 +42,10 @@ function normalise_path( $path ) {
 // Handle form submission
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
-	$level = $_POST['errorReportingLevel'] ?? 'E_ALL';
-	$theme = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
+	$level          = $_POST['errorReportingLevel'] ?? 'E_ALL';
+	$theme          = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
+	$apacheFastMode = isset( $_POST['apacheFastMode'] ) ? 'true' : 'false';
+	$mysqlFastMode  = isset( $_POST['mysqlFastMode'] ) ? 'true' : 'false';
 
 	$user_config = "<?php\n";
 
@@ -56,6 +58,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$user_config .= "define('APACHE_PATH', '" . addslashes( normalise_path( $_POST['APACHE_PATH'] ) ) . "');\n";
 	$user_config .= "define('HTDOCS_PATH', '" . addslashes( normalise_path( $_POST['HTDOCS_PATH'] ) ) . "');\n";
 	$user_config .= "define('PHP_PATH', '" . addslashes( normalise_path( $_POST['PHP_PATH'] ) ) . "');\n";
+
+	$user_config .= "\$apacheFastMode = {$apacheFastMode};\n";
+	$user_config .= "\$mysqlFastMode = {$mysqlFastMode};\n";
 
 	// Feature flags
 	$user_config .= "\$theme = '$theme';\n";

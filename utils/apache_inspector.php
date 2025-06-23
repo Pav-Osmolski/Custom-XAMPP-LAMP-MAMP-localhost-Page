@@ -7,6 +7,7 @@
  * - Operating System and Architecture
  * - Apache binary path
  * - Apache version
+ * - Apache uptime
  * - Main config path
  * - Included config files
  * - Active Virtual Hosts
@@ -15,14 +16,18 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.0
+ * @version 1.1
  */
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
-// Fast mode flag (can be set via ?fast=1 or ?fast=true)
-$fastMode = isset( $_GET['fast'] ) && filter_var( $_GET['fast'], FILTER_VALIDATE_BOOLEAN );
+// Default to config value; override with ?fast=1 or ?fast=0 if provided
+$fastMode = $apacheFastMode ?? false;
+
+if ( isset( $_GET['fast'] ) ) {
+	$fastMode = filter_var( $_GET['fast'], FILTER_VALIDATE_BOOLEAN );
+}
 
 // SYSTEM INFO
 $os   = PHP_OS_FAMILY;
@@ -32,7 +37,13 @@ echo "<pre>";
 echo "🖥️ Operating System: $os ($arch)\n";
 echo "🚀 Fast Mode: " . ( $fastMode ? 'Enabled (some checks skipped)' : 'Disabled (full inspection)' ) . "\n";
 
-// Utility: shell command executor with fallbacks
+/**
+ * Execute a shell command with fallbacks.
+ *
+ * @param string $cmd
+ *
+ * @return string|null
+ */
 function tryShell( $cmd ) {
 	if ( function_exists( 'shell_exec' ) && ! in_array( 'shell_exec', explode( ',', ini_get( 'disable_functions' ) ?? '' ) ) ) {
 		return safe_shell_exec( "$cmd 2>&1" );
@@ -52,7 +63,11 @@ function tryShell( $cmd ) {
 	return null;
 }
 
-// Check for Apache environment
+/**
+ * Check if the current PHP environment is running under Apache.
+ *
+ * @return bool
+ */
 function isApache() {
 	return (
 		strpos( $_SERVER['SERVER_SOFTWARE'] ?? '', 'Apache' ) !== false ||
@@ -61,7 +76,11 @@ function isApache() {
 	);
 }
 
-// Apache version
+/**
+ * Retrieve the Apache version from various sources.
+ *
+ * @return string
+ */
 function getApacheVersion() {
 	if ( function_exists( 'apache_get_version' ) ) {
 		return "via apache_get_version: " . apache_get_version();
@@ -79,7 +98,11 @@ function getApacheVersion() {
 	return "not detected";
 }
 
-// Apache binary detection across platforms
+/**
+ * Attempt to detect the Apache binary path.
+ *
+ * @return string|null
+ */
 function detectApacheBinary() {
 	$paths = [
 		// User defined
@@ -134,7 +157,13 @@ function detectApacheBinary() {
 	return null;
 }
 
-// Apache config path from -V output
+/**
+ * Extract the Apache config file path from the `-V` output.
+ *
+ * @param string $binary
+ *
+ * @return string|null
+ */
 function getApacheConfigPath( $binary ) {
 	$out = tryShell( "$binary -V" );
 	if ( preg_match( '/SERVER_CONFIG_FILE="([^"]+)"/', $out, $conf ) ) {
@@ -149,7 +178,13 @@ function getApacheConfigPath( $binary ) {
 	return null;
 }
 
-// Get Include lines from config
+/**
+ * Parse Include/IncludeOptional directives from a config file.
+ *
+ * @param string $conf
+ *
+ * @return array<int, string>
+ */
 function getIncludes( $conf ) {
 	if ( ! file_exists( $conf ) ) {
 		return [];
@@ -165,7 +200,56 @@ function getIncludes( $conf ) {
 	return $result;
 }
 
-// Virtual hosts via apachectl/httpd -S
+/**
+ * Estimate Apache uptime cross-platform.
+ *
+ * @param string $os
+ *
+ * @return string
+ */
+function getApacheUptimeEstimate( string $os ): string {
+	if ( $os === 'Windows' ) {
+		$output = tryShell( 'wmic process where "name=\'httpd.exe\'" get CreationDate /value' );
+		if ( preg_match( '/CreationDate=(\d{14})/', $output, $match ) ) {
+			$start = \DateTime::createFromFormat( 'YmdHis', substr( $match[1], 0, 14 ) );
+			if ( $start ) {
+				$diff = ( new \DateTime() )->getTimestamp() - $start->getTimestamp();
+
+				return formatDuration( $diff );
+			}
+		}
+	} else {
+		$output = tryShell( 'ps -eo etimes,comm | grep -E "apache|httpd" | head -n1' );
+		if ( preg_match( '/^\s*(\d+)/', $output, $match ) ) {
+			return formatDuration( (int) $match[1] );
+		}
+	}
+
+	return 'Unavailable';
+}
+
+/**
+ * Format a duration in seconds into a human-readable H:M:S string.
+ *
+ * @param int $seconds
+ *
+ * @return string
+ */
+function formatDuration( int $seconds ): string {
+	$hours     = floor( $seconds / 3600 );
+	$minutes   = floor( ( $seconds % 3600 ) / 60 );
+	$remaining = $seconds % 60;
+
+	return "{$seconds} seconds ({$hours}h {$minutes}m {$remaining}s)";
+}
+
+/**
+ * Get the output of `-S` for virtual host listing, if available.
+ *
+ * @param string $binary
+ *
+ * @return string|null
+ */
 function getVirtualHosts( $binary ) {
 	foreach ( [ $binary, 'apachectl', 'httpd' ] as $tool ) {
 		$out = tryShell( "$tool -S" );
@@ -177,7 +261,11 @@ function getVirtualHosts( $binary ) {
 	return null;
 }
 
-// Apache SAPI detection from phpinfo()
+/**
+ * Detect if Apache SAPI is in use via phpinfo() output.
+ *
+ * @return string|null
+ */
 function detectApacheSAPI() {
 	ob_start();
 	phpinfo( INFO_MODULES );
@@ -189,7 +277,11 @@ function detectApacheSAPI() {
 	return null;
 }
 
-// Apache environment variables from getenv and /proc/self/environ
+/**
+ * Get Apache-related environment variables from getenv and optionally /proc/self/environ.
+ *
+ * @return array<string, string>
+ */
 function getApacheEnvVars() {
 	$envVars = [];
 	foreach ( [ 'APACHE_RUN_DIR', 'APACHE_PID_FILE', 'APACHE_LOCK_DIR', 'INVOCATION_ID' ] as $var ) {
@@ -215,7 +307,11 @@ function getApacheEnvVars() {
 	return $envVars;
 }
 
-// PHP ini files
+/**
+ * Get loaded PHP .ini file info.
+ *
+ * @return array<string, string>
+ */
 function getIniFilesInfo() {
 	return [
 		'Loaded php.ini'     => php_ini_loaded_file() ?: 'N/A',
@@ -225,13 +321,18 @@ function getIniFilesInfo() {
 
 // ==== OUTPUT ====
 echo "🧠 Apache Context Detected: " . ( isApache() ? 'Yes' : 'No' ) . "\n";
-echo "🗏️ Apache SAPI: " . ( detectApacheSAPI() ?? 'Unknown or not Apache' ) . "\n";
+echo "📃 Apache SAPI: " . ( detectApacheSAPI() ?? 'Unknown or not Apache' ) . "\n";
 
 $version = getApacheVersion();
 echo "📦 Apache Version: $version\n";
 
 $binary = detectApacheBinary();
-echo "🗒 Apache Binary: " . ( $binary ?: "Not found" ) . "\n";
+echo "📓 Apache Binary: " . ( $binary ?: "Not found" ) . "\n";
+
+if ( ! $fastMode ) {
+	$uptime = getApacheUptimeEstimate( $os );
+	echo "🕒 Apache Uptime (estimated): " . ( $uptime !== 'Unavailable' ? $uptime : 'Not available on this platform or config' ) . "\n";
+}
 
 if ( $binary && ! $fastMode ) {
 	$config = getApacheConfigPath( $binary );

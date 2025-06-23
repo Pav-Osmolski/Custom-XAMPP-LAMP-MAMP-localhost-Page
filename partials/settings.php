@@ -28,11 +28,13 @@
  * - JavaScript values for theme interaction
  * - Inline server path validation (✔️ / ❌)
  *
- * Author: Pav  
- * License: MIT  
+ * Author: Pav
+ * License: MIT
  * Version: 2.0
  */
 
+/** @var bool $apacheFastMode */
+/** @var bool $mysqlFastMode */
 /** @var bool $displayClock */
 /** @var bool $displaySearch */
 /** @var bool $displayApacheErrorLog */
@@ -82,6 +84,18 @@ require_once __DIR__ . '/../config/config.php';
 		<label>PHP Path:&nbsp;
 			<input type="text" name="PHP_PATH" value="<?= PHP_PATH ?>">
 			<?= $phpPathValid ? '✔️' : '❌' ?>
+		</label>
+
+		<label>
+			<input type="checkbox"
+			       name="apacheFastMode" <?= isset( $apacheFastMode ) && $apacheFastMode ? 'checked' : '' ?>>
+			Fast Mode for Apache Inspector
+		</label>
+
+		<label>
+			<input type="checkbox"
+			       name="mysqlFastMode" <?= isset( $mysqlFastMode ) && $mysqlFastMode ? 'checked' : '' ?>>
+			Fast Mode for MySQL Inspector
 		</label><br>
 
 		<?= renderTooltip( 'user_interface', $tooltips, $defaultTooltipMessage, 'h3', 'User Interface' ) ?>

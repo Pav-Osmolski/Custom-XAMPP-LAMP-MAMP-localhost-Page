@@ -36,6 +36,7 @@ require_once __DIR__ . '/partials/submit.php';
 			<?php require_once __DIR__ . '/partials/settings.php'; ?>
 			<?php require_once __DIR__ . '/utils/phpinfo.php'; ?>
 			<div id="apache-view"><?php /* Dynamically loads /utils/apache_inspector.php */ ?></div>
+			<div id="mysql-view"><?php /* Dynamically loads /utils/mysql_inspector.php */ ?></div>
 			<?php require_once __DIR__ . '/partials/dock.php'; ?>
 		</section>
 		<?php require_once __DIR__ . '/partials/info.php'; ?>
