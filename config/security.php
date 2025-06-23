@@ -26,6 +26,11 @@
 
 define( 'CRYPTO_KEY_FILE', __DIR__ . '/../.key' );
 
+/**
+ * Get or create the encryption key used for AES operations.
+ *
+ * @return string 32-character hexadecimal key
+ */
 function getEncryptionKey() {
 	if ( ! file_exists( CRYPTO_KEY_FILE ) ) {
 		$key = bin2hex( openssl_random_pseudo_bytes( 16 ) );
@@ -35,6 +40,12 @@ function getEncryptionKey() {
 	return trim( file_get_contents( CRYPTO_KEY_FILE ) );
 }
 
+/**
+ * Encrypts a plaintext string using AES-256-CBC with IV and returns base64-encoded result.
+ *
+ * @param string $plaintext The value to encrypt
+ * @return string Base64-encoded encrypted string
+ */
 function encryptValue( $plaintext ) {
 	$key       = getEncryptionKey();
 	$iv        = openssl_random_pseudo_bytes( 16 );
@@ -43,6 +54,12 @@ function encryptValue( $plaintext ) {
 	return base64_encode( $iv . $encrypted );
 }
 
+/**
+ * Decrypts a base64-encoded AES-256-CBC encrypted string.
+ *
+ * @param string $encoded The encrypted base64 string
+ * @return string Decrypted plaintext, or empty string on failure
+ */
 function decryptValue( $encoded ) {
 	$key  = getEncryptionKey();
 	$data = base64_decode( $encoded );
@@ -55,6 +72,13 @@ function decryptValue( $encoded ) {
 	return openssl_decrypt( $ciphertext, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
 }
 
+/**
+ * Retrieves a decrypted version of a constant, or falls back to plain text if invalid.
+ *
+ * @param string $const The constant name (e.g., 'DB_USER')
+ * @param bool $allowFallback If true, returns the raw value on failure
+ * @return string Decrypted value or fallback string
+ */
 function getDecrypted( $const, $allowFallback = true ) {
 	static $allowed = [ 'DB_USER', 'DB_PASSWORD' ]; // Only decrypt these
 
@@ -74,7 +98,12 @@ function getDecrypted( $const, $allowFallback = true ) {
 	return $decrypted !== false ? $decrypted : ( $allowFallback ? $value : '' );
 }
 
-// Safe shell execution wrapper
+/**
+ * Safely executes a whitelisted shell command.
+ *
+ * @param string $cmd The shell command to execute
+ * @return string|null Output of the command, or null if disallowed
+ */
 function safe_shell_exec( $cmd ) {
 	$allowed = [
 		'apachectl',
