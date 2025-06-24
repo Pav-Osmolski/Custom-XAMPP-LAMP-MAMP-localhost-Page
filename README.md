@@ -32,19 +32,20 @@ Please feel free to fork and make your own changes!
 
 ## Features
 
-- **Instant Project Search** – Live filter through all your local folders with ease  
-- **Flexible Column Layout** – Draggable, resizable, and fully customisable folder views  
-- **Real-Time Clock** – Because knowing the time is still a thing  
-- **Environment Snapshot** – Instantly see which versions of Apache, PHP, and MySQL you're running  
-- **Smart Apache Control** – Safely restart the active Apache instance based on your OS and setup  
-- **Live System Monitoring** – AJAX-powered CPU, memory, and disk usage at a glance  
-- **Quick Config Panel** – Update paths, ports, and settings without breaking a sweat  
-- **PHP Error Management** – Toggle error display and logging on the fly  
+- **Instant Project Search** – Live filter through all your local folders with ease
+- **Flexible Column Layout** – Draggable, resizable, and fully customisable folder views
+- **Real-Time Clock** – Because knowing the time is still a thing
+- **Environment Snapshot** – Instantly see which versions of Apache, PHP, and MySQL you're running
+- **Smart Apache Control** – Safely restart the active Apache instance based on your OS and setup
+- **Live System Monitoring** – AJAX-powered CPU, memory, and disk usage at a glance
+- **Apache and MySQL Inspector** – Inspect configuration and uptime for Apache and MySQL servers
+- **Quick Config Panel** – Update paths, ports, and settings without breaking a sweat
+- **PHP Error Management** – Toggle error display and logging on the fly
 - **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate management
-- **Apache Error Log Toggle** – One-click access to the latest server logs  
-- **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites  
-- **Responsive Interface** – Sleek, modern design that adapts to all screen sizes  
-- **Theme Switcher** – Light mode. Dark mode. You choose.  
+- **Apache and PHP Error Log Toggle** – One-click access to the latest server logs
+- **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites
+- **Responsive Interface** – Sleek, modern design that adapts to all screen sizes
+- **Theme Switcher** – Light mode. Dark mode. You choose.
 - **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
 
 ## How to Install
@@ -85,6 +86,7 @@ A quick overview of the core files and folders in this project, so you’re neve
 |--------------------------|-------------|
 | `config.php`             | Default configuration including MySQL credentials and Apache path settings. |
 | `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
+| `helpers.php`            | Utility functions, such as string formatting, environment checks, and path handling. |
 | `debug.php`              | Logs raw shell commands (with optional context) to `logs/localhost-page.log`. |
 | `dock.json`              | Stores dock layout and links in JSON format. |
 | `folders.json`           | Defines folder configurations, incl. paths, filters, link templates, and display rules. |
@@ -128,6 +130,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | `apache_inspector.php`   | Detects Apache installation details like version, modules, and config paths. |
 | `generate_cert.php`      | Generates SSL certificates. |
 | `open_folder.php`        | Opens a specified folder path in the system file explorer (cross-platform). |
+| `php_error_log.php`      | Fetches and returns PHP error log entries via AJAX. |
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
 | `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
 | `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
@@ -151,6 +154,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | `components/`    | Reusable UI components such as dock, folders, forms, tooltips, and system modules. |
 | `layout/`        | Page layout structure including header, footer, and main content styles. |
 | `pages/`         | Styles specific to individual pages like settings and PHP info. |
+| `themes/`        | Configurations for all available themes, including colour schemes and metadata. |
 | `utils/`         | SCSS utilities including keyframes, media queries, mixins, and variables. |
 | `style.scss`     | The main SCSS entry point that imports all partials. |
 
