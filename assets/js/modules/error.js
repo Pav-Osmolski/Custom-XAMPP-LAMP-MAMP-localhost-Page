@@ -1,54 +1,66 @@
 // assets/js/modules/error.js
-export function initApacheErrorLog() {
+function initGenericErrorLog( {
+	sectionId,
+	toggleButtonId,
+	logElementId,
+	endpoint
+} ) {
 	document.addEventListener( 'DOMContentLoaded', () => {
 		const body = document.body;
-		const errorLogSection = document.getElementById( 'error-log-section' );
+		const logSection = document.getElementById( sectionId );
+		if ( !logSection ) return;
 
-		if ( !errorLogSection ) return;
+		const toggleBtn = document.getElementById( toggleButtonId );
+		const logElement = document.getElementById( logElementId );
 
-		const toggleBtn = document.getElementById( 'toggle-error-log' );
-		const errorLog = document.getElementById( 'error-log' );
+		if ( !toggleBtn || !logElement ) return;
 
-		// Always allow toggling visibility
 		toggleBtn.addEventListener( 'click', function () {
-			const isVisible = errorLog.style.display === 'block';
-			errorLog.style.display = isVisible ? 'none' : 'block';
+			const isVisible = logElement.style.display === 'block';
+			logElement.style.display = isVisible ? 'none' : 'block';
 			this.setAttribute( 'aria-expanded', !isVisible );
 		} );
 
-		const ajaxEnabled = body.getAttribute( 'data-ajax-enabled' ) === 'true';
-		if ( !ajaxEnabled ) return;
+		if ( body.getAttribute( 'data-ajax-enabled' ) !== 'true' ) return;
 
-		let errorLogInterval;
-
-		function fetchErrorLog() {
-			fetch( `${ window.BASE_URL }utils/apache_error_log.php`, {cache: 'no-store'} )
-				.then( response => {
-					if ( !response.ok ) throw new Error( 'Error log unavailable' );
-					return response.text();
-				} )
-				.then( data => {
-					errorLog.innerHTML = `<code>${ data }</code>`;
-				} );
+		function displayLogContent( data ) {
+			const isEmpty = data.trim() === '';
+			logElement.innerHTML = isEmpty
+				? `<code class="muted">No errors logged. You're doing great. 🎉</code>`
+				: `<code>${ data }</code>`;
 		}
 
-		function startMonitoring() {
-			errorLogInterval = setInterval( fetchErrorLog, 3000 );
-			fetchErrorLog();
+		function fetchLog() {
+			fetch( `${ window.BASE_URL }${ endpoint }`, { cache: 'no-store' } )
+				.then( res => res.ok ? res.text() : Promise.reject() )
+				.then( displayLogContent );
 		}
 
-		// Pre-flight fetch to avoid first-call failure
-		fetch( `${ window.BASE_URL }utils/apache_error_log.php`, {cache: 'no-store'} )
-			.then( response => {
-				if ( !response.ok ) return;
-				return response.text();
-			} )
+		fetch( `${ window.BASE_URL }${ endpoint }`, { cache: 'no-store' } )
+			.then( res => res.ok ? res.text() : Promise.reject() )
 			.then( data => {
-				errorLog.innerHTML = `<code>${ data }</code>`;
-				startMonitoring();
+				displayLogContent( data );
+				setInterval( fetchLog, 3000 );
 			} )
-			.catch( () => {
-				// Do nothing on first failure
-			} );
+			.catch( () => {} );
+	} );
+}
+
+// Public wrappers — keeps main.js simple
+export function initApacheErrorLog() {
+	initGenericErrorLog( {
+		sectionId: 'apache-error-log-section',
+		toggleButtonId: 'toggle-apache-error-log',
+		logElementId: 'apache-error-log',
+		endpoint: 'utils/apache_error_log.php'
+	} );
+}
+
+export function initPhpErrorLog() {
+	initGenericErrorLog( {
+		sectionId: 'php-error-log-section',
+		toggleButtonId: 'toggle-php-error-log',
+		logElementId: 'php-error-log',
+		endpoint: 'utils/php_error_log.php'
 	} );
 }

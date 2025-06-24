@@ -68,6 +68,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$user_config .= "\$displaySearch = " . ( isset( $_POST['displaySearch'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$displaySystemStats = " . ( isset( $_POST['displaySystemStats'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$displayApacheErrorLog = " . ( isset( $_POST['displayApacheErrorLog'] ) ? 'true' : 'false' ) . ";\n";
+	$user_config .= "\$displayPhpErrorLog = " . ( isset( $_POST['displayPhpErrorLog'] ) ? 'true' : 'false' ) . ";\n";
 	$user_config .= "\$useAjaxForStats = " . ( isset( $_POST['useAjaxForStats'] ) ? 'true' : 'false' ) . ";\n";
 
 	// PHP error handling

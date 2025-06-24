@@ -64,9 +64,13 @@ switch ( PHP_OS_FAMILY ) {
 			APACHE_PATH . '/logs/error.log',
 			'/var/log/apache2/error.log',
 			'/var/log/httpd/error_log',
-			'/opt/lampp/logs/error_log',
-			$_SERVER['HOME'] . '/snap/httpd/common/error.log'
+			'/opt/lampp/logs/error_log'
 		];
+
+		if ( isset( $_SERVER['HOME'] ) ) {
+			$possibleLogs[] = $_SERVER['HOME'] . '/snap/httpd/common/error.log';
+		}
+
 		foreach ( $possibleLogs as $path ) {
 			if ( file_exists( $path ) ) {
 				$logFile = $path;
@@ -83,7 +87,7 @@ if ( file_exists( $logFile ) ) {
 	$linesArray = file( $logFile );
 	$logContent = implode( "", array_slice( $linesArray, - $lines ) );
 } else {
-	$logContent = "Error log not found.";
+	$logContent = "Apache error log not found or not configured.";
 }
 
 if ( $useAjaxForStats ) {
@@ -94,11 +98,11 @@ if ( $useAjaxForStats ) {
 	echo $logContent;
 } else {
 	echo "
-        <h3 id='error-log-title'>
-            <button id='toggle-error-log' aria-expanded='false' aria-controls='error-log'>
+        <h3 id='apache-error-log-title'>
+            <button id='toggle-apache-error-log' aria-expanded='false' aria-controls='apache-error-log'>
             📝 Toggle Apache Error Log
             </button>
         </h3>
-        <pre id='error-log' aria-live='polite' tabindex='0' style='display: none;'><code>" . htmlspecialchars( $logContent ) . "</code></pre>";
+        <pre id='apache-error-log' aria-live='polite' tabindex='0' style='display: none;'><code>" . htmlspecialchars( $logContent ) . "</code></pre>";
 }
 ?>

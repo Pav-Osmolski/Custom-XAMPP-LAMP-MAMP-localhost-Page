@@ -24,7 +24,7 @@
  * - Flags: `$apachePathValid`, `$htdocsPathValid`, `$phpPathValid`, `$apacheToggle`
  * - DB: `$dbUser`, `$dbPass`
  * - UI: `$theme`, `$currentTheme`, `$bodyClasses`, `$tooltips`, `$defaultTooltipMessage`
- * - Toggles: `$displayClock`, `$displaySearch`, `$displaySystemStats`, `$displayApacheErrorLog`, `$useAjaxForStats`
+ * - Toggles: `$displayClock`, `$displaySearch`, `$displaySystemStats`, `$displayApacheErrorLog`, `$displayPhpErrorLog`, `$useAjaxForStats`
  * - Themes: `$themeOptions`, `$themeTypes`
  * - Misc: `$user`, `$currentErrorLevel`
  *
@@ -80,6 +80,7 @@ $defaults = [
 	'displaySearch'         => true,
 	'displaySystemStats'    => true,
 	'displayApacheErrorLog' => true,
+	'displayPhpErrorLog'    => true,
 	'useAjaxForStats'       => true,
 ];
 
@@ -110,7 +111,8 @@ $bodyClasses = buildBodyClasses(
 	$displayClock,
 	$displaySearch,
 	$displaySystemStats,
-	$displayApacheErrorLog
+	$displayApacheErrorLog,
+	$displayPhpErrorLog
 );
 
 [ $themeOptions, $themeTypes ] = loadThemes( __DIR__ . '/../assets/scss/themes/' );

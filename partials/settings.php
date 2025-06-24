@@ -38,6 +38,7 @@
 /** @var bool $displayClock */
 /** @var bool $displaySearch */
 /** @var bool $displayApacheErrorLog */
+/** @var bool $displayPhpErrorLog */
 /** @var bool $displaySystemStats */
 /** @var bool $useAjaxForStats */
 /** @var bool $apacheToggle */
@@ -126,6 +127,10 @@ require_once __DIR__ . '/../config/config.php';
 				<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
 			</label>
 
+			<label>Display PHP Error Log:
+				<input type="checkbox" name="displayPhpErrorLog" <?= $displayPhpErrorLog ? 'checked' : '' ?>>
+			</label>
+
 			<label>Use AJAX for Stats and Error log:
 				<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
 			</label>
@@ -188,11 +193,11 @@ require_once __DIR__ . '/../config/config.php';
 	<!-- Apache Control -->
 	<div class="apache-control">
 		<?= renderTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Control' ) ?>
-		<?php if ( $apacheToggle ): ?>
+		<?php if ( $apacheToggle && $apachePathValid ): ?>
 			<button id="restart-apache-button">Restart Apache</button>
 			<div id="apache-status-message" role="status" aria-live="polite"></div>
 		<?php else: ?>
-			<p>Apache control unavailable (toggle_apache.php missing)</p><br>
+			<p>Apache control unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p><br>
 			<button disabled id="restart-apache-button">Restart Apache</button>
 		<?php endif; ?>
 	</div>

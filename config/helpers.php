@@ -53,7 +53,7 @@ function resolveCurrentUser(): string {
  *
  * @return string
  */
-function buildBodyClasses( $theme, $displayClock, $displaySearch, $displaySystemStats, $displayApacheErrorLog ): string {
+function buildBodyClasses( $theme, $displayClock, $displaySearch, $displaySystemStats, $displayApacheErrorLog, $displayPhpErrorLog ): string {
     $classes = [ 'background-image' ];
     $classes[] = $displayClock ? 'clock-active' : 'clock-inactive';
     $classes[] = $displaySearch ? 'search-active' : 'search-inactive';
@@ -64,10 +64,26 @@ function buildBodyClasses( $theme, $displayClock, $displaySearch, $displaySystem
         $classes[] = 'system-monitor-inactive';
     }
 
-    if ( file_exists( __DIR__ . '/../utils/apache_error_log.php' ) && $displayApacheErrorLog ) {
-        $classes[] = 'error-log-section-active';
+    $apacheLogAvailable = file_exists( __DIR__ . '/../utils/apache_error_log.php' );
+    $phpLogAvailable    = file_exists( __DIR__ . '/../utils/php_error_log.php' );
+
+    if ( $apacheLogAvailable && $displayApacheErrorLog ) {
+        $classes[] = 'apache-error-log-active';
     } else {
-        $classes[] = 'error-log-section-inactive';
+        $classes[] = 'apache-error-log-inactive';
+    }
+
+    if ( $phpLogAvailable && $displayPhpErrorLog ) {
+        $classes[] = 'php-error-log-active';
+    } else {
+        $classes[] = 'php-error-log-inactive';
+    }
+
+    if (
+        ( $apacheLogAvailable && $displayApacheErrorLog ) ||
+        ( $phpLogAvailable && $displayPhpErrorLog )
+    ) {
+        $classes[] = 'error-log-active';
     }
 
     $themeFile = __DIR__ . '/../assets/scss/themes/_' . $theme . '.scss';

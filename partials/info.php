@@ -1,23 +1,37 @@
 <?php
 /** @var bool $displayApacheErrorLog */
+/** @var bool $displayPhpErrorLog */
 /** @var bool $displaySystemStats */
 /** @var bool $useAjaxForStats */
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
-if ( $displayApacheErrorLog || $displaySystemStats ): ?>
+if ( $displayApacheErrorLog || $displayPhpErrorLog || $displaySystemStats ): ?>
 
 	<?php if ( $useAjaxForStats ): ?>
 
 		<?php if ( $displayApacheErrorLog ): ?>
-			<section id="error-log-section" aria-labelledby="error-log-title">
-				<h3 id="error-log-title">
-					<button id="toggle-error-log" aria-expanded="false" aria-controls="error-log">
+			<section class="error-log-section" id="apache-error-log-section" aria-labelledby="apache-error-log-title">
+				<h3 id="apache-error-log-title">
+					<button id="toggle-apache-error-log" aria-expanded="false" aria-controls="apache-error-log">
 						📝 Toggle Apache Error Log
 					</button>
 				</h3>
-				<pre id="error-log" aria-live="polite" tabindex="0" style="display: none;">
+				<pre id="apache-error-log" aria-live="polite" tabindex="0" style="display: none;">
+                    <code>Loading...</code>
+                </pre>
+			</section>
+		<?php endif; ?>
+
+		<?php if ( $displayPhpErrorLog ): ?>
+			<section class="error-log-section" id="php-error-log-section" aria-labelledby="php-error-log-title">
+				<h3 id="php-error-log-title">
+					<button id="toggle-php-error-log" aria-expanded="false" aria-controls="php-error-log">
+						📝 Toggle PHP Error Log
+					</button>
+				</h3>
+				<pre id="php-error-log" aria-live="polite" tabindex="0" style="display: none;">
                     <code>Loading...</code>
                 </pre>
 			</section>
@@ -35,8 +49,14 @@ if ( $displayApacheErrorLog || $displaySystemStats ): ?>
 	<?php else: ?>
 
 		<?php if ( $displayApacheErrorLog ): ?>
-			<section id="error-log-section" aria-labelledby="error-log-title">
+			<section class="error-log-section" id="apache-error-log-section" aria-labelledby="apache-error-log-title">
 				<?php include __DIR__ . '/../utils/apache_error_log.php'; ?>
+			</section>
+		<?php endif; ?>
+
+		<?php if ( $displayPhpErrorLog ): ?>
+			<section class="error-log-section" id="php-error-log-section" aria-labelledby="php-error-log-title">
+				<?php include __DIR__ . '/../utils/php_error_log.php'; ?>
 			</section>
 		<?php endif; ?>
 
