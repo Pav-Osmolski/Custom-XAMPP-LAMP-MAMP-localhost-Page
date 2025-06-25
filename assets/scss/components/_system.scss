@@ -20,11 +20,17 @@ body.error-log-active .error-log-section {
 	}
 
 	button {
+		display: flex;
+		align-items: center;
 		cursor: pointer;
 		background: none;
 		border: none;
 		color: inherit;
 		transition: color 0.3s;
+
+		svg {
+			margin-right: 5px;
+		}
 
 		&:hover {
 			color: var(--hover-color) !important;
