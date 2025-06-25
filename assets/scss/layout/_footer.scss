@@ -24,6 +24,27 @@ footer {
 		white-space: nowrap;
 	}
 
+	.footer-links {
+		display: flex;
+		flex-direction: row;
+		list-style: none;
+
+		li {
+			position: relative;
+			padding: 0 0.25rem;
+
+			&::after {
+				content: "|";
+				position: absolute;
+				right: -3px;
+			}
+
+			&:last-child::after {
+				content: "";
+			}
+		}
+	}
+
 	p {
 		font-style: italic;
 		line-height: 1.3;
