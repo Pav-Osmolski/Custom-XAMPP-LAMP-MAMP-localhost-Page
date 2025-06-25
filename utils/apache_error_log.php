@@ -103,6 +103,10 @@ if ( $useAjaxForStats ) {
             📝 Toggle Apache Error Log
             </button>
         </h3>
-        <pre id='apache-error-log' aria-live='polite' tabindex='0' style='display: none;'><code>" . htmlspecialchars( $logContent ) . "</code></pre>";
+        <pre id='apache-error-log' aria-live='polite' tabindex='0'>
+        	<code>"
+				 . htmlspecialchars( $logContent ) . "
+        	</code>
+        </pre>";
 }
 ?>

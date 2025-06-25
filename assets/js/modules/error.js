@@ -16,8 +16,8 @@ function initGenericErrorLog( {
 		if ( !toggleBtn || !logElement ) return;
 
 		toggleBtn.addEventListener( 'click', function () {
-			const isVisible = logElement.style.display === 'block';
-			logElement.style.display = isVisible ? 'none' : 'block';
+			const isVisible = logElement.classList.contains( 'visible' );
+			logElement.classList.toggle( 'visible', !isVisible );
 			this.setAttribute( 'aria-expanded', !isVisible );
 		} );
 

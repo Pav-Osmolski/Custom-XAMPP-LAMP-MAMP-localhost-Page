@@ -1,5 +1,9 @@
 /* System Monitor and Error Log */
-.system-monitor, #apache-error-log-section, #php-error-log-section { //Initial display should be none unless class is detected in the body
+.system-monitor, 
+#apache-error-log-section, 
+#php-error-log-section, 
+#apache-error-log, 
+#php-error-log { //Initial display should be none unless class is detected in the body
 	display: none;
 }
 

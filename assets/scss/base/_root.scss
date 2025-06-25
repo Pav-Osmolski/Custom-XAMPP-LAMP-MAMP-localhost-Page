@@ -1,4 +1,7 @@
-/* Variables */
+/* Root variables for default theme */
+$theme-name: 'Default';
+$theme-type: 'Dark';
+
 :root {
 	--font-main: 'Ubuntu', sans-serif;
 	--background-image: url(../../assets/images/background.jpg);

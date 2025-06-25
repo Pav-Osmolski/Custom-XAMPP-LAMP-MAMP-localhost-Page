@@ -61,15 +61,15 @@ if ( $useAjaxForStats ) {
     echo $logContent;
 } else {
     echo "
-        <section id='php-error-log-section' class='error-log-section'>
-            <h3 id='php-error-log-title'>
-                <button id='toggle-php-error-log' aria-expanded='false' aria-controls='php-error-log'>
-                🐘 Toggle PHP Error Log
-                </button>
-            </h3>
-            <pre id='php-error-log' aria-live='polite' tabindex='0' style='display: none;'><code>" .
-            htmlspecialchars( $logContent ) .
-            "</code></pre>
-        </section>";
+        <h3 id='php-error-log-title'>
+            <button id='toggle-php-error-log' aria-expanded='false' aria-controls='php-error-log'>
+            📝 Toggle PHP Error Log
+            </button>
+        </h3>
+        <pre id='php-error-log' aria-live='polite' tabindex='0'>
+            <code>"
+                 . htmlspecialchars( $logContent ) . "
+            </code>
+        </pre>";
 }
 ?>
