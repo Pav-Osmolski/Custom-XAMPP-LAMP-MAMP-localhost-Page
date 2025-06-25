@@ -59,6 +59,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 	$user_config .= "define('HTDOCS_PATH', '" . addslashes( normalise_path( $_POST['HTDOCS_PATH'] ) ) . "');\n";
 	$user_config .= "define('PHP_PATH', '" . addslashes( normalise_path( $_POST['PHP_PATH'] ) ) . "');\n";
 
+	// Utility options
 	$user_config .= "\$apacheFastMode = {$apacheFastMode};\n";
 	$user_config .= "\$mysqlFastMode = {$mysqlFastMode};\n";
 

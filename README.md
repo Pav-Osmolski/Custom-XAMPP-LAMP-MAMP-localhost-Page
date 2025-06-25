@@ -43,7 +43,9 @@ Please feel free to fork and make your own changes!
 - **PHP Error Management** – Toggle error display and logging on the fly
 - **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate management
 - **Apache and PHP Error Log Toggle** – One-click access to the latest server logs
+- **Open Folder from UI** – Instantly launch projects in your file explorer from the browser
 - **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites
+- **Reusable Link Templates** – Define and reuse HTML templates across folder listings
 - **Responsive Interface** – Sleek, modern design that adapts to all screen sizes
 - **Theme Switcher** – Light mode. Dark mode. You choose.
 - **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
@@ -87,6 +89,7 @@ A quick overview of the core files and folders in this project, so you’re neve
 | `config.php`             | Default configuration including MySQL credentials and Apache path settings. |
 | `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
 | `helpers.php`            | Utility functions, such as string formatting, environment checks, and path handling. |
+| `security.php`           | Validates user input and manages script-level access restrictions and sanitisation. |
 | `debug.php`              | Logs raw shell commands (with optional context) to `logs/localhost-page.log`. |
 | `dock.json`              | Stores dock layout and links in JSON format. |
 | `folders.json`           | Defines folder configurations, incl. paths, filters, link templates, and display rules. |
@@ -129,6 +132,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | `apache_error_log.php`   | Fetches and returns Apache error log entries via AJAX. |
 | `apache_inspector.php`   | Detects Apache installation details like version, modules, and config paths. |
 | `generate_cert.php`      | Generates SSL certificates. |
+| `mysql_inspector.php`    | Fetches MySQL version, uptime, configuration, and connection status. |
 | `open_folder.php`        | Opens a specified folder path in the system file explorer (cross-platform). |
 | `php_error_log.php`      | Fetches and returns PHP error log entries via AJAX. |
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |

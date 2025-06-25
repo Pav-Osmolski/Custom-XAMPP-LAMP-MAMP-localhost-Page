@@ -7,65 +7,60 @@
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
-if ( $displayApacheErrorLog || $displayPhpErrorLog || $displaySystemStats ): ?>
+$features = [
+	'apache' => [
+		'enabled' => $displayApacheErrorLog,
+		'title' => 'Apache Error Log',
+		'toggle_id' => 'toggle-apache-error-log',
+		'log_id' => 'apache-error-log',
+		'php_include' => '/../utils/apache_error_log.php',
+	],
+	'php' => [
+		'enabled' => $displayPhpErrorLog,
+		'title' => 'PHP Error Log',
+		'toggle_id' => 'toggle-php-error-log',
+		'log_id' => 'php-error-log',
+		'php_include' => '/../utils/php_error_log.php',
+	],
+	'stats' => [
+		'enabled' => $displaySystemStats,
+		'title' => 'System Stats',
+		'php_include' => '/../utils/system_stats.php',
+	],
+];
 
-	<?php if ( $useAjaxForStats ): ?>
+if ( array_filter( array_column( $features, 'enabled' ) ) ): ?>
 
-		<?php if ( $displayApacheErrorLog ): ?>
-			<section id="apache-error-log-section" class="error-log-section" aria-labelledby="apache-error-log-title">
-				<h3 id="apache-error-log-title">
-					<button id="toggle-apache-error-log" aria-expanded="false" aria-controls="apache-error-log">
-						📝 Toggle Apache Error Log
-					</button>
-				</h3>
-				<pre id="apache-error-log" aria-live="polite" tabindex="0">
-                    <code>Loading...</code>
-                </pre>
+	<?php foreach ( $features as $key => $feature ):
+		if ( ! $feature['enabled'] ) continue;
+
+		if ( $useAjaxForStats ): ?>
+
+			<?php if ( $key === 'stats' ): ?>
+				<div id="system-monitor" class="system-monitor" role="region" aria-labelledby="system-monitor-title">
+					<h3 id="system-monitor-title">System Stats</h3>
+					<p>CPU Load: <span id="cpu-load" aria-live="polite">N/A</span></p>
+					<p>RAM Usage: <span id="memory-usage" aria-live="polite">N/A</span></p>
+					<p>Disk Space: <span id="disk-space" aria-live="polite">N/A</span></p>
+				</div>
+			<?php else: ?>
+				<section id="<?= htmlspecialchars( $feature['log_id'] . '-section' ) ?>" class="error-log-section" aria-labelledby="<?= htmlspecialchars( $feature['log_id'] . '-title' ) ?>">
+					<h3 id="<?= htmlspecialchars( $feature['log_id'] . '-title' ) ?>">
+						<button id="<?= htmlspecialchars( $feature['toggle_id'] ) ?>" aria-expanded="false" aria-controls="<?= htmlspecialchars( $feature['log_id'] ) ?>">
+							📝 Toggle <?= htmlspecialchars( $feature['title'] ) ?>
+						</button>
+					</h3>
+					<pre id="<?= htmlspecialchars( $feature['log_id'] ) ?>" aria-live="polite" tabindex="0">
+						<code>Loading...</code>
+					</pre>
+				</section>
+			<?php endif; ?>
+
+		<?php else: ?>
+			<section id="<?= $key === 'stats' ? 'system-monitor' : htmlspecialchars( $feature['log_id'] . '-section' ) ?>" class="<?= $key === 'stats' ? 'system-monitor' : 'error-log-section' ?>" role="region" aria-labelledby="<?= $key === 'stats' ? 'system-monitor-title' : htmlspecialchars( $feature['log_id'] . '-title' ) ?>">
+				<?php include __DIR__ . $feature['php_include']; ?>
 			</section>
-		<?php endif; ?>
-
-		<?php if ( $displayPhpErrorLog ): ?>
-			<section id="php-error-log-section" class="error-log-section" aria-labelledby="php-error-log-title">
-				<h3 id="php-error-log-title">
-					<button id="toggle-php-error-log" aria-expanded="false" aria-controls="php-error-log">
-						📝 Toggle PHP Error Log
-					</button>
-				</h3>
-				<pre id="php-error-log" aria-live="polite" tabindex="0">
-                    <code>Loading...</code>
-                </pre>
-			</section>
-		<?php endif; ?>
-
-		<?php if ( $displaySystemStats ): ?>
-			<div id="system-monitor" class="system-monitor" role="region" aria-labelledby="system-monitor-title">
-				<h3 id="system-monitor-title">System Stats</h3>
-				<p>CPU Load: <span id="cpu-load" aria-live="polite">N/A</span></p>
-				<p>RAM Usage: <span id="memory-usage" aria-live="polite">N/A</span></p>
-				<p>Disk Space: <span id="disk-space" aria-live="polite">N/A</span></p>
-			</div>
-		<?php endif; ?>
-
-	<?php else: ?>
-
-		<?php if ( $displayApacheErrorLog ): ?>
-			<section id="apache-error-log-section" class="error-log-section" aria-labelledby="apache-error-log-title">
-				<?php include __DIR__ . '/../utils/apache_error_log.php'; ?>
-			</section>
-		<?php endif; ?>
-
-		<?php if ( $displayPhpErrorLog ): ?>
-			<section id="php-error-log-section" class="error-log-section" aria-labelledby="php-error-log-title">
-				<?php include __DIR__ . '/../utils/php_error_log.php'; ?>
-			</section>
-		<?php endif; ?>
-
-		<?php if ( $displaySystemStats ): ?>
-			<section id="system-monitor" class="system-monitor" role="region" aria-labelledby="system-monitor-title">
-				<?php include __DIR__ . '/../utils/system_stats.php'; ?>
-			</section>
-		<?php endif; ?>
-
-	<?php endif; ?>
+		<?php endif;
+	endforeach; ?>
 
 <?php endif; ?>
