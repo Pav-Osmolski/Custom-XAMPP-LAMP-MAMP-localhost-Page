@@ -44,6 +44,7 @@ function getEncryptionKey() {
  * Encrypts a plaintext string using AES-256-CBC with IV and returns base64-encoded result.
  *
  * @param string $plaintext The value to encrypt
+ *
  * @return string Base64-encoded encrypted string
  */
 function encryptValue( $plaintext ) {
@@ -58,6 +59,7 @@ function encryptValue( $plaintext ) {
  * Decrypts a base64-encoded AES-256-CBC encrypted string.
  *
  * @param string $encoded The encrypted base64 string
+ *
  * @return string Decrypted plaintext, or empty string on failure
  */
 function decryptValue( $encoded ) {
@@ -77,6 +79,7 @@ function decryptValue( $encoded ) {
  *
  * @param string $const The constant name (e.g., 'DB_USER')
  * @param bool $allowFallback If true, returns the raw value on failure
+ *
  * @return string Decrypted value or fallback string
  */
 function getDecrypted( $const, $allowFallback = true ) {
@@ -102,6 +105,7 @@ function getDecrypted( $const, $allowFallback = true ) {
  * Safely executes a whitelisted shell command.
  *
  * @param string $cmd The shell command to execute
+ *
  * @return string|null Output of the command, or null if disallowed
  */
 function safe_shell_exec( $cmd ) {
@@ -125,6 +129,7 @@ function safe_shell_exec( $cmd ) {
 		'open',
 		'xdg-open',
 		'cmd',
+		'command',
 		'powershell',
 		'auto-make-cert',
 		'make-cert',
@@ -133,12 +138,9 @@ function safe_shell_exec( $cmd ) {
 
 	$cmd = rtrim( $cmd, "\r\n" );
 
-	// Extract the first part of the command
-	preg_match( '/(?:^|["\'])([a-zA-Z]:)?[^\\s"\']+/', $cmd, $matches );
-	$fullPath = $matches[0] ?? '';
-
-	// Normalise: get filename without extension
-	$binary = strtolower( pathinfo( $fullPath, PATHINFO_FILENAME ) );
+	// Extract the first word of the command
+	$parts  = preg_split( '/\s+/', $cmd );
+	$binary = strtolower( pathinfo( $parts[0], PATHINFO_FILENAME ) );
 
 	if ( in_array( $binary, $allowed, true ) ) {
 		$output = shell_exec( $cmd );
