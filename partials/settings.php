@@ -52,7 +52,7 @@
 /** @var string $defaultTooltipMessage */
 /** @var string $dbUser */
 /** @var string $dbPass */
-/** @var string $currentErrorLevel */
+/** @var string $currentPhpErrorLevel */
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
@@ -139,20 +139,20 @@ require_once __DIR__ . '/../config/config.php';
 
 		<?= renderTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) ?>
 		<label>Display Errors:
-			<input type="checkbox" name="displayErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
+			<input type="checkbox" name="displayPhpErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
 		</label>
 
 		<label>Error Reporting Level:
-			<select name="errorReportingLevel">
-				<option value="E_ALL" <?= $currentErrorLevel == E_ALL ? 'selected' : '' ?>>E_ALL</option>
-				<option value="E_ERROR" <?= $currentErrorLevel == E_ERROR ? 'selected' : '' ?>>E_ERROR</option>
-				<option value="E_WARNING" <?= $currentErrorLevel == E_WARNING ? 'selected' : '' ?>>E_WARNING</option>
-				<option value="E_NOTICE" <?= $currentErrorLevel == E_NOTICE ? 'selected' : '' ?>>E_NOTICE</option>
+			<select name="phpErrorLevel">
+				<option value="E_ALL" <?= $currentPhpErrorLevel == E_ALL ? 'selected' : '' ?>>E_ALL</option>
+				<option value="E_ERROR" <?= $currentPhpErrorLevel == E_ERROR ? 'selected' : '' ?>>E_ERROR</option>
+				<option value="E_WARNING" <?= $currentPhpErrorLevel == E_WARNING ? 'selected' : '' ?>>E_WARNING</option>
+				<option value="E_NOTICE" <?= $currentPhpErrorLevel == E_NOTICE ? 'selected' : '' ?>>E_NOTICE</option>
 			</select>
 		</label>
 
 		<label>Log Errors:
-			<input type="checkbox" name="logErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
+			<input type="checkbox" name="logPhpErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
 		</label><br>
 
 		<button type="submit">Save Settings</button>
@@ -197,7 +197,8 @@ require_once __DIR__ . '/../config/config.php';
 			<button id="restart-apache-button">Restart Apache</button>
 			<div id="apache-status-message" role="status" aria-live="polite"></div>
 		<?php else: ?>
-			<p>Apache control unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p><br>
+			<p>Apache control
+				unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p><br>
 			<button disabled id="restart-apache-button">Restart Apache</button>
 		<?php endif; ?>
 	</div>

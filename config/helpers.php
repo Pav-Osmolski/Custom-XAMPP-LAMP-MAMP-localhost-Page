@@ -16,6 +16,121 @@
  */
 
 /**
+ * Defines a path-related constant if not already defined, with normalisation.
+ *
+ * Converts slashes to the appropriate OS directory separator and trims
+ * trailing separators before defining the constant. Prevents redefinition
+ * if the constant is already set.
+ *
+ * @param string $name The name of the constant to define
+ * @param string $default The default path value to normalise and use
+ *
+ * @return void
+ */
+function define_path_constant( $name, $default ) {
+	if ( ! defined( $name ) ) {
+		$normalised = rtrim( str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $default ), DIRECTORY_SEPARATOR );
+		define( $name, $normalised );
+	}
+}
+
+/**
+ * Returns a PHP define() statement with an encrypted and escaped value.
+ *
+ * The value is encrypted using encryptValue() and properly escaped for safe
+ * inclusion in generated PHP config files.
+ *
+ * @param string $name The constant name
+ * @param string $value The raw value to encrypt and define
+ *
+ * @return string PHP define() code snippet
+ */
+function defineEncrypted( $name, $value ) {
+	return "define('$name', '" . addslashes( encryptValue( $value ) ) . "');\n";
+}
+
+/**
+ * Normalises a filesystem path to use the current OS directory separator
+ * and removes any trailing slashes.
+ *
+ * Converts forward/backward slashes to DIRECTORY_SEPARATOR and ensures
+ * the path has no trailing slash.
+ *
+ * @param string $path The raw user-provided path
+ *
+ * @return string The cleaned and normalised path
+ */
+function normalise_path( $path ) {
+	$path = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $path );
+
+	return rtrim( $path, DIRECTORY_SEPARATOR );
+}
+
+/**
+ * Encodes a value as a JSON string and verifies the result is valid.
+ *
+ * Encodes arrays or objects into JSON using `JSON_UNESCAPED_SLASHES` and `JSON_PRETTY_PRINT`
+ * by default. Logs an error and returns null if encoding fails.
+ *
+ * @param mixed $data The data to encode (usually array or object)
+ * @param int $options Optional JSON encoding options
+ *
+ * @return string|null JSON string on success, or null if encoding failed
+ */
+function safe_json_encode( $data, int $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ): ?string {
+	$json = json_encode( $data, $options );
+
+	if ( json_last_error() !== JSON_ERROR_NONE ) {
+		error_log( 'JSON encode error: ' . json_last_error_msg() );
+
+		return null;
+	}
+
+	return $json;
+}
+
+/**
+ * Decodes a JSON string and verifies the result is valid.
+ *
+ * @param string $json The JSON string to decode
+ *
+ * @return array|null Returns associative array on success, or null if invalid
+ */
+function safe_json_decode( string $json ): ?array {
+	$data = json_decode( $json, true );
+
+	if ( json_last_error() !== JSON_ERROR_NONE ) {
+		error_log( 'JSON decode error: ' . json_last_error_msg() );
+
+		return null;
+	}
+
+	return $data;
+}
+
+/**
+ * Validates and writes user-provided JSON to a file safely.
+ *
+ * Decodes the input string using `safe_json_decode()`, then re-encodes it using
+ * `safe_json_encode()` before writing to the specified file. Logs are generated
+ * on failure, and nothing is written if validation fails.
+ *
+ * @param string $path Absolute file path to write to
+ * @param string $rawJson Raw JSON string to validate and write
+ *
+ * @return void
+ */
+function write_valid_json( string $path, string $rawJson ): void {
+	$array = safe_json_decode( $rawJson );
+	if ( $array !== null ) {
+		$json = safe_json_encode( $array );
+		if ( $json !== null ) {
+			file_put_contents( $path, $json );
+		}
+	}
+}
+
+/**
  * Detect legacy OS flags.
  *
  * @return array<string, bool>
@@ -55,11 +170,11 @@ function resolveCurrentUser(): string {
  * theme, system stats visibility, and availability of Apache/PHP log viewers.
  *
  * @param string $theme
- * @param bool   $displayClock
- * @param bool   $displaySearch
- * @param bool   $displaySystemStats
- * @param bool   $displayApacheErrorLog
- * @param bool   $displayPhpErrorLog
+ * @param bool $displayClock
+ * @param bool $displaySearch
+ * @param bool $displaySystemStats
+ * @param bool $displayApacheErrorLog
+ * @param bool $displayPhpErrorLog
  *
  * @return string
  */

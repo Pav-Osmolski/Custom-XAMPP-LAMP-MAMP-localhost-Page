@@ -28,24 +28,23 @@
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
-
-function defineEncrypted( $name, $value ) {
-	return "define('$name', '" . addslashes( encryptValue( $value ) ) . "');\n";
-}
-
-function normalise_path( $path ) {
-	$path = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $path );
-
-	return rtrim( $path, DIRECTORY_SEPARATOR );
-}
+require_once __DIR__ . '/../config/helpers.php';
 
 // Handle form submission
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
-	$level          = $_POST['errorReportingLevel'] ?? 'E_ALL';
-	$theme          = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
-	$apacheFastMode = isset( $_POST['apacheFastMode'] ) ? 'true' : 'false';
-	$mysqlFastMode  = isset( $_POST['mysqlFastMode'] ) ? 'true' : 'false';
+	$theme                 = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
+	$apacheFastMode        = isset( $_POST['apacheFastMode'] ) ? 'true' : 'false';
+	$mysqlFastMode         = isset( $_POST['mysqlFastMode'] ) ? 'true' : 'false';
+	$displayClock          = isset( $_POST['displayClock'] ) ? 'true' : 'false';
+	$displaySearch         = isset( $_POST['displaySearch'] ) ? 'true' : 'false';
+	$displaySystemStats    = isset( $_POST['displaySystemStats'] ) ? 'true' : 'false';
+	$displayApacheErrorLog = isset( $_POST['displayApacheErrorLog'] ) ? 'true' : 'false';
+	$displayPhpErrorLog    = isset( $_POST['displayPhpErrorLog'] ) ? 'true' : 'false';
+	$useAjaxForStats       = isset( $_POST['useAjaxForStats'] ) ? 'true' : 'false';
+	$displayPhpErrors      = isset( $_POST['displayPhpErrors'] ) ? '1' : '0';
+	$phpErrorLevel         = $_POST['phpErrorLevel'] ?? 'E_ALL';
+	$logPhpErrors          = isset( $_POST['logPhpErrors'] ) ? '1' : '0';
 
 	$user_config = "<?php\n";
 
@@ -65,40 +64,22 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	// Feature flags
 	$user_config .= "\$theme = '$theme';\n";
-	$user_config .= "\$displayClock = " . ( isset( $_POST['displayClock'] ) ? 'true' : 'false' ) . ";\n";
-	$user_config .= "\$displaySearch = " . ( isset( $_POST['displaySearch'] ) ? 'true' : 'false' ) . ";\n";
-	$user_config .= "\$displaySystemStats = " . ( isset( $_POST['displaySystemStats'] ) ? 'true' : 'false' ) . ";\n";
-	$user_config .= "\$displayApacheErrorLog = " . ( isset( $_POST['displayApacheErrorLog'] ) ? 'true' : 'false' ) . ";\n";
-	$user_config .= "\$displayPhpErrorLog = " . ( isset( $_POST['displayPhpErrorLog'] ) ? 'true' : 'false' ) . ";\n";
-	$user_config .= "\$useAjaxForStats = " . ( isset( $_POST['useAjaxForStats'] ) ? 'true' : 'false' ) . ";\n";
+	$user_config .= "\$displayClock = {$displayClock};\n";
+	$user_config .= "\$displaySearch = {$displaySearch};\n";
+	$user_config .= "\$displaySystemStats = {$displaySystemStats};\n";
+	$user_config .= "\$displayApacheErrorLog = {$displayApacheErrorLog};\n";
+	$user_config .= "\$displayPhpErrorLog = {$displayPhpErrorLog};\n";
+	$user_config .= "\$useAjaxForStats = {$useAjaxForStats};\n";
 
 	// PHP error handling
-	$user_config .= "ini_set('display_errors', " . ( isset( $_POST['displayErrors'] ) ? '1' : '0' ) . ");\n";
-	$user_config .= "error_reporting($level);\n";
-	$user_config .= "ini_set('log_errors', " . ( isset( $_POST['logErrors'] ) ? '1' : '0' ) . ");\n";
+	$user_config .= "ini_set('display_errors', {$displayPhpErrors});\n";
+	$user_config .= "error_reporting($phpErrorLevel);\n";
+	$user_config .= "ini_set('log_errors', {$logPhpErrors});\n";
 
-	// Save folders
-	if ( ! empty( $_POST['folders_json'] ) ) {
-		$foldersPath  = __DIR__ . '/../config/folders.json';
-		$foldersArray = json_decode( $_POST['folders_json'], true );
-		if ( json_last_error() === JSON_ERROR_NONE ) {
-			file_put_contents( $foldersPath, json_encode( $foldersArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
-		}
-	}
-
-	// Save link templates
-	if ( ! empty( $_POST['link_templates'] ) ) {
-		$linkTemplatesPath  = __DIR__ . '/../config/link_templates.json';
-		$linkTemplatesArray = json_decode( $_POST['link_templates'], true );
-		file_put_contents( $linkTemplatesPath, json_encode( $linkTemplatesArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
-	}
-
-	// Save dock
-	if ( ! empty( $_POST['dock_json'] ) ) {
-		$dockPath  = __DIR__ . '/../config/dock.json';
-		$dockArray = json_decode( $_POST['dock_json'], true );
-		file_put_contents( $dockPath, json_encode( $dockArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
-	}
+	// Save folders, link_templates and dock json configuration
+	write_valid_json( __DIR__ . '/../config/folders.json', $_POST['folders_json'] ?? '' );
+	write_valid_json( __DIR__ . '/../config/link_templates.json', $_POST['link_templates'] ?? '' );
+	write_valid_json( __DIR__ . '/../config/dock.json', $_POST['dock_json'] ?? '' );
 
 	file_put_contents( __DIR__ . '/../config/user_config.php', $user_config );
 
@@ -119,8 +100,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 		$ini_content = file_get_contents( $php_ini_path );
 
-		$display_errors_value  = isset( $_POST['displayErrors'] ) ? 'On' : 'Off';
-		$error_reporting_value = $_POST['errorReportingLevel'] ?? 'E_ALL';
+		$display_errors_value  = isset( $_POST['displayPhpErrors'] ) ? 'On' : 'Off';
+		$error_reporting_value = $_POST['phpErrorLevel'] ?? 'E_ALL';
 
 		// Patch display_errors
 		if ( preg_match( '/^\s*display_errors\s*=.*/mi', $ini_content ) ) {

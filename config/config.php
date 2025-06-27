@@ -26,7 +26,7 @@
  * - UI: `$theme`, `$currentTheme`, `$bodyClasses`, `$tooltips`, `$defaultTooltipMessage`
  * - Toggles: `$displayClock`, `$displaySearch`, `$displaySystemStats`, `$displayApacheErrorLog`, `$displayPhpErrorLog`, `$useAjaxForStats`
  * - Themes: `$themeOptions`, `$themeTypes`
- * - Misc: `$user`, `$currentErrorLevel`
+ * - Misc: `$user`, `$currentPhpErrorLevel`
  *
  * Depends On:
  * - `security.php` for access control
@@ -43,14 +43,6 @@ require_once __DIR__ . '/helpers.php';
 // Load user-specific overrides first
 if ( file_exists( __DIR__ . '/user_config.php' ) ) {
 	require_once __DIR__ . '/user_config.php';
-}
-
-// Helper: define only if not already defined, with path normalisation
-function define_path_constant( $name, $default ) {
-	if ( ! defined( $name ) ) {
-		$normalised = rtrim( str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $default ), DIRECTORY_SEPARATOR );
-		define( $name, $normalised );
-	}
 }
 
 // DB settings with guards
@@ -101,7 +93,7 @@ $dbUser = getDecrypted( 'DB_USER' );
 $dbPass = getDecrypted( 'DB_PASSWORD' );
 
 // Get current PHP Error Level
-$currentErrorLevel = ini_get( 'error_reporting' );
+$currentPhpErrorLevel = ini_get( 'error_reporting' );
 
 // Finalise computed environment values using helper functions
 $user = resolveCurrentUser();
