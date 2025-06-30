@@ -1,5 +1,18 @@
 <?php
-// Debug helper
+/**
+ * Logs a command string to a debug log file for diagnostic purposes.
+ *
+ * This function writes a timestamped entry to `logs/localhost-page.log`,
+ * containing the raw command, a JSON-encoded version to reveal invisible characters,
+ * the command length, and optional context information.
+ *
+ * If the logs directory does not exist, it is created automatically.
+ *
+ * @param string $command The raw command string to be logged.
+ * @param string $context Optional context label for grouping or identifying the log entry (e.g. 'cert-gen', 'apache-restart').
+ *
+ * @return void
+ */
 function log_command( $command, $context = '' ) {
 	$logDir  = __DIR__ . '/../logs';
 	$logFile = $logDir . '/localhost-page.log';
