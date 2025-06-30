@@ -7,7 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 module.exports = {
   entry: './assets/js/main.js',
   output: {
-    filename: 'js/script.min.js',
+    filename: path.posix.join('js', 'script.min.js'),
     path: path.resolve(__dirname, 'dist'),
     clean: true
   },
@@ -39,6 +39,9 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
+          options: {
+            cacheDirectory: true
+          }
         },
       },
     ],
