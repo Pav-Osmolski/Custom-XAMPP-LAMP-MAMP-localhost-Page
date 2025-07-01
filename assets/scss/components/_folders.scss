@@ -73,7 +73,7 @@
 	flex: 1;
 	background-color: var(--header-background-color);
 	padding: 16px 13px;
-	border-radius: 8px;
+	border-radius: 10px;
 
 	.drag-handle {
 		position: absolute;
@@ -132,7 +132,7 @@
 #folders-config {
 	background: var(--header-background-color);
 	padding: 1rem;
-	border-radius: 1rem;
+	border-radius: 10px;
 
 	.folder-config-item {
 		display: grid;
