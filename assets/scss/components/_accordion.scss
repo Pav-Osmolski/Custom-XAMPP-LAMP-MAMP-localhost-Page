@@ -1,0 +1,61 @@
+/* Accordion Toggle */
+.toggle-content-container {
+    background: var(--header-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+
+    &.open {
+        .toggle-accordion > svg {
+            transform: rotate(-180deg);
+        }
+    }
+
+    &.open, &:hover {
+        background: var(--background-color);
+    }
+
+    .toggle-accordion {
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 48px;
+        padding: 10px 0;
+        margin-right: 30px;
+        cursor: pointer;
+        user-select: none;
+
+        h3 {
+            transition: color 0.3s;
+        }
+
+        > svg {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: 0;
+            right: -45px;
+            padding: 5px;
+            z-index: 1;
+            transition: transform 0.3s ease, fill 0.3s;
+        }
+
+        &:hover {
+            h3 {
+                color: var(--hover-color);
+            }
+
+            > svg {
+                fill: var(--hover-color);
+            }
+        }
+    }
+
+    .toggle-content {
+        height: 0px;
+        overflow: hidden;
+        transition: height 0.3s ease;
+    }
+}

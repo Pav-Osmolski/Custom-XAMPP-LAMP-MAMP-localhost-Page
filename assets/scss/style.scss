@@ -4,6 +4,8 @@
 @use 'base/reset';
 @use 'base/fonts';
 @use 'base/root';
+@use 'base/background';
+@use 'base/scrollbar';
 
 /* =====================
    🎨 Themes
@@ -23,10 +25,12 @@
 /* =====================
    🧩 Components
    ===================== */
+@use 'components/accordion';
 @use 'components/apache';
 @use 'components/dock';
 @use 'components/folders';
 @use 'components/forms';
+@use 'components/loader';
 @use 'components/system';
 @use 'components/tooltip';
 @use 'components/vhosts';

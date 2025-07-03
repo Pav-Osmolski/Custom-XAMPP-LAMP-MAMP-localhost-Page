@@ -1,4 +1,67 @@
 // assets/js/modules/view.js
+export function initToggleAccordion() {
+	// Helper: force layout reflow to ensure transitions behave correctly (especially in Firefox)
+	function forceReflow( element ) {
+		void element.offsetHeight;
+	}
+
+	document.addEventListener( 'DOMContentLoaded', () => {
+		document.querySelectorAll( '.toggle-content-container' ).forEach( ( container, index ) => {
+			const toggle = container.querySelector( '.toggle-accordion' );
+			const content = container.querySelector( '.toggle-content' );
+			if ( !toggle || !content ) return;
+
+			const collapsedHeight = parseInt( content.dataset.collapsedHeight ) || 0;
+			const accordionId = container.dataset.id || 'accordion-' + index;
+
+			// Restore state from localStorage
+			const savedState = localStorage.getItem( 'accordion_' + accordionId );
+			if ( savedState === 'open' ) {
+				container.classList.add( 'open' );
+				content.style.height = content.scrollHeight + 'px';
+				requestAnimationFrame( () => {
+					content.style.height = 'auto';
+				} );
+			} else {
+				container.classList.remove( 'open' );
+				content.style.height = collapsedHeight + 'px';
+			}
+
+			// Toggle click
+			toggle.addEventListener( 'click', ( event ) => {
+				event.stopPropagation();
+
+				const isOpen = container.classList.toggle( 'open' );
+				localStorage.setItem( 'accordion_' + accordionId, isOpen ? 'open' : 'closed' );
+
+				if ( isOpen ) {
+					content.style.height = content.scrollHeight + 'px';
+					const onTransitionEnd = () => {
+						content.style.height = 'auto';
+						content.removeEventListener( 'transitionend', onTransitionEnd );
+					};
+					content.addEventListener( 'transitionend', onTransitionEnd );
+				} else {
+					content.style.height = content.scrollHeight + 'px';
+					forceReflow( content ); // Ensure Firefox animates the collapse properly
+					requestAnimationFrame( () => {
+						content.style.height = collapsedHeight + 'px';
+					} );
+				}
+			} );
+		} );
+
+		// Recalculate heights on window resize
+		window.addEventListener( 'resize', () => {
+			document.querySelectorAll( '.toggle-content-container.open .toggle-content' ).forEach( ( content ) => {
+				if ( content.style.height !== 'auto' ) {
+					content.style.height = content.scrollHeight + 'px';
+				}
+			} );
+		} );
+	} );
+}
+
 export function initViewToggles() {
 	document.addEventListener( 'DOMContentLoaded', () => {
 		const views = {

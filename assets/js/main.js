@@ -13,6 +13,7 @@ import {initClearStorageButton} from './modules/settings.js';
 import {initSystemMonitoring} from './modules/system.js';
 import {initThemeSwitcher} from './modules/theme.js';
 import {setupVhostCertButtons} from './modules/vhosts.js';
+import {initToggleAccordion} from './modules/view.js';
 import {initViewToggles} from './modules/view.js';
 
 // Initialise on page load
@@ -28,4 +29,5 @@ initClearStorageButton();
 initSystemMonitoring();
 initThemeSwitcher();
 setupVhostCertButtons();
+initToggleAccordion();
 initViewToggles();

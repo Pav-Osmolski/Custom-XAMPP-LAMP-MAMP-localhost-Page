@@ -1,6 +1,6 @@
 {
   "name": "pav-localhost",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A modular Webpack setup for compiling SCSS, bundling and minifying JavaScript, and powering a dynamic custom localhost homepage",
   "scripts": {
     "build": "webpack --mode production",

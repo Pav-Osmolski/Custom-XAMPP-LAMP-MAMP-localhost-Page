@@ -2,7 +2,11 @@
 #settings-view {
 	h3 {
 		position: relative;
-		margin: 10px 0 10px;
+		display: -webkit-inline-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	form > p {
@@ -14,10 +18,19 @@
 	position: relative;
 }
 
+.user-settings {
+	margin-top: 5px;
+}
+
 .ui-features {
 	display: flex;
 	max-width: 450px;
 	flex-wrap: wrap;
 	flex-direction: row;
 	gap: 0 30px;
+	margin-top: 5px;
+}
+
+#link-templates-list {
+	padding: 0 .5rem;
 }

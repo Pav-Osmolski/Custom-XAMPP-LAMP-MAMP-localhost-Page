@@ -24,7 +24,11 @@ require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 ?>
 <div id="vhosts-manager">
-	<?= renderTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h2', 'Virtual Hosts Manager' ) ?>
+	<?php if ( empty( $settingsView ) ): ?>
+		<div class="heading">
+			<?= renderTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h2', 'Virtual Hosts Manager' ) ?>
+		</div>
+	<?php endif; ?>
 	<?php
 	$vhostsPath   = APACHE_PATH . '/conf/extra/httpd-vhosts.conf';
 	$crtPath      = APACHE_PATH . '/crt/';

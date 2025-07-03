@@ -1,5 +1,6 @@
 /* Tooltip */
 .tooltip-icon {
+	display: flex;
 	cursor: help;
 	margin-left: 6px;
 
@@ -30,5 +31,13 @@
 
 	&:hover::after, &:focus::after {
 		opacity: 1;
+	}
+}
+
+.heading {
+	.tooltip-icon {
+		&::after {
+			bottom: 90%;
+		}
 	}
 }
