@@ -5,6 +5,11 @@ export function initToggleAccordion() {
 		void element.offsetHeight;
 	}
 
+	// Helper: check if the click happened inside a given selector
+	function isClickInside( event, selector ) {
+		return !!event.target.closest( selector );
+	}
+
 	document.addEventListener( 'DOMContentLoaded', () => {
 		document.querySelectorAll( '.toggle-content-container' ).forEach( ( container, index ) => {
 			const toggle = container.querySelector( '.toggle-accordion' );
@@ -30,6 +35,11 @@ export function initToggleAccordion() {
 			// Toggle click
 			toggle.addEventListener( 'click', ( event ) => {
 				event.stopPropagation();
+
+				// Prevent toggling if clicking inside .tooltip-icon
+				if ( isClickInside( event, '.tooltip-icon' ) ) {
+					return;
+				}
 
 				const isOpen = container.classList.toggle( 'open' );
 				localStorage.setItem( 'accordion_' + accordionId, isOpen ? 'open' : 'closed' );
