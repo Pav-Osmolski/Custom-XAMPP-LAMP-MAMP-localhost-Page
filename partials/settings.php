@@ -15,7 +15,7 @@
  * - Resetting saved UI settings from localStorage
  *
  * Accessibility & UX Enhancements:
- * - Tooltips provided via `renderTooltip()` using keys from `$tooltips` with fallback support
+ * - Tooltips provided via `renderHeadingTooltip()` using keys from `$tooltips` with fallback support
  * - Dynamic theme metadata (`$themeTypes`, `$themeOptions`) injected into JS context
  *
  * Dependencies:
@@ -66,14 +66,14 @@ require_once __DIR__ . '/../config/config.php';
 <div id="settings-view">
 	<!-- User Settings -->
 	<div class="heading">
-		<?= renderTooltip( 'user_config', $tooltips, $defaultTooltipMessage, 'h2', 'User Configuration' ) ?>
+		<?= renderHeadingTooltip( 'user_config', $tooltips, $defaultTooltipMessage, 'h2', 'User Configuration' ) ?>
 	</div>
 
 	<form method="post">
 		<div class="toggle-content-container" data-id="user-settings">
 			<div class="toggle-accordion">
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
-				<?= renderTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h3', 'Database & Paths' ) ?>
+				<?= renderHeadingTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h3', 'Database & Paths' ) ?>
 			</div>
 			<div class="toggle-content">
 				<div class="user-settings">
@@ -110,6 +110,11 @@ require_once __DIR__ . '/../config/config.php';
 					</label><br>
 
 					<button type="submit">Save Settings</button>
+					<div class="background-logos">
+						<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/Apache.svg', 'Apache2' ); ?>
+						<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/MariaDB.svg', 'MariaDB1' ); ?>
+						<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/PHP.svg', 'PHP2' ); ?>
+					</div>
 					<br><br>
 				</div>
 			</div>
@@ -120,7 +125,7 @@ require_once __DIR__ . '/../config/config.php';
 		<div class="toggle-content-container" data-id="user-interface">
 			<div class="toggle-accordion">
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
-				<?= renderTooltip( 'user_interface', $tooltips, $defaultTooltipMessage, 'h3', 'User Interface' ) ?>
+				<?= renderHeadingTooltip( 'user_interface', $tooltips, $defaultTooltipMessage, 'h3', 'User Interface' ) ?>
 			</div>
 			<div class="toggle-content">
 				<div class="ui-features">
@@ -169,7 +174,7 @@ require_once __DIR__ . '/../config/config.php';
 		<div class="toggle-content-container" data-id="php-error">
 			<div class="toggle-accordion">
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
-				<?= renderTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) ?>
+				<?= renderHeadingTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) ?>
 			</div>
 			<div class="toggle-content">
 				<label>Display Errors:
@@ -203,7 +208,7 @@ require_once __DIR__ . '/../config/config.php';
 		<div class="toggle-content-container" data-id="folders-config">
 			<div class="toggle-accordion">
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
-				<?= renderTooltip( 'folders', $tooltips, $defaultTooltipMessage, 'h3', 'Folders Configuration' ) ?>
+				<?= renderHeadingTooltip( 'folders', $tooltips, $defaultTooltipMessage, 'h3', 'Folders Configuration' ) ?>
 			</div>
 			<div class="toggle-content">
 				<div id="folders-config">
@@ -221,7 +226,7 @@ require_once __DIR__ . '/../config/config.php';
 
 		<div class="toggle-content-container" data-id="link-templates-config">
 			<div class="toggle-accordion">
-				<?= renderTooltip( 'link_templates', $tooltips, $defaultTooltipMessage, 'h3', 'Folder Link Templates' ) ?>
+				<?= renderHeadingTooltip( 'link_templates', $tooltips, $defaultTooltipMessage, 'h3', 'Folder Link Templates' ) ?>
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
@@ -242,7 +247,7 @@ require_once __DIR__ . '/../config/config.php';
 		<div class="toggle-content-container" data-id="dock-config">
 			<div class="toggle-accordion">
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
-				<?= renderTooltip( 'dock', $tooltips, $defaultTooltipMessage, 'h3', 'Dock Configuration' ) ?>
+				<?= renderHeadingTooltip( 'dock', $tooltips, $defaultTooltipMessage, 'h3', 'Dock Configuration' ) ?>
 			</div>
 			<div class="toggle-content">
 				<div id="dock-config-editor">
@@ -264,7 +269,7 @@ require_once __DIR__ . '/../config/config.php';
 	<div class="toggle-content-container" data-id="vhosts-manager">
 		<div class="toggle-accordion">
 			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
-			<?= renderTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) ?>
+			<?= renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) ?>
 		</div>
 		<div class="toggle-content">
 			<?php require_once __DIR__ . '/../partials/vhosts.php'; ?>
@@ -276,7 +281,7 @@ require_once __DIR__ . '/../config/config.php';
 	<!-- Apache Control -->
 	<div class="apache-control">
 		<div class="heading">
-			<?= renderTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Control' ) ?>
+			<?= renderHeadingTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Control' ) ?>
 		</div>
 		<?php if ( $apacheToggle && $apachePathValid ): ?>
 			<button id="restart-apache-button">Restart Apache</button>
@@ -290,7 +295,7 @@ require_once __DIR__ . '/../config/config.php';
 
 	<div id="clear-settings-wrapper">
 		<div class="heading">
-			<?= renderTooltip( 'clear_storage', $tooltips, $defaultTooltipMessage, 'h2', 'Reset Settings' ) ?>
+			<?= renderHeadingTooltip( 'clear_storage', $tooltips, $defaultTooltipMessage, 'h2', 'Reset Settings' ) ?>
 		</div>
 		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
 	</div>

@@ -26,7 +26,7 @@ require_once __DIR__ . '/../config/config.php';
 <div id="vhosts-manager">
 	<?php if ( empty( $settingsView ) ): ?>
 		<div class="heading">
-			<?= renderTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h2', 'Virtual Hosts Manager' ) ?>
+			<?= renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h2', 'Virtual Hosts Manager' ) ?>
 		</div>
 	<?php endif; ?>
 	<?php

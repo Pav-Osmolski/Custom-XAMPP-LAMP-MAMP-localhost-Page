@@ -305,7 +305,7 @@ function getTooltip( string $key, array $tooltips, string $default ): string {
  *
  * @return string HTML output
  */
-function renderTooltip( string $key, array $tooltips, string $defaultTooltipMessage, string $headingTag = 'h3', string $label = '', bool $tooltipOnly = false, bool $headingOnly = false ): string {
+function renderHeadingTooltip( string $key, array $tooltips, string $defaultTooltipMessage, string $headingTag = 'h3', string $label = '', bool $tooltipOnly = false, bool $headingOnly = false ): string {
 	$desc  = getTooltip( $key, $tooltips, $defaultTooltipMessage );
 	$title = $label ?: ucwords( str_replace( '_', ' ', $key ) );
 	ob_start();
@@ -328,6 +328,37 @@ function renderTooltip( string $key, array $tooltips, string $defaultTooltipMess
 	}
 
 	return ob_get_clean();
+}
+
+/**
+ * Injects an SVG with unique IDs by auto-prefixing them.
+ *
+ * @param string $svgPath Path to the SVG file.
+ * @param string $prefix Unique prefix to prevent ID clashes (e.g., 'icon1').
+ * @return string SVG content with updated IDs.
+ */
+function injectSvgWithUniqueIds( string $svgPath, string $prefix ): string {
+	$svg = file_get_contents( $svgPath );
+	if ( $svg === false ) {
+		return ''; // Failed to load SVG
+	}
+
+	// Match IDs in the defs (e.g. id="a")
+	preg_match_all( '/id="([^"]+)"/', $svg, $matches );
+	if ( empty( $matches[1] ) ) {
+		return $svg; // No IDs to replace
+	}
+
+	foreach ( $matches[1] as $originalId ) {
+		$newId = $prefix . '-' . $originalId;
+		// Replace ID declaration
+		$svg = preg_replace( '/id="' . preg_quote( $originalId, '/' ) . '"/', 'id="' . $newId . '"', $svg );
+		// Replace ID references (url(#...))
+		$svg = preg_replace( '/url\(#' . preg_quote( $originalId, '/' ) . '\)/', 'url(#' . $newId . ')', $svg );
+		// Optional: Also replace hrefs or other attribute references if needed
+	}
+
+	return $svg;
 }
 
 /**
