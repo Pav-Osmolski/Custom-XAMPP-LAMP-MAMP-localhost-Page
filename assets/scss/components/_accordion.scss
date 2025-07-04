@@ -18,13 +18,13 @@
     }
 
     .toggle-accordion {
-        position: relative;
-        display: flex;
         align-items: center;
-        height: 48px;
-        padding: 10px 0;
-        margin-right: 30px;
         cursor: pointer;
+        display: flex;
+        height: 48px;
+        margin: 0 -16px;
+        padding: 10px 45px 10px 15px;
+        position: relative;
         user-select: none;
 
         h3 {
@@ -36,7 +36,7 @@
             width: 48px;
             height: 48px;
             top: 0;
-            right: -45px;
+            right: 0;
             padding: 5px;
             z-index: 1;
             transition: transform 0.3s ease, fill 0.3s;
