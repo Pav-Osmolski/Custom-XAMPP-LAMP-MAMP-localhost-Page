@@ -1,6 +1,6 @@
 # 👨🏻‍💻 Custom XAMPP/LAMP/MAMP Localhost Index Page
 
-![PHP Version](https://img.shields.io/badge/PHP-5.4+-blue)
+![PHP Version](https://img.shields.io/badge/PHP-7.1+-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Webpack](https://img.shields.io/badge/Bundler-Webpack-orange)
@@ -10,7 +10,7 @@
 
 An informative and fully modular custom local homepage for xAMP stacks (Apache, MySQL, PHP). This locahost index page showcases your projects, displays system stats, and provides admin tools — all now powered by a modern Webpack build process. Technically this can be adapted to suit any local Apache PHP development environment.
 
-✅ Requires **PHP 5.4+**  
+✅ Requires **PHP 7.1+**  
 ✅ Works on **Windows, macOS, and Linux**  
 ✅ Built with **Webpack, Babel, Sass, and module-based JS**
 
@@ -116,10 +116,10 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 |--------------------------|-------------|
 | `dock.php`               | Renders the customizable macOS-style dock. |
 | `folders.php`            | Dynamically scans and lists local project folders. |
-| `footer.php`             | The shared footer, includes theme toggle and settings link. |
-| `header.php`             | Shared `<head>` setup, includes all essential meta and scripts. |
+| `footer.php`             | Displays the page footer with navigation links and a humorous quote. |
+| `header.php`             | Shared header banner with greeting, search bar, clock, and server info. |
 | `info.php`               | Displays system information like PHP, Apache, and MySQL versions. |
-| `settings.php`           | The settings interface for configuring paths, dock, and logs. |
+| `settings.php`           | The settings interface for configuring paths, theme, folders, dock, and logs. |
 | `submit.php`             | Handles the saving of user-configured settings. |
 | `vhosts.php`             | Lists and validates Apache virtual hosts, including SSL and hosts file checks. |
 

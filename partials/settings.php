@@ -72,8 +72,8 @@ require_once __DIR__ . '/../config/config.php';
 	<form method="post">
 		<div class="toggle-content-container" data-id="user-settings">
 			<div class="toggle-accordion">
-				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 				<?= renderHeadingTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h3', 'Database & Paths' ) ?>
+				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
 				<div class="user-settings">
@@ -120,12 +120,12 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<div class="separator-line" aria-hidden="true"></div>
+		<?= renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="user-interface">
 			<div class="toggle-accordion">
-				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 				<?= renderHeadingTooltip( 'user_interface', $tooltips, $defaultTooltipMessage, 'h3', 'User Interface' ) ?>
+				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
 				<div class="ui-features">
@@ -169,13 +169,13 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<div class="separator-line" aria-hidden="true"></div>
+		<?= renderSeparatorLine() ?>
 
-		<div class="toggle-content-container<?= ! $phpPathValid ? ' disabled' : null ?>" data-id="php-error">
+		<div class="toggle-content-container<?= ! $phpPathValid ? ' disabled' : '' ?>" data-id="php-error">
 			<div class="toggle-accordion">
-				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 				<?= renderHeadingTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) ?>
-				<?= $phpPathValid ? null : '&nbsp;❕' ?>
+				<?= $phpPathValid ? '' : '&nbsp;❕' ?>
+				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
 				<?php if ( ! $phpPathValid ): ?>
@@ -186,15 +186,18 @@ require_once __DIR__ . '/../config/config.php';
 				</label>
 
 				<label>Error Reporting Level:
+					<?php
+						$phpErrorLevels = [
+							E_ALL     => 'E_ALL',
+							E_ERROR   => 'E_ERROR',
+							E_WARNING => 'E_WARNING',
+							E_NOTICE  => 'E_NOTICE'
+						];
+					?>
 					<select name="phpErrorLevel">
-						<option value="E_ALL" <?= $currentPhpErrorLevel == E_ALL ? 'selected' : '' ?>>E_ALL</option>
-						<option value="E_ERROR" <?= $currentPhpErrorLevel == E_ERROR ? 'selected' : '' ?>>E_ERROR
-						</option>
-						<option value="E_WARNING" <?= $currentPhpErrorLevel == E_WARNING ? 'selected' : '' ?>>
-							E_WARNING
-						</option>
-						<option value="E_NOTICE" <?= $currentPhpErrorLevel == E_NOTICE ? 'selected' : '' ?>>E_NOTICE
-						</option>
+						<?php foreach ( $phpErrorLevels as $value => $label ) : ?>
+							<option value="<?= $label ?>" <?= $currentPhpErrorLevel == $value ? 'selected' : '' ?>><?= $label ?></option>
+						<?php endforeach; ?>
 					</select>
 				</label>
 
@@ -207,12 +210,12 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<div class="separator-line" aria-hidden="true"></div>
+		<?= renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="folders-config">
 			<div class="toggle-accordion">
-				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 				<?= renderHeadingTooltip( 'folders', $tooltips, $defaultTooltipMessage, 'h3', 'Folders Configuration' ) ?>
+				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
 				<div id="folders-config">
@@ -226,7 +229,7 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<div class="separator-line" aria-hidden="true"></div>
+		<?= renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="link-templates-config">
 			<div class="toggle-accordion">
@@ -246,12 +249,12 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<div class="separator-line" aria-hidden="true"></div>
+		<?= renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="dock-config">
 			<div class="toggle-accordion">
-				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 				<?= renderHeadingTooltip( 'dock', $tooltips, $defaultTooltipMessage, 'h3', 'Dock Configuration' ) ?>
+				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
 				<div id="dock-config-editor">
@@ -267,21 +270,21 @@ require_once __DIR__ . '/../config/config.php';
 		</div>
 	</form>
 
-	<div class="separator-line" aria-hidden="true"></div>
+	<?= renderSeparatorLine() ?>
 
 	<!-- vHosts Manager -->
-	<div class="toggle-content-container <?= ! $apachePathValid ? ' disabled' : null ?>" data-id="vhosts-manager">
+	<div class="toggle-content-container <?= ! $apachePathValid ? ' disabled' : '' ?>" data-id="vhosts-manager">
 		<div class="toggle-accordion">
-			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			<?= renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) ?>
-			<?= $apachePathValid ? null : '&nbsp;❕' ?>
+			<?= $apachePathValid ? '' : '&nbsp;❕' ?>
+			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 		</div>
 		<div class="toggle-content">
 			<?php require_once __DIR__ . '/../partials/vhosts.php'; ?>
 		</div>
 	</div>
 
-	<div class="separator-line" aria-hidden="true"></div>
+	<?= renderSeparatorLine() ?>
 
 	<!-- Apache Control -->
 	<div class="apache-control">

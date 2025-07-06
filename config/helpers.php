@@ -81,7 +81,7 @@ function safe_json_encode( $data, int $options = JSON_UNESCAPED_SLASHES | JSON_P
 	$json = json_encode( $data, $options );
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
-		error_log( 'JSON encode error: ' . json_last_error_msg() );
+		error_log( '[safe_json_encode] JSON encode error: ' . json_last_error_msg() );
 
 		return null;
 	}
@@ -100,7 +100,7 @@ function safe_json_decode( string $json ): ?array {
 	$data = json_decode( $json, true );
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
-		error_log( 'JSON decode error: ' . json_last_error_msg() );
+		error_log( '[safe_json_decode] JSON decode error: ' . json_last_error_msg() );
 
 		return null;
 	}
@@ -362,6 +362,24 @@ function injectSvgWithUniqueIds( string $svgPath, string $prefix ): string {
 }
 
 /**
+ * Render a visual separator line for UI sections.
+ *
+ * Outputs a horizontal separator line, typically used to divide
+ * sections within settings panels or dashboards.
+ *
+ * This function echoes the following markup:
+ * <div class="separator-line" aria-hidden="true"></div>
+ *
+ * @param string $extraClass Optional additional CSS class(es) to append.
+ *
+ * @return void
+ */
+function renderSeparatorLine( string $extraClass = '' ): void {
+	$class = 'separator-line' . ( $extraClass ? ' ' . $extraClass : '' );
+	echo '<div class="' . $class . '" aria-hidden="true"></div>';
+}
+
+/**
  * Outputs detected versions of Apache, PHP, and MySQL with UI badges.
  *
  * This function performs shell-level checks to determine installed versions
@@ -405,30 +423,38 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 	// 2. OS-specific fallbacks if not found via APACHE_PATH
 	if ( empty( $apacheBin ) ) {
 		if ( $os === 'Windows' ) {
-			$apacheBin = trim( safe_shell_exec( 'where httpd' ) ?? '' );
+			$apachePath = trim( (string) safe_shell_exec( 'where httpd' ) );
+			if ( ! empty( $apachePath ) && file_exists( $apachePath ) ) {
+				$apacheBin = $apachePath;
+			}
 		} elseif ( $os === 'Darwin' ) {
 			$macPaths = [
 				'/Applications/MAMP/Library/bin/httpd',
-				trim( safe_shell_exec( 'which httpd' ) ?? '' )
+				trim( (string) safe_shell_exec( 'which httpd' ) ),
 			];
 			foreach ( $macPaths as $path ) {
-				if ( file_exists( $path ) ) {
+				if ( ! empty( $path ) && file_exists( $path ) ) {
 					$apacheBin = $path;
 					break;
 				}
 			}
-		} else { // Linux
+		} else { // Linux & others
 			$linuxPaths = [
-				trim( safe_shell_exec( 'command -v apachectl 2>/dev/null' ) ?? '' ),
-				trim( safe_shell_exec( 'command -v httpd 2>/dev/null' ) ?? '' )
+				trim( (string) safe_shell_exec( 'command -v apachectl 2>/dev/null' ) ),
+				trim( (string) safe_shell_exec( 'command -v httpd 2>/dev/null' ) ),
 			];
 			foreach ( $linuxPaths as $path ) {
-				if ( file_exists( $path ) ) {
+				if ( ! empty( $path ) && file_exists( $path ) ) {
 					$apacheBin = $path;
 					break;
 				}
 			}
 		}
+	}
+
+	// Optional: log if nothing was found
+	if ( empty( $apacheBin ) ) {
+		error_log( '[renderServerInfo] Apache binary not found in APACHE_PATH or system PATH.' );
 	}
 
 	// 3. Try to get Apache version
@@ -448,7 +474,7 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 
 	// PHP version
 	$phpVersion = phpversion();
-	if ( $phpVersion === false ) {
+	if ( ! $phpVersion ) {
 		echo '<span class="php-unknown-info">PHP: Version unknown ⚠️</span>';
 	} else {
 		$isThreadSafe = ( ZEND_THREAD_SAFE ) ? 'TS' : 'NTS';
