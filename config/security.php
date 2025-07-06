@@ -122,6 +122,7 @@ function safe_shell_exec( $cmd ) {
 		'typeperf',
 		'wmic',
 		'which',
+		'where',
 		'whoami',
 		'explorer',
 		'bash',
