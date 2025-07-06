@@ -171,12 +171,16 @@ require_once __DIR__ . '/../config/config.php';
 
 		<div class="separator-line" aria-hidden="true"></div>
 
-		<div class="toggle-content-container" data-id="php-error">
+		<div class="toggle-content-container<?= ! $phpPathValid ? ' disabled' : null ?>" data-id="php-error">
 			<div class="toggle-accordion">
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 				<?= renderHeadingTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) ?>
+				<?= $phpPathValid ? null : '&nbsp;❕' ?>
 			</div>
 			<div class="toggle-content">
+				<?php if ( ! $phpPathValid ): ?>
+					<p><strong>Note:</strong> PHP Error Handling & Logging will save to <code>user_config.php</code> but will not be reflected in <code>php.ini</code> (invalid PHP path).</p><br>
+				<?php endif; ?>
 				<label>Display Errors:
 					<input type="checkbox" name="displayPhpErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
 				</label>
@@ -266,10 +270,11 @@ require_once __DIR__ . '/../config/config.php';
 	<div class="separator-line" aria-hidden="true"></div>
 
 	<!-- vHosts Manager -->
-	<div class="toggle-content-container" data-id="vhosts-manager">
+	<div class="toggle-content-container <?= ! $apachePathValid ? ' disabled' : null ?>" data-id="vhosts-manager">
 		<div class="toggle-accordion">
 			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			<?= renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) ?>
+			<?= $apachePathValid ? null : '&nbsp;❕' ?>
 		</div>
 		<div class="toggle-content">
 			<?php require_once __DIR__ . '/../partials/vhosts.php'; ?>

@@ -17,6 +17,24 @@
         background: var(--background-color);
     }
 
+    &.disabled {
+        border-color: var(--disabled-color) !important;
+        background: var(--disabled-color) !important;
+        color: var(--text-color) !important;
+
+        .toggle-accordion {
+            &:hover {
+                h3 {
+                    color: unset;
+                }
+
+                > svg {
+                    fill: var(--text-color);
+                }
+            }
+        }
+    }
+
     .toggle-accordion {
         align-items: center;
         cursor: pointer;
@@ -38,6 +56,7 @@
             top: 0;
             right: 0;
             padding: 5px;
+            fill: var(--text-color);
             z-index: 1;
             transition: transform 0.3s ease, fill 0.3s;
         }

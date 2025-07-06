@@ -405,11 +405,11 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 	// 2. OS-specific fallbacks if not found via APACHE_PATH
 	if ( empty( $apacheBin ) ) {
 		if ( $os === 'Windows' ) {
-			$apacheBin = trim( safe_shell_exec( 'where httpd' ) );
+			$apacheBin = trim( safe_shell_exec( 'where httpd' ) ?? '' );
 		} elseif ( $os === 'Darwin' ) {
 			$macPaths = [
 				'/Applications/MAMP/Library/bin/httpd',
-				trim( safe_shell_exec( 'which httpd' ) )
+				trim( safe_shell_exec( 'which httpd' ) ?? '' )
 			];
 			foreach ( $macPaths as $path ) {
 				if ( file_exists( $path ) ) {
@@ -419,8 +419,8 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 			}
 		} else { // Linux
 			$linuxPaths = [
-				trim( safe_shell_exec( 'command -v apachectl 2>/dev/null' ) ),
-				trim( safe_shell_exec( 'command -v httpd 2>/dev/null' ) )
+				trim( safe_shell_exec( 'command -v apachectl 2>/dev/null' ) ?? '' ),
+				trim( safe_shell_exec( 'command -v httpd 2>/dev/null' ) ?? '' )
 			];
 			foreach ( $linuxPaths as $path ) {
 				if ( file_exists( $path ) ) {
