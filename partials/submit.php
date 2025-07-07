@@ -33,6 +33,11 @@ require_once __DIR__ . '/../config/helpers.php';
 // Handle form submission
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
+	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
+		header( "Location: index.php" );
+		exit;
+	}
+
 	$theme                 = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
 	$apacheFastMode        = isset( $_POST['apacheFastMode'] ) ? 'true' : 'false';
 	$mysqlFastMode         = isset( $_POST['mysqlFastMode'] ) ? 'true' : 'false';

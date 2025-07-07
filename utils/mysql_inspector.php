@@ -44,11 +44,11 @@ echo "✅ Connected to MySQL server\n";
 echo "🚀 Fast Mode: " . ( $fastMode ? 'Enabled (some checks skipped)' : 'Disabled (full inspection)' ) . "\n";
 echo "🔢 Server Version: " . htmlspecialchars( $mysqli->server_info ) . "\n";
 echo "📚 Client Version: " . htmlspecialchars( mysqli_get_client_info() ) . "\n";
-echo "🔌 Host Info: " . htmlspecialchars( $mysqli->host_info ) . "\n";
+echo "🔌 Host Info: " . htmlspecialchars( obfuscate_value( $mysqli->host_info ) ) . "\n";
 
 $userResult = $mysqli->query( "SELECT USER()" );
 $user       = $userResult ? $userResult->fetch_row()[0] : 'Unknown';
-echo "🔐 Current User: " . htmlspecialchars( $user ) . "\n";
+echo "🔐 Current User: " . htmlspecialchars( obfuscate_value( $user ) ) . "\n";
 
 $result = $mysqli->query( "SHOW DATABASES" );
 if ( ! $result ) {
@@ -102,7 +102,10 @@ while ( $row = $status->fetch_assoc() ) {
 echo "\n📋 Current Processes:\n";
 $processList = $mysqli->query( "SHOW FULL PROCESSLIST" );
 while ( $row = $processList->fetch_assoc() ) {
-	echo "- [" . htmlspecialchars( $row['Id'] ) . "] " . htmlspecialchars( $row['User'] ) . "@" . htmlspecialchars( $row['Host'] ) . ": " . htmlspecialchars( $row['Info'] ) . "\n";
+	echo "- [" . htmlspecialchars( (string) ( $row['Id'] ?? '' ) ) . "] "
+		. htmlspecialchars( (string) ( obfuscate_value( $row['User'] ) ?? '' ) ) . "@"
+		. htmlspecialchars( (string) ( obfuscate_value( $row['Host'] ) ?? '' ) ) . ": "
+		. htmlspecialchars( (string) ( $row['Info'] ?? '' ) ) . "\n";
 }
 
 $mysqli->close();

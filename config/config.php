@@ -45,6 +45,9 @@ if ( file_exists( __DIR__ . '/user_config.php' ) ) {
 	require_once __DIR__ . '/user_config.php';
 }
 
+// Enable Demo Mode (disables saving settings and obfuscates credentials)
+define( 'DEMO_MODE', false );
+
 // DB settings with guards
 foreach (
 	[
@@ -96,7 +99,7 @@ $dbPass = getDecrypted( 'DB_PASSWORD' );
 $currentPhpErrorLevel = ini_get( 'error_reporting' );
 
 // Finalise computed environment values using helper functions
-$user = resolveCurrentUser();
+$user = ( defined( 'DEMO_MODE' ) && DEMO_MODE ) ? 'demo' : resolveCurrentUser();
 
 $bodyClasses = buildBodyClasses(
 	$theme,

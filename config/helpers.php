@@ -497,4 +497,24 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 	}
 }
 
+/**
+ * Obfuscates a sensitive configuration value when demo mode is active.
+ *
+ * This function masks the provided value if the constant `DEMO_MODE` is enabled.
+ * It is intended for use in forms and settings pages to prevent exposing
+ * sensitive paths, database credentials, or other private values in demo environments.
+ *
+ * By default, it replaces each character with an asterisk (*) to maintain
+ * approximate field length for consistent UI rendering.
+ *
+ * @param string $value The sensitive value to obfuscate.
+ * @return string The obfuscated value if demo mode is enabled, or the original value otherwise.
+ */
+function obfuscate_value( string $value ): string {
+	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
+		return str_repeat( '*', strlen( $value ) );
+	}
+	return $value;
+}
+
 ?>

@@ -14,23 +14,38 @@
  * @license MIT
  * @version 1.0
  */
+
+require_once __DIR__ . '/../config/security.php';
+require_once __DIR__ . '/../config/config.php';
 ?>
 <div id="phpinfo-view">
 	<?php
-	ob_start();
-	phpinfo();
-	$info = ob_get_clean();
+	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
+		ob_start();
+		// Only show general PHP info & credits — no secrets here
+		phpinfo( INFO_GENERAL | INFO_CREDITS | INFO_LICENSE );
+		$info = ob_get_clean();
 
-	// Strip everything before <body> and after </body>
-	$info = preg_replace( '%^.*<body>(.*)</body>.*$%s', '$1', $info );
+		$info = preg_replace( '%^.*<body>(.*)</body>.*$%s', '$1', $info );
+		$info = preg_replace( '/<style\b[^>]*>(.*?)<\/style>/is', '', $info );
+		$info = preg_replace( '/style=("|\')(.*?)("|\')/i', '', $info );
 
-	// Optionally strip the style block
-	$info = preg_replace( '%<style[^>]*>.*?</style>%s', '', $info );
+		echo $info;
+	} else {
+		ob_start();
+		phpinfo();
+		$info = ob_get_clean();
 
-	// Or, if you want to remove ALL styles inline or block
-	$info = preg_replace( '/<style\b[^>]*>(.*?)<\/style>/is', '', $info );
-	$info = preg_replace( '/style=("|\')(.*?)("|\')/i', '', $info );
+		// Strip everything before <body> and after </body>
+		$info = preg_replace( '%^.*<body>(.*)</body>.*$%s', '$1', $info );
 
-	echo $info;
+		// Strip the style block
+		$info = preg_replace( '/<style\b[^>]*>(.*?)<\/style>/is', '', $info );
+
+		// Remove ALL styles inline or blocck
+		$info = preg_replace( '/style=("|\')(.*?)("|\')/i', '', $info );
+
+		echo $info;
+	}
 	?>
 </div>

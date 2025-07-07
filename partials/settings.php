@@ -68,7 +68,11 @@ require_once __DIR__ . '/../config/config.php';
 	<div class="heading">
 		<?= renderHeadingTooltip( 'user_config', $tooltips, $defaultTooltipMessage, 'h2', 'User Configuration' ) ?>
 	</div>
-
+	<?php if ( defined( 'DEMO_MODE' ) && DEMO_MODE ): ?>
+		<div class="demo-mode" role="alert">
+			<p><strong>Demo Mode:</strong> Saving is disabled and credentials are obfuscated in this environment.</p><br>
+		</div>
+	<?php endif; ?>
 	<form method="post">
 		<div class="toggle-content-container" data-id="user-settings">
 			<div class="toggle-accordion">
@@ -76,24 +80,34 @@ require_once __DIR__ . '/../config/config.php';
 				<?php echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 			</div>
 			<div class="toggle-content">
+				<div class="background-logos">
+					<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/Apache.svg', 'Apache2' ); ?>
+					<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/MariaDB.svg', 'MariaDB1' ); ?>
+					<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/PHP.svg', 'PHP2' ); ?>
+				</div>
 				<div class="user-settings">
-					<label>DB Host:&nbsp;<input type="text" name="DB_HOST" value="<?= DB_HOST ?>"></label>
-					<label>DB User:&nbsp;<input type="text" name="DB_USER" value="<?= htmlspecialchars( $dbUser ) ?>"></label>
-					<label>DB Password:&nbsp;<input type="password" name="DB_PASSWORD"
-					                                value="<?= htmlspecialchars( $dbPass ) ?>"></label>
+					<label>DB Host:&nbsp;
+						<input type="text" name="DB_HOST" value="<?= obfuscate_value( DB_HOST ) ?>">
+					</label>
+					<label>DB User:&nbsp;
+						<input type="text" name="DB_USER" value="<?= obfuscate_value( htmlspecialchars( $dbUser ) ) ?>">
+					</label>
+					<label>DB Password:&nbsp;
+						<input type="password" name="DB_PASSWORD" value="<?= obfuscate_value( htmlspecialchars( $dbPass ) ) ?>">
+					</label>
 
 					<label>Apache Path:&nbsp;
-						<input type="text" name="APACHE_PATH" value="<?= APACHE_PATH ?>">
+						<input type="text" name="APACHE_PATH" value="<?= obfuscate_value( APACHE_PATH ) ?>">
 						<?= $apachePathValid ? '✔️' : '❌' ?>
 					</label>
 
 					<label>HTDocs Path:&nbsp;
-						<input type="text" name="HTDOCS_PATH" value="<?= HTDOCS_PATH ?>">
+						<input type="text" name="HTDOCS_PATH" value="<?= obfuscate_value( HTDOCS_PATH ) ?>">
 						<?= $htdocsPathValid ? '✔️' : '❌' ?>
 					</label>
 
 					<label>PHP Path:&nbsp;
-						<input type="text" name="PHP_PATH" value="<?= PHP_PATH ?>">
+						<input type="text" name="PHP_PATH" value="<?= obfuscate_value( PHP_PATH ) ?>">
 						<?= $phpPathValid ? '✔️' : '❌' ?>
 					</label>
 
@@ -110,11 +124,6 @@ require_once __DIR__ . '/../config/config.php';
 					</label><br>
 
 					<button type="submit">Save Settings</button>
-					<div class="background-logos">
-						<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/Apache.svg', 'Apache2' ); ?>
-						<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/MariaDB.svg', 'MariaDB1' ); ?>
-						<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/PHP.svg', 'PHP2' ); ?>
-					</div>
 					<br><br>
 				</div>
 			</div>
