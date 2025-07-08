@@ -129,7 +129,7 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<?= renderSeparatorLine() ?>
+		<?php renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="user-interface">
 			<div class="toggle-accordion">
@@ -178,7 +178,7 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<?= renderSeparatorLine() ?>
+		<?php renderSeparatorLine() ?>
 
 		<div class="toggle-content-container<?= ! $phpPathValid ? ' disabled' : '' ?>" data-id="php-error">
 			<div class="toggle-accordion">
@@ -219,7 +219,7 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<?= renderSeparatorLine() ?>
+		<?php renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="folders-config">
 			<div class="toggle-accordion">
@@ -229,7 +229,7 @@ require_once __DIR__ . '/../config/config.php';
 			<div class="toggle-content">
 				<div id="folders-config">
 					<ul id="folders-config-list" class="draggable-list"></ul>
-					<button type="button" id="add-folder-column">➕ Add Column</button>
+					<button type="button" id="add-folder-column">➕ Add Folder Column</button>
 				</div>
 				<input type="hidden" id="folders_json_input" name="folders_json">
 				<br>
@@ -238,7 +238,7 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<?= renderSeparatorLine() ?>
+		<?php renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="link-templates-config">
 			<div class="toggle-accordion">
@@ -258,7 +258,7 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 		</div>
 
-		<?= renderSeparatorLine() ?>
+		<?php renderSeparatorLine() ?>
 
 		<div class="toggle-content-container" data-id="dock-config">
 			<div class="toggle-accordion">
@@ -268,7 +268,7 @@ require_once __DIR__ . '/../config/config.php';
 			<div class="toggle-content">
 				<div id="dock-config-editor">
 					<ul id="dock-list"></ul>
-					<button type="button" id="add-dock-item">➕ Add Item</button>
+					<button type="button" id="add-dock-item">➕ Add Dock Item</button>
 				</div>
 				<input type="hidden" id="dock_json_input" name="dock_json">
 				<br>
@@ -279,7 +279,7 @@ require_once __DIR__ . '/../config/config.php';
 		</div>
 	</form>
 
-	<?= renderSeparatorLine() ?>
+	<?php renderSeparatorLine(); ?>
 
 	<!-- vHosts Manager -->
 	<div class="toggle-content-container <?= ! $apachePathValid ? ' disabled' : '' ?>" data-id="vhosts-manager">
@@ -293,7 +293,7 @@ require_once __DIR__ . '/../config/config.php';
 		</div>
 	</div>
 
-	<?= renderSeparatorLine() ?>
+	<?php renderSeparatorLine(); ?>
 
 	<!-- Apache Control -->
 	<div class="apache-control">
@@ -302,11 +302,13 @@ require_once __DIR__ . '/../config/config.php';
 		</div>
 		<?php if ( $apacheToggle && $apachePathValid ): ?>
 			<button id="restart-apache-button">Restart Apache</button>
+			<?php renderSeparatorLine( 'small' ) ?>
 			<div id="apache-status-message" role="status" aria-live="polite"></div>
 		<?php else: ?>
 			<p>Apache control
 				unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p><br>
 			<button disabled id="restart-apache-button">Restart Apache</button>
+			<?php renderSeparatorLine( 'small' ) ?>
 		<?php endif; ?>
 	</div>
 

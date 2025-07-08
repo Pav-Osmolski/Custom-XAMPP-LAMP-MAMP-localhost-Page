@@ -92,7 +92,15 @@ table {
 }
 
 .separator-line {
-	height: 1.5rem;
+	&.small {
+		height: 1rem;
+	}
+	&.medium {
+		height: 1.5rem;
+	}
+	&.large {
+		height: 2rem;
+	}
 }
 
 /* Unique theme type settings */

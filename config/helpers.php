@@ -27,7 +27,7 @@
  *
  * @return void
  */
-function define_path_constant( $name, $default ) {
+function define_path_constant( string $name, string $default ): void {
 	if ( ! defined( $name ) ) {
 		$normalised = rtrim( str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $default ), DIRECTORY_SEPARATOR );
 		define( $name, $normalised );
@@ -45,7 +45,7 @@ function define_path_constant( $name, $default ) {
  *
  * @return string PHP define() code snippet
  */
-function defineEncrypted( $name, $value ) {
+function defineEncrypted( string $name, string $value ): string {
 	return "define('$name', '" . addslashes( encryptValue( $value ) ) . "');\n";
 }
 
@@ -60,7 +60,7 @@ function defineEncrypted( $name, $value ) {
  *
  * @return string The cleaned and normalised path
  */
-function normalise_path( $path ) {
+function normalise_path( string $path ): string {
 	$path = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $path );
 
 	return rtrim( $path, DIRECTORY_SEPARATOR );
@@ -77,7 +77,7 @@ function normalise_path( $path ) {
  *
  * @return string|null JSON string on success, or null if encoding failed
  */
-function safe_json_encode( $data, int $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ): ?string {
+function safe_json_encode( mixed $data, int $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ): ?string {
 	$json = json_encode( $data, $options );
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
@@ -178,7 +178,7 @@ function resolveCurrentUser(): string {
  *
  * @return string
  */
-function buildBodyClasses( $theme, $displayClock, $displaySearch, $displaySystemStats, $displayApacheErrorLog, $displayPhpErrorLog ): string {
+function buildBodyClasses( string $theme, bool $displayClock, bool $displaySearch, bool $displaySystemStats, bool $displayApacheErrorLog, bool $displayPhpErrorLog ): string {
 	$classes   = [ 'background-image' ];
 	$classes[] = $displayClock ? 'clock-active' : 'clock-inactive';
 	$classes[] = $displaySearch ? 'search-active' : 'search-inactive';
@@ -370,12 +370,12 @@ function injectSvgWithUniqueIds( string $svgPath, string $prefix ): string {
  * This function echoes the following markup:
  * <div class="separator-line" aria-hidden="true"></div>
  *
- * @param string $extraClass Optional additional CSS class(es) to append.
+ * @param string $extraClass Optional additional CSS class(es) to append. Defaults to 'medium'.
  *
  * @return void
  */
 function renderSeparatorLine( string $extraClass = '' ): void {
-	$class = 'separator-line' . ( $extraClass ? ' ' . $extraClass : '' );
+	$class = 'separator-line' . ( $extraClass ? ' ' . $extraClass : ' medium' );
 	echo '<div class="' . $class . '" aria-hidden="true"></div>';
 }
 
