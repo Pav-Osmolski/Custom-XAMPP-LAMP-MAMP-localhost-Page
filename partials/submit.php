@@ -34,13 +34,15 @@ require_once __DIR__ . '/../config/helpers.php';
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
-		header( "Location: index.php" );
+		header( "Location: ?view=settings" );
 		exit;
 	}
 
 	$theme                 = isset( $_POST['theme'] ) ? preg_replace( '/[^a-zA-Z0-9_-]/', '', $_POST['theme'] ) : 'default';
 	$apacheFastMode        = isset( $_POST['apacheFastMode'] ) ? 'true' : 'false';
 	$mysqlFastMode         = isset( $_POST['mysqlFastMode'] ) ? 'true' : 'false';
+	$displayHeader         = isset( $_POST['displayHeader'] ) ? 'true' : 'false';
+	$displayFooter         = isset( $_POST['displayFooter'] ) ? 'true' : 'false';
 	$displayClock          = isset( $_POST['displayClock'] ) ? 'true' : 'false';
 	$displaySearch         = isset( $_POST['displaySearch'] ) ? 'true' : 'false';
 	$displaySystemStats    = isset( $_POST['displaySystemStats'] ) ? 'true' : 'false';
@@ -69,6 +71,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	// Feature flags
 	$user_config .= "\$theme = '$theme';\n";
+	$user_config .= "\$displayHeader = {$displayHeader};\n";
+	$user_config .= "\$displayFooter = {$displayFooter};\n";
 	$user_config .= "\$displayClock = {$displayClock};\n";
 	$user_config .= "\$displaySearch = {$displaySearch};\n";
 	$user_config .= "\$displaySystemStats = {$displaySystemStats};\n";
@@ -125,6 +129,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 		file_put_contents( $php_ini_path, $ini_content );
 	}
 
-	header( "Location: index.php" );
+	header( "Location: ?view=settings" );
 	exit;
 }

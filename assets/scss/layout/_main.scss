@@ -39,9 +39,27 @@ pre {
 	padding: 15px;
 }
 
-.container {
+main {
 	display: flex;
 	flex-direction: column;
+}
+
+body.header-active.footer-active {
+	main {
+		min-height: calc(100vh - 181px); //Minus header + footer height
+	}
+}
+
+body.header-inactive.footer-active {
+	main {
+		min-height: calc(100vh - 93px);
+	}
+}
+
+body.header-active.footer-inactive {
+	main {
+		min-height: calc(100vh - 88px);
+	}
 }
 
 section {

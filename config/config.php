@@ -24,7 +24,7 @@
  * - Flags: `$apachePathValid`, `$htdocsPathValid`, `$phpPathValid`, `$apacheToggle`
  * - DB: `$dbUser`, `$dbPass`
  * - UI: `$theme`, `$currentTheme`, `$bodyClasses`, `$tooltips`, `$defaultTooltipMessage`
- * - Toggles: `$displayClock`, `$displaySearch`, `$displaySystemStats`, `$displayApacheErrorLog`, `$displayPhpErrorLog`, `$useAjaxForStats`
+ * - Toggles: `$displayHeader`, `$displayFooter`, `$displayClock`, `$displaySearch`, `$displaySystemStats`, `$displayApacheErrorLog`, `$displayPhpErrorLog`, `$useAjaxForStats`
  * - Themes: `$themeOptions`, `$themeTypes`
  * - Misc: `$user`, `$currentPhpErrorLevel`
  *
@@ -71,6 +71,8 @@ $defaults = [
 	'theme'                 => 'default',
 	'apacheFastMode'        => false,
 	'mysqlFastMode'         => false,
+	'displayHeader'         => true,
+	'displayFooter'         => true,
 	'displayClock'          => true,
 	'displaySearch'         => true,
 	'displaySystemStats'    => true,
@@ -103,6 +105,8 @@ $user = ( defined( 'DEMO_MODE' ) && DEMO_MODE ) ? 'demo' : resolveCurrentUser();
 
 $bodyClasses = buildBodyClasses(
 	$theme,
+	$displayHeader,
+	$displayFooter,
 	$displayClock,
 	$displaySearch,
 	$displaySystemStats,

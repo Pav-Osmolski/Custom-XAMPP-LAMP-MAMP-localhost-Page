@@ -47,16 +47,17 @@ Please feel free to fork and make your own changes!
 - **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites
 - **Reusable Link Templates** – Define and reuse HTML templates across folder listings
 - **Responsive Interface** – Sleek, modern design that adapts to all screen sizes
-- **Theme Switcher** – Light mode. Dark mode. You choose.
+- **Theme Switcher** – Five themes, one destiny. Pick your favourite
 - **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
 
 ## How to Install
 
-1. Clone this repo to a location on your hard disk, e.g. `C:/xampp/htdocs/`
+1. Clone this repo into your Apache document root, e.g. `C:/xampp/htdocs/`
 2. Run `npm install` in the repo's location to install dev dependencies
-3. Set your custom user config by navigating to the Settings page in the footer
-4. Customise to your delight
-5. Run `npm run build` to compile any changed SCSS or JavaScript
+3. Access `http://localhost/` on your web browser to view your new dashboard
+4. Set your custom user config by navigating to the Settings page in the footer
+5. Customise to your delight
+6. Run `npm run build` to compile any changed SCSS or JavaScript
 
 ## Screenshots
 

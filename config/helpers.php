@@ -170,6 +170,8 @@ function resolveCurrentUser(): string {
  * theme, system stats visibility, and availability of Apache/PHP log viewers.
  *
  * @param string $theme
+ * @param bool $displayHeader
+ * @param bool $displayFooter
  * @param bool $displayClock
  * @param bool $displaySearch
  * @param bool $displaySystemStats
@@ -178,8 +180,10 @@ function resolveCurrentUser(): string {
  *
  * @return string
  */
-function buildBodyClasses( string $theme, bool $displayClock, bool $displaySearch, bool $displaySystemStats, bool $displayApacheErrorLog, bool $displayPhpErrorLog ): string {
+function buildBodyClasses( string $theme, bool $displayHeader, bool $displayFooter, bool $displayClock, bool $displaySearch, bool $displaySystemStats, bool $displayApacheErrorLog, bool $displayPhpErrorLog ): string {
 	$classes   = [ 'background-image' ];
+	$classes[] = $displayHeader ? 'header-active' : 'header-inactive';
+	$classes[] = $displayFooter ? 'footer-active' : 'footer-inactive';
 	$classes[] = $displayClock ? 'clock-active' : 'clock-inactive';
 	$classes[] = $displaySearch ? 'search-active' : 'search-inactive';
 
@@ -335,6 +339,7 @@ function renderHeadingTooltip( string $key, array $tooltips, string $defaultTool
  *
  * @param string $svgPath Path to the SVG file.
  * @param string $prefix Unique prefix to prevent ID clashes (e.g., 'icon1').
+ *
  * @return string SVG content with updated IDs.
  */
 function injectSvgWithUniqueIds( string $svgPath, string $prefix ): string {
@@ -508,12 +513,14 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
  * approximate field length for consistent UI rendering.
  *
  * @param string $value The sensitive value to obfuscate.
+ *
  * @return string The obfuscated value if demo mode is enabled, or the original value otherwise.
  */
 function obfuscate_value( string $value ): string {
 	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
 		return str_repeat( '*', strlen( $value ) );
 	}
+
 	return $value;
 }
 

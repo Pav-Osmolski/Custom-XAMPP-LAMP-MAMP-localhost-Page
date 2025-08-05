@@ -35,6 +35,8 @@
 
 /** @var bool $apacheFastMode */
 /** @var bool $mysqlFastMode */
+/** @var bool $displayHeader */
+/** @var bool $displayFooter */
 /** @var bool $displayClock */
 /** @var bool $displaySearch */
 /** @var bool $displayApacheErrorLog */
@@ -146,6 +148,14 @@ require_once __DIR__ . '/../config/config.php';
 								</option>
 							<?php endforeach; ?>
 						</select>
+					</label>
+
+					<label>Display Header:
+						<input type="checkbox" name="displayHeader" <?= $displayHeader ? 'checked' : '' ?>>
+					</label>
+
+					<label>Display Footer:
+						<input type="checkbox" name="displayFooter" <?= $displayFooter ? 'checked' : '' ?>>
 					</label>
 
 					<label>Display Clock:

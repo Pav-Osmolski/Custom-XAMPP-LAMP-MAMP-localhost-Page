@@ -11,6 +11,7 @@ body.error-log-active {
 	.error-log-section {
 		position: relative;
 		display: flex !important;
+		flex: 0;
 		flex-direction: column;
 		animation: fadeIn 1.5s ease-in;
 		padding-top: 0;

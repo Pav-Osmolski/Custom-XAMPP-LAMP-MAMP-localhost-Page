@@ -1,5 +1,7 @@
 <?php
 /** @var string $user */
+/** @var bool $displayHeader */
+/** @var bool $displayFooter */
 /** @var bool $useAjaxForStats */
 /** @var string $bodyClasses */
 
@@ -29,7 +31,7 @@ require_once __DIR__ . '/partials/submit.php';
 </head>
 <body<?= $useAjaxForStats ? ' data-ajax-enabled="true"' : '' ?> class="<?= $bodyClasses ?>">
 <div class="container">
-	<?php require_once __DIR__ . '/partials/header.php'; ?>
+	<?php $displayHeader && require_once __DIR__ . '/partials/header.php'; ?>
 	<main role="main">
 		<section class="folders">
 			<?php require_once __DIR__ . '/partials/folders.php'; ?>
@@ -41,7 +43,7 @@ require_once __DIR__ . '/partials/submit.php';
 		</section>
 		<?php require_once __DIR__ . '/partials/info.php'; ?>
 	</main>
-	<?php require_once __DIR__ . '/partials/footer.php'; ?>
+	<?php $displayFooter && require_once __DIR__ . '/partials/footer.php'; ?>
 </div>
 </body>
 </html>

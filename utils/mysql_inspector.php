@@ -66,7 +66,7 @@ if ( ! $result ) {
 	if ( $fastMode ) {
 		echo "\n📁 Databases:";
 		foreach ( $databases as $db ) {
-			echo "\n- " . htmlspecialchars( $db );
+			echo "\n- " . obfuscate_value( htmlspecialchars( $db ) );
 		}
 	} else {
 		echo "\n📦 Databases with Approximate Sizes:";
@@ -77,7 +77,7 @@ if ( ! $result ) {
 				$totalSize += $sizeRow['Data_length'] + $sizeRow['Index_length'];
 			}
 			$mb = round( $totalSize / 1024 / 1024, 2 );
-			echo "\n- " . htmlspecialchars( $db ) . ": {$mb} MB";
+			echo "\n- " . obfuscate_value( htmlspecialchars( $db ) ) . ": {$mb} MB";
 		}
 	}
 }
