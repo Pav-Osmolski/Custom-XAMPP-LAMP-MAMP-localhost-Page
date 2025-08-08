@@ -65,6 +65,17 @@ require_once __DIR__ . '/../config/config.php';
 	const serverTheme = <?= json_encode( $currentTheme ) ?>;
 </script>
 
+<?php if ( isset($_GET['saved']) ): ?>
+    <div class="post-confirmation-container <?= $_GET['saved'] === '1' ? 'success' : 'failure' ?>" role="status" aria-live="polite">
+    	<div class="post-confirmation-message">
+	        <?= $_GET['saved'] === '1'
+	            ? '✔️ User Settings saved successfully.'
+	            : '⚠️ Demo Mode says no! Changes weren’t saved.'
+	        ?>
+    	</div>
+    </div>
+<?php endif; ?>
+
 <div id="settings-view">
 	<!-- User Settings -->
 	<div class="heading">

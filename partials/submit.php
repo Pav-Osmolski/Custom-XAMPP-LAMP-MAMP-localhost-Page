@@ -34,7 +34,7 @@ require_once __DIR__ . '/../config/helpers.php';
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
-		header( "Location: ?view=settings" );
+		header( "Location: ?view=settings&saved=0" );
 		exit;
 	}
 
@@ -129,6 +129,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 		file_put_contents( $php_ini_path, $ini_content );
 	}
 
-	header( "Location: ?view=settings" );
+	header( "Location: ?view=settings&saved=1" );
 	exit;
 }

@@ -20,3 +20,16 @@ export function initClearStorageButton() {
 		} );
 	} );
 }
+
+export function autoHideConfirmationMessage() {
+	document.addEventListener( 'DOMContentLoaded', () => {
+		const msg = document.querySelector( '.post-confirmation-container' );
+		if ( !msg ) return;
+
+		setTimeout(() => {
+			msg.style.transition = 'opacity 0.5s ease';
+			msg.style.opacity = '0';
+			setTimeout(() => msg.remove(), 500);
+		}, 3000);
+	} );
+}
