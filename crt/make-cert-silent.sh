@@ -37,9 +37,18 @@ mkdir -p "$OUT_DIR"
 sed "s/{{DOMAIN}}/$DOMAIN/g" "$TEMPLATE" > "$TEMP_CONF"
 
 # Generate certificate
-"$OPENSSL" req -config "$TEMP_CONF" -new -sha256 -newkey rsa:2048 -nodes \
-  -keyout "$OUT_DIR/server.key" -x509 -days 365 -out "$OUT_DIR/server.crt" \
-  -subj "$SUBJECT" \
+"$OPENSSL" req \
+  -config   "$TEMP_CONF" \
+  -new \
+  -sha256 \
+  -newkey   rsa:2048 \
+  -nodes \
+  -keyout   "$OUT_DIR/server.key" \
+  -x509 \
+  -days     365 \
+  -out      "$OUT_DIR/server.crt" \
+  -subj     "$SUBJECT" \
+  -addext   "subjectAltName=DNS:$DOMAIN,DNS:localhost,IP:127.0.0.1" \
   >> "$LOG_FILE" 2>&1
 
 EXIT_CODE=$?
