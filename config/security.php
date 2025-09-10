@@ -21,7 +21,7 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.0
+ * @version 1.1
  */
 
 define( 'CRYPTO_KEY_FILE', __DIR__ . '/../.key' );
@@ -99,6 +99,85 @@ function getDecrypted( $const, $allowFallback = true ) {
 	$decrypted = decryptValue( $value );
 
 	return $decrypted !== false ? $decrypted : ( $allowFallback ? $value : '' );
+}
+
+/**
+ * Returns a CSRF token for the current session, creating one if needed.
+ *
+ * @return string
+ */
+function csrf_get_token(): string {
+	if ( session_status() !== PHP_SESSION_ACTIVE ) {
+		// If headers already sent, don't try to start; rely on early bootstrap
+		if ( headers_sent() ) {
+			// No active session; return empty so the form won’t validate (safer fail)
+			error_log('[csrf_get_token] Headers already sent; session not active.');
+			return '';
+		}
+		session_start();
+	}
+
+	if ( empty( $_SESSION['csrf_token'] ) || ! is_string( $_SESSION['csrf_token'] ) ) {
+		$_SESSION['csrf_token'] = bin2hex( random_bytes( 32 ) );
+	}
+
+	return $_SESSION['csrf_token'];
+}
+
+/**
+ * Verifies a CSRF token from user input against the session token.
+ * If valid, rotates the token to prevent replay.
+ *
+ * @param string|null $token
+ *
+ * @return bool
+ */
+function csrf_verify( ?string $token ): bool {
+	if ( session_status() !== PHP_SESSION_ACTIVE ) {
+		session_start();
+	}
+
+	$valid = (
+		is_string( $token )
+		&& isset( $_SESSION['csrf_token'] )
+		&& is_string( $_SESSION['csrf_token'] )
+		&& hash_equals( $_SESSION['csrf_token'], $token )
+	);
+
+	if ( $valid ) {
+		// rotate token to make it single-use
+		$_SESSION['csrf_token'] = bin2hex( random_bytes( 32 ) );
+	}
+
+	return $valid;
+}
+
+/**
+ * Returns true if the HTTP request appears to originate from the same origin.
+ *
+ * @return bool
+ */
+function request_is_same_origin(): bool {
+	$scheme = (! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+	$host   = $_SERVER['HTTP_HOST'] ?? '';
+	if ( $host === '' ) {
+		return false;
+	}
+	$origin   = $_SERVER['HTTP_ORIGIN']   ?? null;
+	$referrer = $_SERVER['HTTP_REFERER']  ?? null;
+	$allowed  = $scheme . '://' . $host;
+
+	foreach ( [ $origin, $referrer ] as $h ) {
+		if ( $h === null ) {
+			continue;
+		}
+		// compare prefix only (exact scheme+host), normalised to lowercase
+		if ( stripos( $h, $allowed ) !== 0 ) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 /**

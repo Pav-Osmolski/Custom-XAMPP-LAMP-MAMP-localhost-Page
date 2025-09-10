@@ -34,7 +34,7 @@
  *
  * @author Pav
  * @license MIT
- * @version 2.2
+ * @version 2.3
  */
 
 require_once __DIR__ . '/security.php';
@@ -46,7 +46,7 @@ if ( file_exists( __DIR__ . '/user_config.php' ) ) {
 }
 
 // Enable Demo Mode (disables saving settings and obfuscates credentials)
-define( 'DEMO_MODE', false );
+const DEMO_MODE = false;
 
 // DB settings with guards
 foreach (

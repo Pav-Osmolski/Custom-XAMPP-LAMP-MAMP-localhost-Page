@@ -12,7 +12,7 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.1
+ * @version 1.2
  */
 
 /**
@@ -67,67 +67,74 @@ function normalise_path( string $path ): string {
 }
 
 /**
- * Encodes a value as a JSON string and verifies the result is valid.
+ * Sends a generic 400 error without leaking sensitive details.
  *
- * Encodes arrays or objects into JSON using `JSON_UNESCAPED_SLASHES` and `JSON_PRETTY_PRINT`
- * by default. Logs an error and returns null if encoding fails.
- *
- * @param mixed $data The data to encode (usually array or object)
- * @param int $options Optional JSON encoding options
- *
- * @return string|null JSON string on success, or null if encoding failed
- */
-function safe_json_encode( mixed $data, int $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ): ?string {
-	$json = json_encode( $data, $options );
-
-	if ( json_last_error() !== JSON_ERROR_NONE ) {
-		error_log( '[safe_json_encode] JSON encode error: ' . json_last_error_msg() );
-
-		return null;
-	}
-
-	return $json;
-}
-
-/**
- * Decodes a JSON string and verifies the result is valid.
- *
- * @param string $json The JSON string to decode
- *
- * @return array|null Returns associative array on success, or null if invalid
- */
-function safe_json_decode( string $json ): ?array {
-	$data = json_decode( $json, true );
-
-	if ( json_last_error() !== JSON_ERROR_NONE ) {
-		error_log( '[safe_json_decode] JSON decode error: ' . json_last_error_msg() );
-
-		return null;
-	}
-
-	return $data;
-}
-
-/**
- * Validates and writes user-provided JSON to a file safely.
- *
- * Decodes the input string using `safe_json_decode()`, then re-encodes it using
- * `safe_json_encode()` before writing to the specified file. Logs are generated
- * on failure, and nothing is written if validation fails.
- *
- * @param string $path Absolute file path to write to
- * @param string $rawJson Raw JSON string to validate and write
- *
+ * @param string $msg
  * @return void
  */
-function write_valid_json( string $path, string $rawJson ): void {
-	$array = safe_json_decode( $rawJson );
-	if ( $array !== null ) {
-		$json = safe_json_encode( $array );
-		if ( $json !== null ) {
-			file_put_contents( $path, $json );
+function submit_fail( string $msg ): void {
+	http_response_code( 400 );
+	header( 'Content-Type: text/plain; charset=UTF-8' );
+	echo 'Bad request.';
+	error_log( '[submit.php] ' . $msg );
+	exit;
+}
+
+/**
+ * Writes content atomically with restrictive permissions.
+ *
+ * @param string $dstPath
+ * @param string $content
+ * @return void
+ */
+function atomic_write( string $dstPath, string $content ): void {
+	$dir = dirname( $dstPath );
+	if ( ! is_dir( $dir ) ) {
+		if ( ! mkdir( $dir, 0750, true ) ) {
+			submit_fail( 'Failed to create directory: ' . $dir );
 		}
 	}
+
+	$temp = $dstPath . '.tmp.' . bin2hex( random_bytes( 8 ) );
+	if ( file_put_contents( $temp, $content, LOCK_EX ) === false ) {
+		submit_fail( 'Failed to write temp file: ' . $temp );
+	}
+	@chmod( $temp, 0600 );
+
+	if ( ! rename( $temp, $dstPath ) ) {
+		@unlink( $temp );
+		submit_fail( 'Failed to move temp into place: ' . $dstPath );
+	}
+}
+
+/**
+ * Validates JSON text and returns a pretty-printed canonical form.
+ *
+ * @param string $raw
+ * @param bool   $allowEmptyArray
+ * @return string Canonical JSON
+ */
+function validate_and_canonicalise_json( string $raw, bool $allowEmptyArray = true ): string {
+	$raw = trim( $raw );
+	if ( $raw === '' ) {
+		return $allowEmptyArray ? "[]" : "{}";
+	}
+	$data = json_decode( $raw, true, 512, JSON_THROW_ON_ERROR );
+	if ( ! is_array( $data ) ) {
+		throw new InvalidArgumentException( 'JSON root must be array or object.' );
+	}
+	return json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+}
+
+/**
+ * Normalises a boolean from various HTML input forms.
+ *
+ * @param mixed $v
+ * @return string "true" or "false"
+ */
+function normalise_bool( $v ): string {
+	$truthy = [ '1', 1, true, 'true', 'on', 'yes' ];
+	return in_array( $v, $truthy, true ) ? 'true' : 'false';
 }
 
 /**

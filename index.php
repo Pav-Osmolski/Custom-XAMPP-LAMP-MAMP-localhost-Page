@@ -5,6 +5,23 @@
 /** @var bool $useAjaxForStats */
 /** @var string $bodyClasses */
 
+// Start session before anything else so CSRF can safely use it during render
+if ( session_status() !== PHP_SESSION_ACTIVE ) {
+	// Optional: set cookie attributes before session_start
+	if ( function_exists( 'session_set_cookie_params' ) ) {
+		$cookieParams = session_get_cookie_params();
+		session_set_cookie_params( [
+			'lifetime' => $cookieParams['lifetime'] ?? 0,
+			'path'     => $cookieParams['path'] ?? '/',
+			'domain'   => $cookieParams['domain'] ?? '',
+			'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+			'httponly' => true,
+			'samesite' => 'Lax', // 'Strict' if you never post across origins
+		] );
+	}
+	session_start();
+}
+
 include __DIR__ . '/config/security.php';
 include __DIR__ . '/config/config.php';
 //include __DIR__ . '/config/debug.php';

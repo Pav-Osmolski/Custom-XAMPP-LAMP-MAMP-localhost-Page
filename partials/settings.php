@@ -30,7 +30,7 @@
  *
  * Author: Pav
  * License: MIT
- * Version: 2.0
+ * Version: 2.1
  */
 
 /** @var bool $apacheFastMode */
@@ -66,14 +66,14 @@ require_once __DIR__ . '/../config/config.php';
 </script>
 
 <?php if ( isset($_GET['saved']) ): ?>
-    <div class="post-confirmation-container <?= $_GET['saved'] === '1' ? 'success' : 'failure' ?>" role="status" aria-live="polite">
-    	<div class="post-confirmation-message">
-	        <?= $_GET['saved'] === '1'
-	            ? '✔️ User Settings saved successfully.'
-	            : '⚠️ Demo Mode says no! Changes weren’t saved.'
-	        ?>
-    	</div>
-    </div>
+	<div class="post-confirmation-container <?= $_GET['saved'] === '1' ? 'success' : 'failure' ?>" role="status" aria-live="polite">
+		<div class="post-confirmation-message">
+			<?= $_GET['saved'] === '1'
+				? '✔️ User Settings saved successfully.'
+				: '⚠️ Demo Mode says no! Changes weren’t saved.'
+			?>
+		</div>
+	</div>
 <?php endif; ?>
 
 <div id="settings-view">
@@ -86,7 +86,8 @@ require_once __DIR__ . '/../config/config.php';
 			<p><strong>Demo Mode:</strong> Saving is disabled and credentials are obfuscated in this environment.</p><br>
 		</div>
 	<?php endif; ?>
-	<form method="post">
+	<form method="post" action="" accept-charset="UTF-8" autocomplete="off">
+		<input type="hidden" name="csrf" value="<?= htmlspecialchars( csrf_get_token() ) ?>">
 		<div class="toggle-content-container" data-id="user-settings">
 			<div class="toggle-accordion">
 				<?= renderHeadingTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h3', 'Database & Paths' ) ?>
@@ -271,7 +272,7 @@ require_once __DIR__ . '/../config/config.php';
 					<ul id="link-templates-list" class="template-list"></ul>
 					<button type="button" id="add-link-template">➕ Add Link Template</button>
 				</div>
-				<input type="hidden" id="link_templates_json_input" name="link_templates" value="">
+				<input type="hidden" id="link_templates_json_input" name="link_templates_json" value="">
 				<br>
 
 				<button type="submit">Save Settings</button>
