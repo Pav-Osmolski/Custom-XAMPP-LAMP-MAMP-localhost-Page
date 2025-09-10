@@ -13,6 +13,8 @@
  *
  * Optional: ?fast=1 to skip size aggregation
  *
+ * @author Pav
+ * @license MIT
  * @version 1.1
  */
 

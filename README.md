@@ -87,6 +87,7 @@ A quick overview of the core files and folders in this project, so you’re neve
 
 | File                     | Description |
 |--------------------------|-------------|
+| `bootstrap.php`          | Init headers, session, security, and config; starts session early for CSRF rendering. |
 | `config.php`             | Default configuration including MySQL credentials and Apache path settings. |
 | `user_config.php`        | Auto generated user-defined overrides saved from the settings UI. |
 | `helpers.php`            | Utility functions, such as string formatting, environment checks, and path handling. |

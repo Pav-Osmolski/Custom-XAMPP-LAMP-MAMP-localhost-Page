@@ -16,6 +16,8 @@
  * - Invalidate OPcache where applicable
  * - Redirect with 303 on success
  *
+ * @author Pav
+ * @license MIT
  * @version 2.5
  */
 

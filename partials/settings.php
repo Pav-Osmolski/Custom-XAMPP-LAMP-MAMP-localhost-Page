@@ -28,9 +28,9 @@
  * - JavaScript values for theme interaction
  * - Inline server path validation (✔️ / ❌)
  *
- * Author: Pav
- * License: MIT
- * Version: 2.1
+ * @author Pav
+ * @license MIT
+ * @version 2.1
  */
 
 /** @var bool $apacheFastMode */
