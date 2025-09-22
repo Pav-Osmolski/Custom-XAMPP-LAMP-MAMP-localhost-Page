@@ -1,5 +1,7 @@
 <?php
 /** @var string $user */
+/** @var string $dbUser */
+/** @var string $dbPass */
 /** @var bool $displayClock */
 /** @var bool $displaySearch */
 

@@ -18,11 +18,11 @@
  *
  * @author Pav
  * @license MIT
- * @version 2.5
+ * @version 2.6
  */
 
 /** @var string $foldersJson */
-/** @var string $linkTemplatesJson */
+/** @var string $linkTplJson */
 /** @var string $dockJson */
 
 require_once __DIR__ . '/../config/security.php';
@@ -144,7 +144,7 @@ $logPhpErrors          = normalise_bool( $in['logPhpErrors'] ?? null );
 $apacheFastMode        = normalise_bool( $in['apacheFastMode'] ?? null );
 $mysqlFastMode         = normalise_bool( $in['mysqlFastMode'] ?? null );
 
-// Theme: letters, numbers, dashes, underscores. Fallback to soda-nocturne.
+// Theme: letters, numbers, dashes, underscores. Fallback to default.
 $theme = 'default';
 if ( isset( $in['theme'] ) && is_string( $in['theme'] ) ) {
 	$t = trim( $in['theme'] );
@@ -198,22 +198,12 @@ $encPass = $DB_PASS !== '' ? encryptValue( $DB_PASS ) : null;
 // JSON
 try {
 	$foldersRaw   = (string) ( $in['folders_json'] ?? '' );
-	$dockRaw      = (string) ( $in['dock_json'] ?? '' );
 	$linkTplRaw   = (string) ( $in['link_templates_json'] ?? '' );
+	$dockRaw      = (string) ( $in['dock_json'] ?? '' );
 
 	$foldersJson  = validate_and_canonicalise_json( $foldersRaw );
+	$linkTplJson  = validate_and_canonicalise_json( $linkTplRaw );
 	$dockJson     = validate_and_canonicalise_json( $dockRaw );
-
-	if ( trim( $linkTplRaw ) === '' ) {
-		$existing = @file_get_contents( __DIR__ . '/../config/link_templates.json' );
-		if ( $existing === false || trim( $existing ) === '' ) {
-			$linkTemplatesJson = "[]";
-		} else {
-			$linkTemplatesJson = validate_and_canonicalise_json( $existing );
-		}
-	} else {
-		$linkTemplatesJson = validate_and_canonicalise_json( $linkTplRaw );
-	}
 } catch ( Throwable $e ) {
 	submit_fail( 'Invalid JSON payload: ' . $e->getMessage() );
 }
@@ -268,7 +258,7 @@ atomic_write( $configDir . '/user_config.php', $user_config );
 
 // JSON configs
 atomic_write( $configDir . '/folders.json',        $foldersJson );
-atomic_write( $configDir . '/link_templates.json', $linkTemplatesJson );
+atomic_write( $configDir . '/link_templates.json', $linkTplJson );
 atomic_write( $configDir . '/dock.json',           $dockJson );
 
 /* ------------------------------------------------------------------ */

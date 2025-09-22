@@ -127,6 +127,35 @@ function validate_and_canonicalise_json( string $raw, bool $allowEmptyArray = tr
 }
 
 /**
+ * Safely read a JSON file into an associative array.
+ *
+ * Returns an empty array if the file does not exist, is unreadable,
+ * is empty, or contains invalid JSON.
+ *
+ * @param string $path Absolute file path to the JSON file.
+ * @return array<int|string, mixed> Decoded array or [] on failure.
+ */
+function read_json_array_safely( string $path ): array {
+    if ( ! is_file( $path ) || ! is_readable( $path ) ) {
+        return [];
+    }
+
+    $raw = file_get_contents( $path );
+    if ( $raw === false || $raw === '' ) {
+        return [];
+    }
+
+    $decoded = json_decode( $raw, true );
+    if ( is_array( $decoded ) ) {
+        return $decoded;
+    }
+
+    // Optional breadcrumb for debugging malformed JSON
+    error_log( basename( $path ) . ' JSON decode failed: ' . json_last_error_msg() );
+    return [];
+}
+
+/**
  * Normalises a boolean from various HTML input forms.
  *
  * @param mixed $v
@@ -529,6 +558,38 @@ function obfuscate_value( string $value ): string {
 	}
 
 	return $value;
+}
+
+/**
+ * Merge a parsed <VirtualHost> block into the $serverData map.
+ *
+ * - Marks duplicates on both the previously stored entry and the incoming block
+ * - Applies defaults before storing
+ *
+ * @param array<string, array<string, mixed>> $serverData
+ * @param array<string, mixed>|null           $block
+ * @return void
+ */
+function collectServerBlock( array &$serverData, ?array $block ): void {
+	if ( ! is_array( $block ) || empty( $block['name'] ) ) {
+		return;
+	}
+
+	$name = $block['name'];
+
+	// Detect duplicate before overwriting
+	if ( isset( $serverData[ $name ] ) ) {
+		$serverData[ $name ]['_duplicate'] = true;
+		$block['_duplicate']               = true;
+	}
+
+	$serverData[ $name ] = array_merge( [
+		'valid'     => false,
+		'cert'      => '',
+		'key'       => '',
+		'certValid' => true,
+		'docRoot'   => '',
+	], $block );
 }
 
 ?>

@@ -126,6 +126,14 @@
 		display: flex;
 		gap: 10px;
 	}
+
+	.invalid, .empty {
+		font-weight: lighter;
+	}
+
+	.invalid {
+		color: var(--error-bg);
+	}
 }
 
 /* Folders Config */

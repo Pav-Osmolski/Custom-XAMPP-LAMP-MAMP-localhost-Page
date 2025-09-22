@@ -17,8 +17,11 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.0
+ * @version 1.1
  */
+
+/** @var string[] $tooltips */
+/** @var string $defaultTooltipMessage */
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
@@ -51,23 +54,7 @@ require_once __DIR__ . '/../config/config.php';
 				$port         = $matches[1];
 				$currentBlock = [ 'ssl' => $port === '443' ];
 			} elseif ( preg_match( '#^</VirtualHost>#i', $line ) ) {
-				if ( is_array( $currentBlock ) && isset( $currentBlock['name'] ) ) {
-					$name = $currentBlock['name'];
-
-					// Detect duplicate before overwriting
-					if ( isset( $serverData[ $name ] ) ) {
-						$serverData[ $name ]['_duplicate'] = true;
-						$currentBlock['_duplicate']        = true;
-					}
-
-					$serverData[ $name ] = array_merge( [
-						'valid'     => false,
-						'cert'      => '',
-						'key'       => '',
-						'certValid' => true,
-						'docRoot'   => '',
-					], $currentBlock );
-				}
+				collectServerBlock( $serverData, $currentBlock );
 				$currentBlock = null;
 			} elseif ( is_array( $currentBlock ) ) {
 				if ( preg_match( '/^\s*ServerName\s+(.+)/i', $line, $matches ) ) {
@@ -83,20 +70,7 @@ require_once __DIR__ . '/../config/config.php';
 		}
 
 		// Catch final block if file ends without </VirtualHost>
-		if ( is_array( $currentBlock ) && isset( $currentBlock['name'] ) ) {
-			$name = $currentBlock['name'];
-			if ( isset( $serverData[ $name ] ) ) {
-				$serverData[ $name ]['_duplicate'] = true;
-				$currentBlock['_duplicate']        = true;
-			}
-			$serverData[ $name ] = array_merge( [
-				'valid'     => false,
-				'cert'      => '',
-				'key'       => '',
-				'certValid' => true,
-				'docRoot'   => '',
-			], $currentBlock );
-		}
+		collectServerBlock( $serverData, $currentBlock );
 
 		foreach ( $serverData as $name => &$info ) {
 			if ( $info['ssl'] ) {

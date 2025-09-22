@@ -120,5 +120,3 @@ $currentTheme = $theme;
 
 $tooltips              = getDefaultTooltips();
 $defaultTooltipMessage = getDefaultTooltipMessage();
-
-?>
