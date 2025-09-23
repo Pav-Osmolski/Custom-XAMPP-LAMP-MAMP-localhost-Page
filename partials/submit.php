@@ -229,9 +229,10 @@ if ( $encPass !== null ) {
 
 // Paths (only if provided)
 foreach ( [ 'APACHE_PATH', 'HTDOCS_PATH', 'PHP_PATH' ] as $pkey ) {
-	if ( isset( $in[ $pkey ] ) && is_string( $in[ $pkey ] ) && $in[ $pkey ] !== '' ) {
-		$user_config .= '$' . $pkey . " = '" . addslashes( $in[ $pkey ] ) . "';\n";
-	}
+    if ( isset( $in[ $pkey ] ) && is_string( $in[ $pkey ] ) && $in[ $pkey ] !== '' ) {
+        $val = addslashes( $in[ $pkey ] );
+        $user_config .= "if ( ! defined('{$pkey}') ) { define('{$pkey}', '{$val}'); }\n";
+    }
 }
 
 // UI flags
