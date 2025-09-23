@@ -12,7 +12,7 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.2
+ * @version 1.3
  */
 
 /**
@@ -153,6 +153,136 @@ function read_json_array_safely( string $path ): array {
     // Optional breadcrumb for debugging malformed JSON
     error_log( basename( $path ) . ' JSON decode failed: ' . json_last_error_msg() );
     return [];
+}
+
+/**
+ * Normalise a configured subdirectory safely below HTDOCS_PATH.
+ *
+ * Uses your normalise_path() for slash handling, prevents traversal,
+ * and anchors the result under HTDOCS_PATH.
+ *
+ * @param string $relative
+ * @return array{dir:string,error:?string}
+ */
+function normalise_subdir( $relative ) {
+    $relative = (string) $relative;
+
+    // Canonical slash handling via your helper
+    $subdir = trim( normalise_path( $relative ), DIRECTORY_SEPARATOR );
+
+    // Prevent traversal
+    if ( strpos( $subdir, '..' ) !== false ) {
+        return [ 'dir' => '', 'error' => 'Security: directory traversal detected in "dir".' ];
+    }
+
+    $abs = rtrim( HTDOCS_PATH, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . $subdir . DIRECTORY_SEPARATOR;
+    return [ 'dir' => $abs, 'error' => null ];
+}
+
+/**
+ * List immediate subdirectories of a directory, skipping dot entries and sorting naturally.
+ *
+ * @param string $absDir
+ * @return array<int, string> Folder basenames
+ */
+function list_subdirs( $absDir ) {
+    if ( ! is_dir( $absDir ) ) {
+        return [];
+    }
+
+    $out = [];
+    $it  = new DirectoryIterator( $absDir );
+    foreach ( $it as $f ) {
+        if ( $f->isDot() ) {
+            continue;
+        }
+        if ( $f->isDir() ) {
+            $out[] = $f->getBasename();
+        }
+    }
+
+    natcasesort( $out );
+    return array_values( $out );
+}
+
+/**
+ * Build the URL/display name from rules and special cases.
+ *
+ * @param string $folderName
+ * @param array<string, mixed> $column
+ * @param array<int, string> $errors Accumulates human-readable errors
+ * @return string URL/display name or '__SKIP__' sentinel
+ */
+function build_url_name( $folderName, array $column, array &$errors ) {
+    $urlName = $folderName;
+
+    if ( isset( $column['urlRules']['match'], $column['urlRules']['replace'] ) ) {
+        $match   = (string) $column['urlRules']['match'];
+        $replace = (string) $column['urlRules']['replace'];
+
+        // Validate regex safely
+        set_error_handler( static function () {}, E_WARNING );
+        $ok = @preg_match( $match, '' );
+        restore_error_handler();
+
+        if ( $ok === false ) {
+            $errors[] = 'Invalid regex in urlRules.match for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+        } else {
+            if ( preg_match( $match, $folderName ) ) {
+                $urlName = preg_replace( $replace, '', $folderName );
+                if ( $urlName === null ) {
+                    $errors[] = 'Invalid regex in urlRules.replace for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+                    $urlName = $folderName;
+                }
+            } else {
+                return '__SKIP__';
+            }
+        }
+    }
+
+    if ( ! empty( $column['specialCases'] ) && is_array( $column['specialCases'] ) ) {
+        if ( array_key_exists( $urlName, $column['specialCases'] ) ) {
+            $urlName = (string) $column['specialCases'][ $urlName ];
+        }
+    }
+
+    return $urlName;
+}
+
+/**
+ * Resolve a template by name to HTML.
+ *
+ * @param string $templateName
+ * @param array<string, array<string,mixed>> $templatesByName
+ * @return string
+ */
+function resolve_template_html( $templateName, array $templatesByName ) {
+    if ( isset( $templatesByName[ $templateName ]['html'] ) ) {
+        return (string) $templatesByName[ $templateName ]['html'];
+    }
+    if ( isset( $templatesByName['basic']['html'] ) ) {
+        return (string) $templatesByName['basic']['html'];
+    }
+    return '<li><a href="/{urlName}">{urlName}</a></li>';
+}
+
+/**
+ * Render one list item from a template, substituting placeholders safely.
+ *
+ * @param string $templateHtml
+ * @param string $urlName
+ * @param bool $disableLinks
+ * @return string
+ */
+function render_item_html( $templateHtml, $urlName, $disableLinks ) {
+    $safe = htmlspecialchars( $urlName, ENT_QUOTES, 'UTF-8' );
+    $html = str_replace( '{urlName}', $safe, $templateHtml );
+
+    if ( $disableLinks ) {
+        $html = strip_tags( $html, '<li><div><span>' );
+    }
+
+    return $html;
 }
 
 /**

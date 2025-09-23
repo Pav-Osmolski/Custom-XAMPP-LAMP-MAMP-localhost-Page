@@ -51,21 +51,6 @@
 	width: 100%;
 	max-width: 1300px;
 	transition: max-width 0.3s ease;
-
-	// Width modifiers
-	$column-widths: (
-		max-xs: 800px,
-		max-sm: 1000px,
-		max-md: 1300px,
-		max-lg: 1600px,
-		max-xl: fit-content
-	);
-
-	@each $class, $width in $column-widths {
-		&.#{$class} {
-			max-width: $width;
-		}
-	}
 }
 
 .column {
@@ -133,6 +118,14 @@
 
 	.invalid {
 		color: var(--error-bg);
+	}
+
+	&.warnings {
+		margin: 30px auto 0 auto;
+
+		li {
+			font-weight: lighter;
+		}
 	}
 }
 

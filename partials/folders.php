@@ -20,33 +20,46 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.1
+ * @version 1.3
  */
 
 require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
+// Load config via safe JSON reader
 $foldersConfigData = read_json_array_safely( __DIR__ . '/../config/folders.json' );
 $linkTemplates     = read_json_array_safely( __DIR__ . '/../config/link_templates.json' );
 
+// Index templates by name for fast lookup
+$templatesByName = [];
+foreach ( $linkTemplates as $tpl ) {
+    if ( is_array( $tpl ) && isset( $tpl['name'] ) ) {
+        $templatesByName[ (string) $tpl['name'] ] = $tpl;
+    }
+}
+
+// Load hamburger icon, prefixing IDs to avoid collisions
 $hamburgerSvgPath = __DIR__ . '/../assets/images/hamburger.svg';
-$hamburgerSvg     = is_file( $hamburgerSvgPath ) ? file_get_contents( $hamburgerSvgPath ) : '';
+$hamburgerSvg     = is_file( $hamburgerSvgPath )
+    ? injectSvgWithUniqueIds( $hamburgerSvgPath, 'drag-' . bin2hex( random_bytes( 3 ) ) )
+    : '';
 
 $columnCounter = 0;
+$globalErrors  = [];
 ?>
 
-<?php if ( empty( $foldersConfigData ) || empty( $linkTemplates ) ) : ?>
+<?php if ( empty( $foldersConfigData ) || empty( $templatesByName ) ) : ?>
     <div id="folders-view" class="visible">
         <h2>Document Folders</h2>
         <div class="columns max-md">
             <div class="column">
-				<?php if ( empty( $foldersConfigData ) && empty( $linkTemplates ) ) : ?>
-				    <p>No folders or link templates configured yet. Pop over to <a href="?view=settings">Settings</a> to add your first folder column and link template.</p>
-				<?php elseif ( empty( $foldersConfigData ) ) : ?>
-				    <p>No folders configured yet. Pop over to <a href="?view=settings">Settings</a> to add your first folder column.</p>
-				<?php elseif ( empty( $linkTemplates ) ) : ?>
-				    <p>No link templates configured yet. Pop over to <a href="?view=settings">Settings</a> to add your first link template.</p>
-				<?php endif; ?>
+                <?php if ( empty( $foldersConfigData ) && empty( $templatesByName ) ) : ?>
+                    <p>No folders or link templates configured yet. Pop over to <a href="?view=settings">Settings</a> to add your first folder column and link template.</p>
+                <?php elseif ( empty( $foldersConfigData ) ) : ?>
+                    <p>No folders configured yet. Pop over to <a href="?view=settings">Settings</a> to add your first folder column.</p>
+                <?php elseif ( empty( $templatesByName ) ) : ?>
+                    <p>No link templates configured yet. Pop over to <a href="?view=settings">Settings</a> to add your first link template.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -60,80 +73,78 @@ $columnCounter = 0;
         <h2>Document Folders</h2>
         <div class="columns max-md">
             <?php foreach ( $foldersConfigData as $column ): ?>
-                <div class="column" id="<?php echo 'column_' . ( ++ $columnCounter ); ?>">
+                <?php
+                if ( ! is_array( $column ) ) {
+                    $globalErrors[] = 'Column configuration must be an object.';
+                    continue;
+                }
+
+                $title       = isset( $column['title'] ) ? (string) $column['title'] : 'Untitled';
+                $href        = isset( $column['href'] ) ? (string) $column['href'] : '';
+                $template    = isset( $column['linkTemplate'] ) ? (string) $column['linkTemplate'] : 'basic';
+                $excludeList = isset( $column['excludeList'] ) && is_array( $column['excludeList'] ) ? $column['excludeList'] : [];
+                $disable     = ! empty( $column['disableLinks'] );
+
+                $norm = normalise_subdir( $column['dir'] ?? '' );
+                $dir  = $norm['dir'];
+                if ( $norm['error'] ) {
+                    $globalErrors[] = $norm['error'] . ' (Column: ' . htmlspecialchars( $title ) . ')';
+                }
+
+                $folders = $dir ? list_subdirs( $dir ) : [];
+                ?>
+                <div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>">
                     <div class="drag-handle"><?php echo $hamburgerSvg; ?></div>
                     <h3>
-                        <?php if ( ! empty( $column['href'] ) ): ?>
-                            <a href="<?= htmlspecialchars( $column['href'] ) ?>"><?= htmlspecialchars( $column['title'] ) ?></a>
+                        <?php if ( $href !== '' ): ?>
+                            <a href="<?= htmlspecialchars( $href ) ?>"><?= htmlspecialchars( $title ) ?></a>
                         <?php else: ?>
-                            <?= htmlspecialchars( $column['title'] ) ?>
+                            <?= htmlspecialchars( $title ) ?>
                         <?php endif; ?>
                     </h3>
                     <ul>
                         <?php
-                        $subdir = trim( str_replace( [
-                            '/',
-                            '\\'
-                        ], DIRECTORY_SEPARATOR, $column['dir'] ), DIRECTORY_SEPARATOR );
-                        $dir    = HTDOCS_PATH . DIRECTORY_SEPARATOR . $subdir . DIRECTORY_SEPARATOR;
-                        $folders = array_filter( glob( $dir . '*' ), 'is_dir' );
-
-                        if ( ! is_dir( $dir ) ) {
-                            echo "<li class='invalid'>Error: The directory '{$dir}' does not exist.</li>";
+                        if ( ! $dir || ! is_dir( $dir ) ) {
+                            echo "<li class='invalid'>Error: The directory '" . htmlspecialchars( $dir ?: '(unset)' ) . "' does not exist.</li>";
                         } elseif ( empty( $folders ) ) {
-                            echo "<li class='empty'>No projects found in '{$dir}'.</li>";
-                        }
+                            echo "<li class='empty'>No projects found in '" . htmlspecialchars( $dir ) . "'.</li>";
+                        } else {
+                            $templateHtml = resolve_template_html( $template, $templatesByName );
 
-                        foreach ( $folders as $folder ) {
-                            $folderName  = basename( $folder );
-                            $excludeList = $column['excludeList'] ?? [];
-                            if ( in_array( $folderName, $excludeList ) ) {
-                                continue;
-                            }
-
-                            if ( isset( $column['urlRules'] ) &&
-                                 ! empty( $column['urlRules']['match'] ) &&
-                                 ! empty( $column['urlRules']['replace'] )
-                            ) {
-                                $matchRegex   = $column['urlRules']['match'];
-                                $replaceRegex = $column['urlRules']['replace'];
-                                $urlName      = preg_replace( $replaceRegex, '', $folderName );
-
-                                if ( ! preg_match( $matchRegex, $folderName ) ) {
+                            foreach ( $folders as $folderName ) {
+                                if ( in_array( $folderName, $excludeList, true ) ) {
                                     continue;
                                 }
-                            } else {
-                                $urlName = $folderName;
-                            }
 
-                            if ( ! empty( $column['specialCases'][ $urlName ] ) ) {
-                                $urlName = $column['specialCases'][ $urlName ];
-                            }
+                                $errors  = [];
+                                $urlName = build_url_name( $folderName, $column, $errors );
 
-                            $disableLinks = ! empty( $column['disableLinks'] );
-
-                            $template      = $column['linkTemplate'] ?? 'basic';
-                            $html          = '';
-
-                            foreach ( $linkTemplates as $t ) {
-                                if ( $t['name'] === $template ) {
-                                    $html = $t['html'];
-                                    break;
+                                if ( $urlName === '__SKIP__' ) {
+                                    continue;
                                 }
+
+                                foreach ( $errors as $e ) {
+                                    $globalErrors[] = $e;
+                                }
+
+                                echo render_item_html( $templateHtml, $urlName, $disable );
                             }
-
-                            $html = str_replace( '{urlName}', $urlName, $html );
-
-                            if ( $disableLinks ) {
-                                $html = strip_tags( $html, '<li><div>' );
-                            }
-
-                            echo $html;
                         }
                         ?>
                     </ul>
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <?php if ( ! empty( $globalErrors ) ): ?>
+            <div class="column warnings max-md">
+                <h4>Notes</h4>
+                <ul>
+                    <?php foreach ( array_unique( $globalErrors ) as $msg ): ?>
+                        <li><?= $msg ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
 <?php endif; ?>
