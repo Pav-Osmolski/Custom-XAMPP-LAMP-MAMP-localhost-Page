@@ -105,8 +105,10 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 
 | Script                    | Purpose |
 |---------------------------|---------|
-| `make-cert-silent.bat`    | Generates a `.crt` and `.key` using OpenSSL silently via Windows Batch script. |
-| `make-cert-silent.sh`     | Bash script to generate a cert/key pair non-interactively using OpenSSL. |
+| `make-cert-prompt.bat`      | Windows Batch that prompts for CN/SANs, generates `.key` and `.crt` with OpenSSL. |
+| `make-cert-prompt.sh`       | Bash script that prompts for CN/SANs, generates `.key` and `.crt` with OpenSSL. |
+| `make-cert-silent.bat`      | Generates a `.crt` and `.key` using OpenSSL silently via Windows Batch script. |
+| `make-cert-silent.sh`       | Bash script to generate a cert/key pair non-interactively using OpenSSL. |
 
 > 💡 These scripts are auto-copied from `crt/` if missing from `apache/crt/` or outdated.
 
@@ -138,7 +140,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | `open_folder.php`        | Opens a specified folder path in the system file explorer (cross-platform). |
 | `php_error_log.php`      | Fetches and returns PHP error log entries via AJAX. |
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
-| `read_config.php`        | Read-only endpoint for whitelisted UI JSON over GET |
+| `read_config.php`        | Read-only endpoint for whitelisted UI JSON over GET. |
 | `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
 | `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
 

@@ -36,9 +36,9 @@ if ( ! is_dir( $crtDir ) ) {
 
 // Define script variants by OS
 $scriptVariants = [
-	'Windows' => [ 'make-cert-silent.ps1', 'make-cert-silent.bat' ],
-	'Linux'   => [ 'make-cert-silent.sh' ],
-	'Darwin'  => [ 'make-cert-silent.sh' ],
+	'Windows' => [ 'make-cert-silent.ps1', 'make-cert-silent.bat', 'make-cert-prompt.ps1', 'make-cert-prompt.bat' ],
+	'Linux'   => [ 'make-cert-silent.sh', 'make-cert-prompt.sh' ],
+	'Darwin'  => [ 'make-cert-silent.sh', 'make-cert-prompt.sh' ],
 ];
 
 // Copy fallback scripts if missing or outdated
