@@ -206,36 +206,61 @@ function list_subdirs( $absDir ) {
 }
 
 /**
- * Build the URL/display name from rules and special cases.
+ * Build the URL/display name for a folder using column rules and special cases.
  *
- * @param string $folderName
- * @param array<string, mixed> $column
- * @param array<int, string> $errors Accumulates human-readable errors
- * @return string URL/display name or '__SKIP__' sentinel
+ * Behaviour:
+ * - If both `urlRules.match` and `urlRules.replace` are empty: no rule is applied, no error.
+ * - If only one of the two is provided: an error is added (both must be set or both empty).
+ * - If both are provided:
+ *     - Validates `urlRules.match` as a regex.
+ *     - If valid and matches $folderName, applies `urlRules.replace` as a regex replace.
+ *     - If invalid, logs an error and leaves $folderName unchanged.
+ *     - If it does not match $folderName, returns "__SKIP__" to signal exclusion.
+ * - After urlRules, applies any `specialCases` overrides if present.
+ *
+ * @param string              $folderName The original folder name.
+ * @param array<string,mixed> $column     The column definition (may contain urlRules and specialCases).
+ * @param array<int,string>   $errors     Reference to an array that accumulates human-readable errors.
+ *
+ * @return string The transformed URL/display name, or "__SKIP__" sentinel if the folder should be skipped.
  */
 function build_url_name( $folderName, array $column, array &$errors ) {
     $urlName = $folderName;
 
-    if ( isset( $column['urlRules']['match'], $column['urlRules']['replace'] ) ) {
-        $match   = (string) $column['urlRules']['match'];
-        $replace = (string) $column['urlRules']['replace'];
+    if ( isset( $column['urlRules'] ) && is_array( $column['urlRules'] ) ) {
+        $match   = isset( $column['urlRules']['match'] ) ? (string) $column['urlRules']['match'] : '';
+        $replace = isset( $column['urlRules']['replace'] ) ? (string) $column['urlRules']['replace'] : '';
 
-        // Validate regex safely
-        set_error_handler( static function () {}, E_WARNING );
-        $ok = @preg_match( $match, '' );
-        restore_error_handler();
+        $matchTrim   = trim( $match );
+        $replaceTrim = trim( $replace );
 
-        if ( $ok === false ) {
-            $errors[] = 'Invalid regex in urlRules.match for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+        // Both empty => no rule, no error
+        if ( $matchTrim === '' && $replaceTrim === '' ) {
+            // do nothing
+        } elseif ( ($matchTrim === '') !== ($replaceTrim === '') ) {
+            // One provided without the other
+            $errors[] = 'Both urlRules.match and urlRules.replace must be set (or both empty) for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
         } else {
-            if ( preg_match( $match, $folderName ) ) {
-                $urlName = preg_replace( $replace, '', $folderName );
-                if ( $urlName === null ) {
-                    $errors[] = 'Invalid regex in urlRules.replace for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
-                    $urlName = $folderName;
-                }
+            // Validate regex for match
+            set_error_handler( static function () {}, E_WARNING );
+            $ok = @preg_match( $matchTrim, '' );
+            restore_error_handler();
+
+            if ( $ok === false ) {
+                $errors[] = 'Invalid regex in urlRules.match for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
             } else {
-                return '__SKIP__';
+                if ( preg_match( $matchTrim, $folderName ) ) {
+                    // Apply "replace" as your pattern to strip
+                    $newName = @preg_replace( $replaceTrim, '', $folderName );
+                    if ( $newName === null ) {
+                        $errors[] = 'Invalid regex in urlRules.replace for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+                    } else {
+                        $urlName = $newName;
+                    }
+                } else {
+                    // No match => skip this item for this column
+                    return '__SKIP__';
+                }
             }
         }
     }
