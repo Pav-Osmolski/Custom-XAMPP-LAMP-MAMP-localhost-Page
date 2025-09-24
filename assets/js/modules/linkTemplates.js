@@ -7,7 +7,7 @@ export function initLinkTemplates() {
 
 		function loadTemplatesFromFile() {
 			list.innerHTML = '';
-			fetch( `${ window.BASE_URL }config/link_templates.json`, {cache: 'no-store'} )
+			fetch( `${ window.BASE_URL }utils/read_config.php?file=link_templates`, {cache: 'no-store'} )
 				.then( ( res ) => res.json() )
 				.then( ( data ) => {
 					data.forEach( addTemplateItem );

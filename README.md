@@ -138,6 +138,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | `open_folder.php`        | Opens a specified folder path in the system file explorer (cross-platform). |
 | `php_error_log.php`      | Fetches and returns PHP error log entries via AJAX. |
 | `phpinfo.php`            | Outputs PHP environment details via `phpinfo()` — handy for debugging. |
+| `read_config.php`        | Read-only endpoint for whitelisted UI JSON over GET |
 | `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
 | `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
 

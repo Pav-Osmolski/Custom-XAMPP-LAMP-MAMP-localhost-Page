@@ -13,7 +13,7 @@ export function initFoldersConfig() {
 
 		const getLinkTemplates = () => {
 			if ( linkTemplatesCache ) return Promise.resolve( linkTemplatesCache );
-			return fetch( `${ window.BASE_URL }config/link_templates.json`, {cache: 'no-store'} )
+			return fetch( `${ window.BASE_URL }utils/read_config.php?file=link_templates`, {cache: 'no-store'} )
 				.then( res => res.json() )
 				.then( templates => {
 					linkTemplatesCache = templates;
@@ -145,7 +145,7 @@ export function initFoldersConfig() {
 			input.value = JSON.stringify( items, null, 2 );
 		};
 
-		fetch( `${ window.BASE_URL }config/folders.json`, {cache: 'no-store'} )
+		fetch( `${ window.BASE_URL }utils/read_config.php?file=folders`, {cache: 'no-store'} )
 			.then( res => res.json() )
 			.then( data => {
 				data.forEach( item => addFolderItem( item ) );
