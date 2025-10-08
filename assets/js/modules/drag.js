@@ -3,67 +3,74 @@ export function enableDragSort( listSelector ) {
 	const list = document.querySelector( listSelector );
 	if ( !list ) return;
 
+	// Prevent double-initialising the same list
+	if ( list.dataset.sortBound === '1' ) return;
+	list.dataset.sortBound = '1';
+
 	let dragSrcEl = null;
 
-	function handleDragStart( e ) {
-		dragSrcEl = this;
+	function isInteractive( el ) {
+		return !!el.closest( 'input, select, textarea, button, a, [contenteditable=""], .no-drag' );
+	}
+
+	// We only toggle draggable dynamically when the pointer goes down on a list item
+	list.addEventListener( 'pointerdown', ( e ) => {
+		const li = e.target.closest( 'li' );
+		if ( !li || !list.contains( li ) ) return;
+		if ( isInteractive( e.target ) ) return; // don't start drag from form controls
+		li.draggable = true; // enable just-in-time
+	}, { capture: true } );
+
+	list.addEventListener( 'dragstart', ( e ) => {
+		const li = e.target.closest( 'li' );
+		if ( !li || !list.contains( li ) ) return;
+		dragSrcEl = li;
 		e.dataTransfer.effectAllowed = 'move';
-		e.dataTransfer.setData( 'text/html', this.outerHTML );
-		this.classList.add( 'dragElem' );
-	}
+		li.classList.add( 'dragElem' );
+	});
 
-	function handleDragOver( e ) {
-		if ( e.preventDefault ) e.preventDefault();
-		this.classList.add( 'over' );
+	list.addEventListener( 'dragenter', ( e ) => {
+		const li = e.target.closest( 'li' );
+		if ( !li || !list.contains( li ) ) return;
+		li.classList.add( 'over' );
+	});
+
+	list.addEventListener( 'dragover', ( e ) => {
+		// Allow dropping
+		e.preventDefault();
 		e.dataTransfer.dropEffect = 'move';
-		return false;
-	}
+	});
 
-	function handleDragEnter() {
-		this.classList.add( 'over' );
-	}
+	list.addEventListener( 'dragleave', ( e ) => {
+		const li = e.target.closest( 'li' );
+		if ( !li || !list.contains( li ) ) return;
+		li.classList.remove( 'over' );
+	});
 
-	function handleDragLeave() {
-		this.classList.remove( 'over' );
-	}
-
-	function handleDrop( e ) {
-		if ( e.stopPropagation ) e.stopPropagation();
-		if ( dragSrcEl !== this ) {
-			const dropHTML = e.dataTransfer.getData( 'text/html' );
-			const tempDiv = document.createElement( 'div' );
-			tempDiv.innerHTML = dropHTML.trim();
-			const dropElem = tempDiv.firstChild;
-
-			const bounding = this.getBoundingClientRect();
-			const offset = e.clientY - bounding.top;
-
-			if ( offset > bounding.height / 2 ) {
-				this.after( dropElem );
+	list.addEventListener( 'drop', ( e ) => {
+		e.preventDefault();
+		const li = e.target.closest( 'li' );
+		if ( !li || !list.contains( li ) ) return;
+		if ( dragSrcEl && dragSrcEl !== li ) {
+			const items = Array.from( list.children );
+			const from = items.indexOf( dragSrcEl );
+			const to = items.indexOf( li );
+			if ( from < to ) {
+				list.insertBefore( dragSrcEl, li.nextSibling );
 			} else {
-				this.before( dropElem );
+				list.insertBefore( dragSrcEl, li );
 			}
-
-			dragSrcEl.remove();
-			addDnDHandlers( dropElem );
+			list.dispatchEvent( new CustomEvent( 'sorted', { bubbles: true } ) );
 		}
-		this.classList.remove( 'over' );
-		return false;
-	}
+		li.classList.remove( 'over' );
+	});
 
-	function handleDragEnd() {
-		this.classList.remove( 'over' );
-		this.classList.remove( 'dragElem' );
-	}
-
-	function addDnDHandlers( elem ) {
-		elem.addEventListener( 'dragstart', handleDragStart );
-		elem.addEventListener( 'dragenter', handleDragEnter );
-		elem.addEventListener( 'dragover', handleDragOver );
-		elem.addEventListener( 'dragleave', handleDragLeave );
-		elem.addEventListener( 'drop', handleDrop );
-		elem.addEventListener( 'dragend', handleDragEnd );
-	}
-
-	Array.from( list.children ).forEach( addDnDHandlers );
+	list.addEventListener( 'dragend', ( e ) => {
+		const li = e.target.closest( 'li' );
+		if ( li && list.contains( li ) ) {
+			li.classList.remove( 'dragElem' );
+			li.draggable = false; // remove again so inputs behave normally
+		}
+		Array.from( list.children ).forEach( el => el.classList.remove( 'over' ) );
+	});
 }

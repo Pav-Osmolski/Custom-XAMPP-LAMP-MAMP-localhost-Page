@@ -1,5 +1,5 @@
 // assets/js/modules/dock.js
-import {enableDragSort} from './drag.js';
+import { enableDragSort } from './drag.js';
 
 export function initDockConfig() {
 	document.addEventListener( 'DOMContentLoaded', () => {
@@ -10,16 +10,20 @@ export function initDockConfig() {
 		if ( !dockList || !addBtn || !form ) return;
 
 		// Load current config
-		fetch( `${ window.BASE_URL }utils/read_config.php?file=dock`, {cache: 'no-store'} )
+		fetch( `${ window.BASE_URL }utils/read_config.php?file=dock`, { cache: 'no-store' } )
 			.then( res => res.json() )
 			.then( data => {
 				data.forEach( addDockItem );
 				enableDragSort( '#dock-list' );
+
+				// When user reorders items, refresh hidden input
+				dockList.addEventListener( 'sorted', updateInput );
 				updateInput();
 			} );
 
 		addBtn.addEventListener( 'click', () => {
 			addDockItem();
+			// enableDragSort is idempotent now; it will only bind to new child
 			enableDragSort( '#dock-list' );
 			updateInput();
 		} );
@@ -27,14 +31,13 @@ export function initDockConfig() {
 		function addDockItem( item = {} ) {
 			const li = document.createElement( 'li' );
 			li.className = 'dock-item';
-			li.draggable = true;
 			li.innerHTML = `
-                <input type="text" placeholder="Label" value="${ item.label || '' }">
-                <input type="text" placeholder="URL" value="${ item.url || '' }">
-                <input type="text" placeholder="Icon" value="${ item.icon || '' }">
-                <input type="text" placeholder="Alt Text" value="${ item.alt || '' }">
-                <button type="button" class="remove-dock-item">❌</button>
-            `;
+				<input type="text" placeholder="Label" value="${ item.label || '' }">
+				<input type="text" placeholder="URL" value="${ item.url || '' }">
+				<input type="text" placeholder="Icon" value="${ item.icon || '' }">
+				<input type="text" placeholder="Alt Text" value="${ item.alt || '' }">
+				<button type="button" class="remove-dock-item">❌</button>
+			`;
 			dockList.appendChild( li );
 
 			li.querySelector( '.remove-dock-item' ).addEventListener( 'click', () => {
@@ -42,15 +45,16 @@ export function initDockConfig() {
 				updateInput();
 			} );
 
-			Array.from( li.querySelectorAll( 'input' ) ).forEach( input => {
+			Array.from( li.querySelectorAll( 'input' ) ).forEach( ( input ) => {
 				input.addEventListener( 'input', updateInput );
 			} );
 		}
 
 		function updateInput() {
 			const dockItems = [];
-			dockList.querySelectorAll( '.dock-item' ).forEach( li => {
+			Array.from( dockList.children ).forEach( ( li ) => {
 				const inputs = li.querySelectorAll( 'input' );
+				if ( inputs.length < 4 ) return;
 				dockItems.push( {
 					label: inputs[0].value.trim(),
 					url: inputs[1].value.trim(),
