@@ -1,5 +1,5 @@
 // assets/js/modules/drag.js
-export function enableDragSort( listSelector ) {
+export function enableDragSort( listSelector, opts = {} ) {
 	const list = document.querySelector( listSelector );
 	if ( !list ) return;
 
@@ -7,70 +7,77 @@ export function enableDragSort( listSelector ) {
 	if ( list.dataset.sortBound === '1' ) return;
 	list.dataset.sortBound = '1';
 
+	const itemsSelector  = opts.items  || 'li';
+	const handleSelector = opts.handle || null;
+
 	let dragSrcEl = null;
 
 	function isInteractive( el ) {
 		return !!el.closest( 'input, select, textarea, button, a, [contenteditable=""], .no-drag' );
 	}
 
-	// We only toggle draggable dynamically when the pointer goes down on a list item
+	// Enable "just-in-time" draggable, but only if we’re on a valid item (and, if set, on its handle)
 	list.addEventListener( 'pointerdown', ( e ) => {
-		const li = e.target.closest( 'li' );
-		if ( !li || !list.contains( li ) ) return;
-		if ( isInteractive( e.target ) ) return; // don't start drag from form controls
-		li.draggable = true; // enable just-in-time
+		const item = e.target.closest( itemsSelector );
+		if ( !item || !list.contains( item ) ) return;
+		if ( isInteractive( e.target ) ) return;
+		if ( handleSelector && !e.target.closest( handleSelector ) ) return;
+		item.draggable = true;
 	}, { capture: true } );
 
 	list.addEventListener( 'dragstart', ( e ) => {
-		const li = e.target.closest( 'li' );
-		if ( !li || !list.contains( li ) ) return;
-		dragSrcEl = li;
+		const item = e.target.closest( itemsSelector );
+		if ( !item || !list.contains( item ) ) return;
+		dragSrcEl = item;
 		e.dataTransfer.effectAllowed = 'move';
-		li.classList.add( 'dragElem' );
-	});
+		try { e.dataTransfer.setData( 'text/plain', '' ); } catch ( _ ) {}
+		item.classList.add( 'dragElem' );
+	} );
 
 	list.addEventListener( 'dragenter', ( e ) => {
-		const li = e.target.closest( 'li' );
-		if ( !li || !list.contains( li ) ) return;
-		li.classList.add( 'over' );
-	});
+		const item = e.target.closest( itemsSelector );
+		if ( !item || !list.contains( item ) ) return;
+		item.classList.add( 'over' );
+	} );
 
 	list.addEventListener( 'dragover', ( e ) => {
-		// Allow dropping
-		e.preventDefault();
-		e.dataTransfer.dropEffect = 'move';
-	});
+		if ( dragSrcEl ) e.preventDefault();
+	} );
 
 	list.addEventListener( 'dragleave', ( e ) => {
-		const li = e.target.closest( 'li' );
-		if ( !li || !list.contains( li ) ) return;
-		li.classList.remove( 'over' );
-	});
+		const item = e.target.closest( itemsSelector );
+		if ( item && list.contains( item ) ) {
+			item.classList.remove( 'over' );
+		}
+	} );
 
 	list.addEventListener( 'drop', ( e ) => {
 		e.preventDefault();
-		const li = e.target.closest( 'li' );
-		if ( !li || !list.contains( li ) ) return;
-		if ( dragSrcEl && dragSrcEl !== li ) {
-			const items = Array.from( list.children );
-			const from = items.indexOf( dragSrcEl );
-			const to = items.indexOf( li );
+		const target = e.target.closest( itemsSelector );
+		if ( !target || !dragSrcEl || target === dragSrcEl ) return;
+
+		const children = Array.from( list.querySelectorAll( `:scope > ${ itemsSelector }` ) );
+		const from = children.indexOf( dragSrcEl );
+		const to   = children.indexOf( target );
+
+		if ( from > -1 && to > -1 ) {
 			if ( from < to ) {
-				list.insertBefore( dragSrcEl, li.nextSibling );
+				target.after( dragSrcEl );
 			} else {
-				list.insertBefore( dragSrcEl, li );
+				target.before( dragSrcEl );
 			}
 			list.dispatchEvent( new CustomEvent( 'sorted', { bubbles: true } ) );
 		}
-		li.classList.remove( 'over' );
-	});
+		target.classList.remove( 'over' );
+	} );
 
 	list.addEventListener( 'dragend', ( e ) => {
-		const li = e.target.closest( 'li' );
-		if ( li && list.contains( li ) ) {
-			li.classList.remove( 'dragElem' );
-			li.draggable = false; // remove again so inputs behave normally
+		const item = e.target.closest( itemsSelector );
+		if ( item && list.contains( item ) ) {
+			item.classList.remove( 'dragElem' );
+			item.draggable = false; // return inputs to normal behaviour
 		}
-		Array.from( list.children ).forEach( el => el.classList.remove( 'over' ) );
-	});
+		Array.from( list.querySelectorAll( itemsSelector ) ).forEach( el => el.classList.remove( 'over' ) );
+		dragSrcEl = null;
+	} );
 }

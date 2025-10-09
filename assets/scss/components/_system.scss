@@ -25,6 +25,7 @@ body.error-log-active {
 		button {
 			display: flex;
 			align-items: center;
+			line-height: 1.3;
 			cursor: pointer;
 			background: none;
 			border: none;
@@ -58,7 +59,7 @@ body.system-monitor-active {
 		background: var(--header-background-color);
 		padding: 15px;
 		border-radius: 10px;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 4px 8px var(--box-shadow);
 		pointer-events: none;
 		animation: fadeIn 1.5s ease-in;
 
