@@ -315,6 +315,19 @@ require_once __DIR__ . '/../config/config.php';
 		</div>
 	</div>
 
+	<?php renderSeparatorLine() ?>
+
+	<div class="toggle-content-container <?= ! $phpPathValid ? ' disabled' : '' ?>" data-id="export">
+		<div class="toggle-accordion">
+			<?= renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h3', 'Export Files & Database' ) ?>
+			<?= $phpPathValid ? '' : '&nbsp;❕' ?>
+			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
+		</div>
+		<div class="toggle-content">
+			<?php require_once __DIR__ . '/../partials/export.php'; ?>
+		</div>
+	</div>
+
 	<?php renderSeparatorLine(); ?>
 
 	<!-- Apache Control -->

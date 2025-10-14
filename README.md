@@ -43,11 +43,14 @@ Please feel free to fork and make your own changes!
 - **PHP Error Management** – Toggle error display and logging on the fly
 - **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate management
 - **Apache and PHP Error Log Toggle** – One-click access to the latest server logs
+- **Export Files & Database** – Export folders as ZIP; include/only WP uploads; exclude junk
+- **Security** – CSRF on POST, path checks, safe fallbacks; no secrets persisted
 - **Open Folder from UI** – Instantly launch projects in your file explorer from the browser
 - **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites
 - **Reusable Link Templates** – Define and reuse HTML templates across folder listings
 - **Responsive Interface** – Sleek, modern design that adapts to all screen sizes
 - **Theme Switcher** – Five themes, one destiny. Pick your favourite
+- **Demo Mode** – Disables exports and obfuscates credentials for demonstrative purposes
 - **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
 
 ## How to Install
@@ -105,10 +108,10 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 
 | Script                    | Purpose |
 |---------------------------|---------|
-| `make-cert-prompt.bat`      | Windows Batch that prompts for CN/SANs, generates `.key` and `.crt` with OpenSSL. |
-| `make-cert-prompt.sh`       | Bash script that prompts for CN/SANs, generates `.key` and `.crt` with OpenSSL. |
-| `make-cert-silent.bat`      | Generates a `.crt` and `.key` using OpenSSL silently via Windows Batch script. |
-| `make-cert-silent.sh`       | Bash script to generate a cert/key pair non-interactively using OpenSSL. |
+| `make-cert-prompt.bat`    | Windows Batch that prompts for CN/SANs, generates `.key` and `.crt` with OpenSSL. |
+| `make-cert-prompt.sh`     | Bash script that prompts for CN/SANs, generates `.key` and `.crt` with OpenSSL. |
+| `make-cert-silent.bat`    | Generates a `.crt` and `.key` using OpenSSL silently via Windows Batch script. |
+| `make-cert-silent.sh`     | Bash script to generate a cert/key pair non-interactively using OpenSSL. |
 
 > 💡 These scripts are auto-copied from `crt/` if missing from `apache/crt/` or outdated.
 
@@ -119,6 +122,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | File                     | Description |
 |--------------------------|-------------|
 | `dock.php`               | Renders the customizable macOS-style dock. |
+| `export.php`             | UI + JSON endpoints to export files or DB with CSRF and WP uploads options. |
 | `folders.php`            | Dynamically scans and lists local project folders. |
 | `footer.php`             | Displays the page footer with navigation links and a humorous quote. |
 | `header.php`             | Shared header banner with greeting, search bar, clock, and server info. |

@@ -60,7 +60,9 @@ function tail_log( $file, $lines = 25 ) {
 
 	fclose( $fp );
 
-	return implode( "\n", array_filter( $data, fn( $l ) => trim( $l ) !== '' ) );
+	return implode( "\n", array_filter( $data, function ( $l ) {
+		return trim( $l ) !== '';
+	} ) );
 }
 
 if ( $useAjaxForStats ) {

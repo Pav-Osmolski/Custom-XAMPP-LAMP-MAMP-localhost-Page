@@ -12,8 +12,31 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.3
+ * @version 1.6
  */
+
+/**
+ * Polyfill for PHP 8.0's str_starts_with().
+ *
+ * Behaviour:
+ * - Case-sensitive, binary-safe prefix check.
+ * - Returns true when $needle is an empty string.
+ * - Equivalent to: strncmp($haystack, $needle, strlen($needle)) === 0
+ *
+ * Notes:
+ * - Provided only if str_starts_with() does not already exist (PHP < 8.0).
+ * - For multibyte/locale-aware checks, consider mb_strpos($haystack, $needle) === 0.
+ *
+ * @param string $haystack Full string to inspect.
+ * @param string $needle Prefix to compare against.
+ *
+ * @return bool  True if $haystack begins with $needle; false otherwise.
+ */
+if ( ! function_exists( 'str_starts_with' ) ) {
+	function str_starts_with( string $haystack, string $needle ): bool {
+		return strncmp( $haystack, $needle, strlen( $needle ) ) === 0;
+	}
+}
 
 /**
  * Defines a path-related constant if not already defined, with normalisation.
@@ -70,6 +93,7 @@ function normalise_path( string $path ): string {
  * Sends a generic 400 error without leaking sensitive details.
  *
  * @param string $msg
+ *
  * @return void
  */
 function submit_fail( string $msg ): void {
@@ -85,6 +109,7 @@ function submit_fail( string $msg ): void {
  *
  * @param string $dstPath
  * @param string $content
+ *
  * @return void
  */
 function atomic_write( string $dstPath, string $content ): void {
@@ -111,7 +136,8 @@ function atomic_write( string $dstPath, string $content ): void {
  * Validates JSON text and returns a pretty-printed canonical form.
  *
  * @param string $raw
- * @param bool   $allowEmptyArray
+ * @param bool $allowEmptyArray
+ *
  * @return string Canonical JSON
  */
 function validate_and_canonicalise_json( string $raw, bool $allowEmptyArray = true ): string {
@@ -123,6 +149,7 @@ function validate_and_canonicalise_json( string $raw, bool $allowEmptyArray = tr
 	if ( ! is_array( $data ) ) {
 		throw new InvalidArgumentException( 'JSON root must be array or object.' );
 	}
+
 	return json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 }
 
@@ -133,26 +160,28 @@ function validate_and_canonicalise_json( string $raw, bool $allowEmptyArray = tr
  * is empty, or contains invalid JSON.
  *
  * @param string $path Absolute file path to the JSON file.
+ *
  * @return array<int|string, mixed> Decoded array or [] on failure.
  */
 function read_json_array_safely( string $path ): array {
-    if ( ! is_file( $path ) || ! is_readable( $path ) ) {
-        return [];
-    }
+	if ( ! is_file( $path ) || ! is_readable( $path ) ) {
+		return [];
+	}
 
-    $raw = file_get_contents( $path );
-    if ( $raw === false || $raw === '' ) {
-        return [];
-    }
+	$raw = file_get_contents( $path );
+	if ( $raw === false || $raw === '' ) {
+		return [];
+	}
 
-    $decoded = json_decode( $raw, true );
-    if ( is_array( $decoded ) ) {
-        return $decoded;
-    }
+	$decoded = json_decode( $raw, true );
+	if ( is_array( $decoded ) ) {
+		return $decoded;
+	}
 
-    // Optional breadcrumb for debugging malformed JSON
-    error_log( basename( $path ) . ' JSON decode failed: ' . json_last_error_msg() );
-    return [];
+	// Optional breadcrumb for debugging malformed JSON
+	error_log( basename( $path ) . ' JSON decode failed: ' . json_last_error_msg() );
+
+	return [];
 }
 
 /**
@@ -162,47 +191,51 @@ function read_json_array_safely( string $path ): array {
  * and anchors the result under HTDOCS_PATH.
  *
  * @param string $relative
+ *
  * @return array{dir:string,error:?string}
  */
 function normalise_subdir( $relative ) {
-    $relative = (string) $relative;
+	$relative = (string) $relative;
 
-    // Canonical slash handling via your helper
-    $subdir = trim( normalise_path( $relative ), DIRECTORY_SEPARATOR );
+	// Canonical slash handling via your helper
+	$subdir = trim( normalise_path( $relative ), DIRECTORY_SEPARATOR );
 
-    // Prevent traversal
-    if ( strpos( $subdir, '..' ) !== false ) {
-        return [ 'dir' => '', 'error' => 'Security: directory traversal detected in "dir".' ];
-    }
+	// Prevent traversal
+	if ( strpos( $subdir, '..' ) !== false ) {
+		return [ 'dir' => '', 'error' => 'Security: directory traversal detected in "dir".' ];
+	}
 
-    $abs = rtrim( HTDOCS_PATH, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . $subdir . DIRECTORY_SEPARATOR;
-    return [ 'dir' => $abs, 'error' => null ];
+	$abs = rtrim( HTDOCS_PATH, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . $subdir . DIRECTORY_SEPARATOR;
+
+	return [ 'dir' => $abs, 'error' => null ];
 }
 
 /**
  * List immediate subdirectories of a directory, skipping dot entries and sorting naturally.
  *
  * @param string $absDir
+ *
  * @return array<int, string> Folder basenames
  */
 function list_subdirs( $absDir ) {
-    if ( ! is_dir( $absDir ) ) {
-        return [];
-    }
+	if ( ! is_dir( $absDir ) ) {
+		return [];
+	}
 
-    $out = [];
-    $it  = new DirectoryIterator( $absDir );
-    foreach ( $it as $f ) {
-        if ( $f->isDot() ) {
-            continue;
-        }
-        if ( $f->isDir() ) {
-            $out[] = $f->getBasename();
-        }
-    }
+	$out = [];
+	$it  = new DirectoryIterator( $absDir );
+	foreach ( $it as $f ) {
+		if ( $f->isDot() ) {
+			continue;
+		}
+		if ( $f->isDir() ) {
+			$out[] = $f->getBasename();
+		}
+	}
 
-    natcasesort( $out );
-    return array_values( $out );
+	natcasesort( $out );
+
+	return array_values( $out );
 }
 
 /**
@@ -218,60 +251,61 @@ function list_subdirs( $absDir ) {
  *     - If it does not match $folderName, returns "__SKIP__" to signal exclusion.
  * - After urlRules, applies any `specialCases` overrides if present.
  *
- * @param string              $folderName The original folder name.
- * @param array<string,mixed> $column     The column definition (may contain urlRules and specialCases).
- * @param array<int,string>   $errors     Reference to an array that accumulates human-readable errors.
+ * @param string $folderName The original folder name.
+ * @param array<string,mixed> $column The column definition (may contain urlRules and specialCases).
+ * @param array<int,string> $errors Reference to an array that accumulates human-readable errors.
  *
  * @return string The transformed URL/display name, or "__SKIP__" sentinel if the folder should be skipped.
  */
 function build_url_name( $folderName, array $column, array &$errors ) {
-    $urlName = $folderName;
+	$urlName = $folderName;
 
-    if ( isset( $column['urlRules'] ) && is_array( $column['urlRules'] ) ) {
-        $match   = isset( $column['urlRules']['match'] ) ? (string) $column['urlRules']['match'] : '';
-        $replace = isset( $column['urlRules']['replace'] ) ? (string) $column['urlRules']['replace'] : '';
+	if ( isset( $column['urlRules'] ) && is_array( $column['urlRules'] ) ) {
+		$match   = isset( $column['urlRules']['match'] ) ? (string) $column['urlRules']['match'] : '';
+		$replace = isset( $column['urlRules']['replace'] ) ? (string) $column['urlRules']['replace'] : '';
 
-        $matchTrim   = trim( $match );
-        $replaceTrim = trim( $replace );
+		$matchTrim   = trim( $match );
+		$replaceTrim = trim( $replace );
 
-        // Both empty => no rule, no error
-        if ( $matchTrim === '' && $replaceTrim === '' ) {
-            // do nothing
-        } elseif ( ($matchTrim === '') !== ($replaceTrim === '') ) {
-            // One provided without the other
-            $errors[] = 'Both urlRules.match and urlRules.replace must be set (or both empty) for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
-        } else {
-            // Validate regex for match
-            set_error_handler( static function () {}, E_WARNING );
-            $ok = @preg_match( $matchTrim, '' );
-            restore_error_handler();
+		// Both empty => no rule, no error
+		if ( $matchTrim === '' && $replaceTrim === '' ) {
+			// do nothing
+		} elseif ( ( $matchTrim === '' ) !== ( $replaceTrim === '' ) ) {
+			// One provided without the other
+			$errors[] = 'Both urlRules.match and urlRules.replace must be set (or both empty) for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+		} else {
+			// Validate regex for match
+			set_error_handler( static function () {
+			}, E_WARNING );
+			$ok = @preg_match( $matchTrim, '' );
+			restore_error_handler();
 
-            if ( $ok === false ) {
-                $errors[] = 'Invalid regex in urlRules.match for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
-            } else {
-                if ( preg_match( $matchTrim, $folderName ) ) {
-                    // Apply "replace" as your pattern to strip
-                    $newName = @preg_replace( $replaceTrim, '', $folderName );
-                    if ( $newName === null ) {
-                        $errors[] = 'Invalid regex in urlRules.replace for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
-                    } else {
-                        $urlName = $newName;
-                    }
-                } else {
-                    // No match => skip this item for this column
-                    return '__SKIP__';
-                }
-            }
-        }
-    }
+			if ( $ok === false ) {
+				$errors[] = 'Invalid regex in urlRules.match for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+			} else {
+				if ( preg_match( $matchTrim, $folderName ) ) {
+					// Apply "replace" as your pattern to strip
+					$newName = @preg_replace( $replaceTrim, '', $folderName );
+					if ( $newName === null ) {
+						$errors[] = 'Invalid regex in urlRules.replace for column "' . htmlspecialchars( (string) ( $column['title'] ?? '' ) ) . '".';
+					} else {
+						$urlName = $newName;
+					}
+				} else {
+					// No match => skip this item for this column
+					return '__SKIP__';
+				}
+			}
+		}
+	}
 
-    if ( ! empty( $column['specialCases'] ) && is_array( $column['specialCases'] ) ) {
-        if ( array_key_exists( $urlName, $column['specialCases'] ) ) {
-            $urlName = (string) $column['specialCases'][ $urlName ];
-        }
-    }
+	if ( ! empty( $column['specialCases'] ) && is_array( $column['specialCases'] ) ) {
+		if ( array_key_exists( $urlName, $column['specialCases'] ) ) {
+			$urlName = (string) $column['specialCases'][ $urlName ];
+		}
+	}
 
-    return $urlName;
+	return $urlName;
 }
 
 /**
@@ -279,16 +313,18 @@ function build_url_name( $folderName, array $column, array &$errors ) {
  *
  * @param string $templateName
  * @param array<string, array<string,mixed>> $templatesByName
+ *
  * @return string
  */
 function resolve_template_html( $templateName, array $templatesByName ) {
-    if ( isset( $templatesByName[ $templateName ]['html'] ) ) {
-        return (string) $templatesByName[ $templateName ]['html'];
-    }
-    if ( isset( $templatesByName['basic']['html'] ) ) {
-        return (string) $templatesByName['basic']['html'];
-    }
-    return '<li><a href="/{urlName}">{urlName}</a></li>';
+	if ( isset( $templatesByName[ $templateName ]['html'] ) ) {
+		return (string) $templatesByName[ $templateName ]['html'];
+	}
+	if ( isset( $templatesByName['basic']['html'] ) ) {
+		return (string) $templatesByName['basic']['html'];
+	}
+
+	return '<li><a href="/{urlName}">{urlName}</a></li>';
 }
 
 /**
@@ -297,27 +333,30 @@ function resolve_template_html( $templateName, array $templatesByName ) {
  * @param string $templateHtml
  * @param string $urlName
  * @param bool $disableLinks
+ *
  * @return string
  */
 function render_item_html( $templateHtml, $urlName, $disableLinks ) {
-    $safe = htmlspecialchars( $urlName, ENT_QUOTES, 'UTF-8' );
-    $html = str_replace( '{urlName}', $safe, $templateHtml );
+	$safe = htmlspecialchars( $urlName, ENT_QUOTES, 'UTF-8' );
+	$html = str_replace( '{urlName}', $safe, $templateHtml );
 
-    if ( $disableLinks ) {
-        $html = strip_tags( $html, '<li><div><span>' );
-    }
+	if ( $disableLinks ) {
+		$html = strip_tags( $html, '<li><div><span>' );
+	}
 
-    return $html;
+	return $html;
 }
 
 /**
  * Normalises a boolean from various HTML input forms.
  *
  * @param mixed $v
+ *
  * @return string "true" or "false"
  */
 function normalise_bool( $v ): string {
 	$truthy = [ '1', 1, true, 'true', 'on', 'yes' ];
+
 	return in_array( $v, $truthy, true ) ? 'true' : 'false';
 }
 
@@ -459,6 +498,7 @@ function getDefaultTooltips(): array {
 		'dock'           => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
 		'apache_control' => 'Restart the Apache server.',
 		'vhosts_manager' => 'Browse, check, and open virtual hosts with cert and DNS validation.',
+		'export'         => 'Create an archive of site files or a database. Pick a subfolder, optionally include or export only wp-content/uploads, and apply your exclude list.',
 		'clear_storage'  => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
 	];
 }
@@ -722,7 +762,8 @@ function obfuscate_value( string $value ): string {
  * - Applies defaults before storing
  *
  * @param array<string, array<string, mixed>> $serverData
- * @param array<string, mixed>|null           $block
+ * @param array<string, mixed>|null $block
+ *
  * @return void
  */
 function collectServerBlock( array &$serverData, ?array $block ): void {
@@ -745,6 +786,595 @@ function collectServerBlock( array &$serverData, ?array $block ): void {
 		'certValid' => true,
 		'docRoot'   => '',
 	], $block );
+}
+
+/**
+ * Returns the default folder names to exclude when zipping.
+ *
+ * Override by defining EXPORT_EXCLUDE (array) in user_config.php.
+ *
+ * @return string[] Normalised, unique folder names (no empties).
+ */
+function export_get_default_excludes(): array {
+	$defaults = [ '.git', '.idea', '.vscode', 'node_modules', 'vendor', 'dist', 'build' ];
+	if ( defined( 'EXPORT_EXCLUDE' ) && is_array( EXPORT_EXCLUDE ) ) {
+		$items = array_map(
+			static function ( $v ) {
+				return trim( (string) $v );
+			},
+			EXPORT_EXCLUDE
+		);
+		$items = array_values( array_unique( array_filter(
+			$items,
+			static function ( $v ) {
+				return $v !== '';
+			}
+		) ) );
+
+		return $items;
+	}
+
+	return $defaults;
+}
+
+/**
+ * Load folders.json and return as an array.
+ *
+ * @param string $path Absolute path to folders.json
+ *
+ * @return array<int, array<string,mixed>> Parsed config; empty array on missing/invalid JSON.
+ */
+function export_load_folders_json( string $path ): array {
+	if ( ! is_file( $path ) ) {
+		return [];
+	}
+	$json = @file_get_contents( $path );
+	if ( $json === false || $json === '' ) {
+		return [];
+	}
+	$data = json_decode( $json, true );
+
+	return is_array( $data ) ? $data : [];
+}
+
+/**
+ * Parse a regex literal string like "/^wp-/" into a valid pattern.
+ * If input looks like a delimited regex already, it is returned as-is.
+ *
+ * @param string $raw
+ *
+ * @return string|null
+ */
+function export_parse_regex_literal( string $raw ): ?string {
+	$raw = trim( $raw );
+	// Looks like /.../flags already
+	if ( strlen( $raw ) >= 2 && $raw[0] === '/' && strrpos( $raw, '/' ) !== 0 ) {
+		return $raw;
+	}
+
+	return null;
+}
+
+/**
+ * Detect if a directory looks like a WordPress site root.
+ *
+ * @param string $absPath
+ *
+ * @return bool
+ */
+function export_is_wp_root( string $absPath ): bool {
+	return is_file( $absPath . DIRECTORY_SEPARATOR . 'wp-config.php' )
+	       || is_dir( $absPath . DIRECTORY_SEPARATOR . 'wp-content' );
+}
+
+/**
+ * Detect if a WordPress uploads folder exists under a given root.
+ *
+ * @param string $absPath
+ *
+ * @return bool
+ */
+function export_has_wp_uploads( string $absPath ): bool {
+	return is_dir( $absPath . DIRECTORY_SEPARATOR . 'wp-content' . DIRECTORY_SEPARATOR . 'uploads' );
+}
+
+/**
+ * List subfolders of a base "dir" entry, applying excludeList and urlRules.match.
+ *
+ * @param string $htdocsPath Absolute HTDOCS path base.
+ * @param string $dirEntry Relative dir from folders.json.
+ * @param string[] $excludeList Names to exclude (exact match).
+ * @param array $urlRules Optional urlRules with "match" (pre-delimited regex string).
+ *
+ * @return array<int, array{name:string,abs:string,isWp:bool,hasUploads:bool}>
+ */
+function export_list_subfolders( string $htdocsPath, string $dirEntry, array $excludeList = [], array $urlRules = [] ): array {
+	$result  = [];
+	$baseAbs = rtrim( $htdocsPath, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . str_replace( [
+			'/',
+			'\\'
+		], DIRECTORY_SEPARATOR, $dirEntry );
+	if ( ! is_dir( $baseAbs ) ) {
+		return $result;
+	}
+
+	$excludeSet = array_flip( $excludeList );
+	$matchRaw   = isset( $urlRules['match'] ) && is_string( $urlRules['match'] ) ? $urlRules['match'] : null;
+	$pattern    = $matchRaw ? export_parse_regex_literal( $matchRaw ) : null;
+
+	$items = @scandir( $baseAbs ) ?: [];
+	foreach ( $items as $name ) {
+		if ( $name === '.' || $name === '..' ) {
+			continue;
+		}
+		if ( isset( $excludeSet[ $name ] ) ) {
+			continue;
+		}
+
+		$abs = $baseAbs . DIRECTORY_SEPARATOR . $name;
+		if ( ! is_dir( $abs ) ) {
+			continue;
+		}
+
+		if ( $pattern !== null ) {
+			$pm = @preg_match( $pattern, $name );
+			if ( $pm !== 1 ) {
+				continue;
+			} // skip non-matches or invalid regex
+		}
+
+		$isWp       = export_is_wp_root( $abs );
+		$hasUploads = $isWp && export_has_wp_uploads( $abs );
+
+		$result[] = [
+			'name'       => $name,
+			'abs'        => $abs,
+			'isWp'       => $isWp,
+			'hasUploads' => $hasUploads,
+		];
+	}
+
+	usort( $result, static function ( $a, $b ) {
+		return strnatcasecmp( $a['name'], $b['name'] );
+	} );
+
+	return $result;
+}
+
+/**
+ * Ensure the public exports directory exists and is writable.
+ * Uses /dist/exports so the browser can download directly.
+ *
+ * @return array{abs:string,rel:string} Absolute path and web-relative path.
+ */
+function export_ensure_exports_dir(): array {
+	$root    = dirname( __DIR__ ); // project root (config/..)
+	$absPath = $root . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR . 'exports';
+	if ( ! is_dir( $absPath ) ) {
+		@mkdir( $absPath, 0775, true );
+	}
+
+	return [
+		'abs' => $absPath,
+		'rel' => 'dist/exports', // web path uses forward slashes
+	];
+}
+
+/**
+ * Create a compressed archive of a project directory for download.
+ *
+ * Prefers ZipArchive; falls back to .tar.gz via PharData (or .tar if zlib is absent).
+ * Returns false on failure and populates $error with a human-readable reason.
+ *
+ * Rules:
+ * - Folder names in $excludeFolders are skipped anywhere in the tree (case-insensitive).
+ * - If the source is a WordPress root, wp-content/uploads is excluded unless $includeUploads is true.
+ * - If $onlyUploads is true, only wp-content/uploads is archived.
+ *
+ * @param string $sourceAbs Absolute path to the directory to archive.
+ * @param string $zipAbs Preferred .zip path; fallback may create .tar.gz or .tar with the same basename.
+ * @param string[] $excludeFolders Folder names to exclude at any depth (e.g. ['.git','node_modules','vendor','dist','build','.idea','.vscode']).
+ * @param bool $includeUploads Include wp-content/uploads when the source is a WP root (ignored when $onlyUploads is true).
+ * @param string|null   &$error Output: detailed error string on failure; null on success.
+ * @param bool $onlyUploads When true, export only wp-content/uploads for WP sites.
+ *
+ * @return bool True if an archive was created (either $zipAbs or the same path with .tar[.gz]).
+ */
+function export_zip_directory( string $sourceAbs, string $zipAbs, array $excludeFolders, bool $includeUploads, ?string &$error = null, bool $onlyUploads = false ): bool {
+	$error = null;
+
+	if ( ! is_dir( $sourceAbs ) ) {
+		$error = 'Source folder does not exist.';
+
+		return false;
+	}
+
+	$sourceAbs    = rtrim( $sourceAbs, DIRECTORY_SEPARATOR );
+	$baseLen      = strlen( $sourceAbs ) + 1;
+	$excludeSet   = array_flip( array_map( 'strtolower', $excludeFolders ) ); // case-insensitive
+	$wpUploadsRel = 'wp-content' . DIRECTORY_SEPARATOR . 'uploads';
+	$isWp         = export_is_wp_root( $sourceAbs );
+	$uploadsOk    = $isWp && $includeUploads;
+
+	// If exporting uploads only, retarget the iterator to the uploads root
+	if ( $onlyUploads ) {
+		$uploadsAbs = $sourceAbs . DIRECTORY_SEPARATOR . $wpUploadsRel;
+		if ( ! $isWp || ! is_dir( $uploadsAbs ) ) {
+			$error = 'Uploads folder not found for this selection.';
+
+			return false;
+		}
+		$sourceAbs  = $uploadsAbs;
+		$baseLen    = strlen( $sourceAbs ) + 1;
+		$excludeSet = []; // not relevant within uploads
+	}
+
+	$iter = function () use ( $sourceAbs, $baseLen, $excludeSet, $isWp, $uploadsOk, $wpUploadsRel, $onlyUploads ) {
+		$it = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator( $sourceAbs, FilesystemIterator::SKIP_DOTS ),
+			RecursiveIteratorIterator::SELF_FIRST
+		);
+		foreach ( $it as $path => $info ) {
+			$rel = substr( $path, $baseLen );
+
+			if ( ! $onlyUploads ) {
+				// Fast any-depth exclude (case-insensitive)
+				$segments   = explode( DIRECTORY_SEPARATOR, strtolower( $rel ) );
+				$excludeHit = false;
+				foreach ( $segments as $seg ) {
+					if ( isset( $excludeSet[ $seg ] ) ) {
+						$excludeHit = true;
+						break;
+					}
+				}
+				if ( $excludeHit ) {
+					continue;
+				}
+
+				// Skip uploads unless explicitly included
+				if ( $isWp && ! $uploadsOk ) {
+					if ( str_starts_with( $rel, $wpUploadsRel ) ) {
+						continue;
+					}
+				}
+			}
+
+			yield [
+				'path'  => $path,
+				'rel'   => $rel,
+				'isDir' => $info->isDir(),
+			];
+		}
+	};
+
+	// Ensure destination directory exists and is writable
+	$dstDir = dirname( $zipAbs );
+	if ( ! is_dir( $dstDir ) && ! @mkdir( $dstDir, 0775, true ) ) {
+		$error = 'Cannot create destination directory: ' . $dstDir;
+
+		return false;
+	}
+	if ( ! is_writable( $dstDir ) ) {
+		$error = 'Destination directory is not writable: ' . $dstDir;
+
+		return false;
+	}
+
+	// Preferred: ZIP via ZipArchive
+	if ( class_exists( 'ZipArchive' ) ) {
+		$zip      = new ZipArchive();
+		$openCode = $zip->open( $zipAbs, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		if ( $openCode !== true ) {
+			$error = 'ZipArchive open failed with code ' . (string) $openCode . ' for ' . $zipAbs;
+
+			return false;
+		}
+
+		$added = 0;
+		foreach ( $iter() as $entry ) {
+			$rel = str_replace( '\\', '/', $entry['rel'] );
+			if ( $entry['isDir'] ) {
+				$zip->addEmptyDir( rtrim( $rel, '/' ) );
+			} else {
+				$zip->addFile( $entry['path'], $rel );
+			}
+			$added ++;
+		}
+		$zip->close();
+
+		if ( ! is_file( $zipAbs ) ) {
+			$error = 'ZIP was not created (no files were added).';
+
+			return false;
+		}
+
+		return true;
+	}
+
+	// Fallback: TAR(.GZ) via PharData
+	if ( ! extension_loaded( 'phar' ) ) {
+		$error = 'Neither ZipArchive nor Phar are available.';
+
+		return false;
+	}
+
+	// Robust readonly check: accepts "0/1" or "Off/On"
+	$roRaw = ini_get( 'phar.readonly' );
+	$roVal = filter_var( $roRaw, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+	if ( $roVal === true ) {
+		$error = 'Phar fallback blocked: set phar.readonly=0 in php.ini.';
+
+		return false;
+	}
+
+	$wantGzip = extension_loaded( 'zlib' ); // gzip only if zlib exists
+	$tarAbs   = preg_replace( '/\.zip$/i', '.tar', $zipAbs );
+	$tgzAbs   = preg_replace( '/\.zip$/i', '.tar.gz', $zipAbs );
+
+	try {
+		if ( file_exists( $tarAbs ) ) {
+			@unlink( $tarAbs );
+		}
+		if ( file_exists( $tgzAbs ) ) {
+			@unlink( $tgzAbs );
+		}
+
+		$tar   = new PharData( $tarAbs );
+		$added = 0;
+
+		foreach ( $iter() as $entry ) {
+			$rel = str_replace( '\\', '/', $entry['rel'] ); // tar needs forward slashes
+			if ( $entry['isDir'] ) {
+				$tar->addEmptyDir( rtrim( $rel, '/' ) );
+			} else {
+				$tar->addFile( $entry['path'], $rel );
+			}
+			$added ++;
+		}
+
+		if ( $wantGzip ) {
+			$tar->compress( Phar::GZ );     // creates .tar.gz alongside .tar
+			unset( $tar );
+			@unlink( $tarAbs );              // keep only .tar.gz
+			if ( ! is_file( $tgzAbs ) ) {
+				$error = 'TAR.GZ was not created (unknown reason).';
+
+				return false;
+			}
+
+			return true;
+		}
+
+		unset( $tar );                      // plain .tar outcome
+		if ( ! is_file( $tarAbs ) ) {
+			$error = 'TAR was not created (unknown reason).';
+
+			return false;
+		}
+
+		return true;
+	} catch ( Throwable $e ) {
+		$error = 'Phar error: ' . $e->getMessage();
+
+		return false;
+	}
+}
+
+/**
+ * Dump a MySQL database to SQL text (schema + data).
+ *
+ * Design:
+ * - Uses its **own** mysqli connection (no multi-statements).
+ * - For each table:
+ *   - Writes `DROP TABLE` + `SHOW CREATE TABLE` DDL.
+ *   - Streams `SELECT *` rows unbuffered (MYSQLI_USE_RESULT) into batched multi-value INSERTs.
+ * - Avoids the classic “Commands out of sync” by:
+ *   - Fetching **SHOW COLUMNS** BEFORE opening the unbuffered SELECT.
+ *   - NEVER issuing another query until the active unbuffered result is fully drained and freed.
+ *
+ * Safety & formatting:
+ * - Identifiers are backticked and escaped (`` => ```).
+ * - Values are SQL-escaped via `$mysqli->real_escape_string()`. NULLs preserved.
+ * - Batch size defaults to 200 rows per INSERT (edit inline if you need).
+ *
+ * Performance notes:
+ * - Unbuffered reads keep memory stable on large tables.
+ * - If tables are tiny or RAM is plentiful, you may switch to buffered SELECTs.
+ *
+ * Limitations:
+ * - Only dumps BASE TABLEs (no views, routines, triggers). Extend as needed.
+ * - Does not wrap output in transactions. Add if your restore workflow expects it.
+ *
+ * @param string $host MySQL host (may include port via host:port or use default).
+ * @param string $user MySQL username.
+ * @param string $pass MySQL password.
+ * @param string $dbName Database name to dump.
+ * @param null|string $charset Connection charset (default 'utf8mb4'); set null to skip.
+ *
+ * @return string  Complete SQL dump.
+ *
+ * @throws RuntimeException if the mysqli init or connect fails.
+ */
+function export_dump_mysql_database( string $host, string $user, string $pass, string $dbName, ?string $charset = 'utf8mb4' ): string {
+	$mysqli = mysqli_init();
+	if ( ! $mysqli ) {
+		throw new RuntimeException( 'mysqli_init() failed' );
+	}
+	// IMPORTANT: no CLIENT_MULTI_STATEMENTS flags
+	if ( ! $mysqli->real_connect( $host, $user, $pass, $dbName, 0, null, 0 ) ) {
+		throw new RuntimeException( 'MySQL connect error: ' . mysqli_connect_error() );
+	}
+	if ( $charset ) {
+		$mysqli->set_charset( $charset );
+	}
+
+	$e = static function ( string $s ) {
+		return '`' . str_replace( '`', '``', $s ) . '`';
+	};
+
+	$out = "-- Dump of database {$e($dbName)}\n";
+	$out .= "-- Generated: " . date( 'Y-m-d H:i:s' ) . "\n\n";
+	$out .= "SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';\n";
+	$out .= "SET time_zone = '+00:00';\n";
+	$out .= "SET FOREIGN_KEY_CHECKS=0;\n\n";
+
+	// Tables (BASE TABLEs only)
+	$tables = [];
+	if ( $res = $mysqli->query( "SHOW FULL TABLES WHERE Table_type='BASE TABLE'" ) ) {
+		while ( $row = $res->fetch_row() ) {
+			$tables[] = (string) $row[0];
+		}
+		$res->free();
+	}
+
+	foreach ( $tables as $table ) {
+		// Schema (DDL)
+		if ( $res = $mysqli->query( "SHOW CREATE TABLE " . $e( $table ) ) ) {
+			$row    = $res->fetch_array( MYSQLI_NUM );
+			$create = $row[1] ?? '';
+			$res->free();
+		} else {
+			$out .= "-- ERROR: SHOW CREATE TABLE failed for {$e($table)}: " . $mysqli->error . "\n\n";
+			continue;
+		}
+
+		$out .= "DROP TABLE IF EXISTS " . $e( $table ) . ";\n";
+		$out .= $create . ";\n\n";
+
+		// Columns FIRST (buffered), then start unbuffered data stream
+		$columns = [];
+		if ( $colsRes = $mysqli->query( "SHOW COLUMNS FROM " . $e( $table ) ) ) {
+			while ( $f = $colsRes->fetch_assoc() ) {
+				$columns[] = $f['Field'];
+			}
+			$colsRes->free();
+		}
+
+		// Data (unbuffered)
+		$res = $mysqli->query( "SELECT * FROM " . $e( $table ), MYSQLI_USE_RESULT );
+		if ( ! $res ) {
+			$out .= "-- ERROR: SELECT * failed for {$e($table)}: " . $mysqli->error . "\n\n";
+			continue;
+		}
+
+		$batchSize = 200;
+		$values    = [];
+		$rowCount  = 0;
+
+		$flush = function () use ( &$out, $table, &$values, $columns, $e ) {
+			if ( ! $values ) {
+				return;
+			}
+			$colsSql = $columns ? ( " (" . implode( ',', array_map( $e, $columns ) ) . ")" ) : '';
+			$out     .= "INSERT INTO " . $e( $table ) . $colsSql . " VALUES\n" . implode( ",\n", $values ) . ";\n";
+			$values  = [];
+		};
+
+		// Stream rows (no other queries until we free() this)
+		while ( $row = $res->fetch_assoc() ) {
+			if ( ! $columns ) {
+				$columns = array_keys( $row );
+			} // fallback if SHOW COLUMNS failed
+			$vals = [];
+			foreach ( $columns as $col ) {
+				$v      = $row[ $col ] ?? null;
+				$vals[] = $v === null ? "NULL" : "'" . $mysqli->real_escape_string( $v ) . "'";
+			}
+			$values[] = '(' . implode( ',', $vals ) . ')';
+			if ( count( $values ) >= $batchSize ) {
+				$flush();
+			}
+			$rowCount ++;
+		}
+		$res->free(); // CRUCIAL: free the unbuffered result before any next query
+
+		if ( $values ) {
+			$flush();
+		}
+		if ( $rowCount > 0 ) {
+			$out .= "\n";
+		}
+	}
+
+	$out .= "SET FOREIGN_KEY_CHECKS=1;\n";
+	$mysqli->close();
+
+	return $out;
+}
+
+/**
+ * List databases available to the configured user (excludes system schemas).
+ *
+ * @param string $host
+ * @param string $user
+ * @param string $pass
+ *
+ * @return string[] Database names (sorted natural, case-insensitive).
+ */
+function export_list_databases( string $host, string $user, string $pass ): array {
+	$mysqli = @new mysqli( $host, $user, $pass );
+	if ( $mysqli->connect_error ) {
+		return [];
+	}
+	$mysqli->set_charset( 'utf8mb4' );
+
+	$out = [];
+	if ( $res = $mysqli->query( 'SHOW DATABASES' ) ) {
+		while ( $row = $res->fetch_array( MYSQLI_NUM ) ) {
+			$name = (string) $row[0];
+			// Hide system schemas
+			if ( in_array( $name, [ 'information_schema', 'performance_schema', 'mysql', 'sys' ], true ) ) {
+				continue;
+			}
+			$out[] = $name;
+		}
+		$res->free();
+	}
+
+	$mysqli->close();
+	sort( $out, SORT_NATURAL | SORT_FLAG_CASE );
+
+	return $out;
+}
+
+/**
+ * Map ZipArchive::open() error codes to readable messages.
+ *
+ * Intended for diagnostics when creating ZIPs:
+ *   $code = $zip->open($path, ZipArchive::CREATE|ZipArchive::OVERWRITE);
+ *   if ($code !== true) { echo export_zip_err($code); }
+ *
+ * Notes:
+ * - Covers the common ER_* constants; unknown codes return "Unknown error".
+ * - Messages are deliberately brief for UI/tooltips; expand if needed.
+ *
+ * @param int $code ZipArchive error/status code (e.g., ZipArchive::ER_OPEN).
+ *
+ * @return string Human-friendly description for the given error code.
+ */
+function export_zip_err( int $code ): string {
+	switch ( $code ) {
+		case ZipArchive::ER_EXISTS:
+			return 'File already exists';
+		case ZipArchive::ER_INCONS:
+			return 'Archive inconsistent';
+		case ZipArchive::ER_INVAL:
+			return 'Invalid argument';
+		case ZipArchive::ER_MEMORY:
+			return 'Out of memory';
+		case ZipArchive::ER_NOENT:
+			return 'No such file';
+		case ZipArchive::ER_NOZIP:
+			return 'Not a zip archive';
+		case ZipArchive::ER_OPEN:
+			return 'Cannot open file';
+		case ZipArchive::ER_READ:
+			return 'Read error';
+		case ZipArchive::ER_SEEK:
+			return 'Seek error';
+		default:
+			return 'Unknown error';
+	}
 }
 
 ?>

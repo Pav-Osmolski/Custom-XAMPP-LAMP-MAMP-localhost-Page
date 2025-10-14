@@ -48,6 +48,25 @@ if ( file_exists( __DIR__ . '/user_config.php' ) ) {
 // Enable Demo Mode (disables saving settings and obfuscates credentials)
 const DEMO_MODE = false;
 
+// Export files exclusion list
+const EXPORT_EXCLUDE = [
+	'.git',
+	'.idea',
+	'node_modules',
+	'vendor',
+	'dist',
+	'build',
+	'.vscode',
+	'.DS_Store',
+	'Thumbs.db',
+	'.cache',
+	'.parcel-cache',
+	'.sass-cache',
+	'.next',
+	'.nuxt',
+	'.turbo'
+];
+
 // DB settings with guards
 foreach (
 	[
