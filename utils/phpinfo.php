@@ -15,7 +15,6 @@
  * @version 1.0
  */
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 ?>
 <div id="phpinfo-view">

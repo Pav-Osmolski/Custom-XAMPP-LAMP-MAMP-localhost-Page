@@ -19,8 +19,7 @@
  * - Dynamic theme metadata (`$themeTypes`, `$themeOptions`) injected into JS context
  *
  * Dependencies:
- * - `config.php` (theme detection, display flags, path constants, tooltip data)
- * - `security.php` (access control)
+ * - `config.php` (theme detection, display flags, path constants, tooltip data, access control)
  * - `vhosts.php` (virtual host listing)
  *
  * Outputs:
@@ -56,7 +55,6 @@
 /** @var string $dbPass */
 /** @var string $currentPhpErrorLevel */
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 ?>
 
@@ -65,8 +63,9 @@ require_once __DIR__ . '/../config/config.php';
 	const serverTheme = <?= json_encode( $currentTheme ) ?>;
 </script>
 
-<?php if ( isset($_GET['saved']) ): ?>
-	<div class="post-confirmation-container <?= $_GET['saved'] === '1' ? 'success' : 'failure' ?>" role="status" aria-live="polite">
+<?php if ( isset( $_GET['saved'] ) ): ?>
+	<div class="post-confirmation-container <?= $_GET['saved'] === '1' ? 'success' : 'failure' ?>" role="status"
+	     aria-live="polite">
 		<div class="post-confirmation-message">
 			<?= $_GET['saved'] === '1'
 				? '✔️ User Settings saved successfully.'
@@ -83,7 +82,8 @@ require_once __DIR__ . '/../config/config.php';
 	</div>
 	<?php if ( defined( 'DEMO_MODE' ) && DEMO_MODE ): ?>
 		<div class="demo-mode" role="alert">
-			<p><strong>Demo Mode:</strong> Saving is disabled and credentials are obfuscated in this environment.</p><br>
+			<p><strong>Demo Mode:</strong> Saving is disabled and credentials are obfuscated in this environment.</p>
+			<br>
 		</div>
 	<?php endif; ?>
 	<form method="post" action="" accept-charset="UTF-8" autocomplete="off">
@@ -107,7 +107,8 @@ require_once __DIR__ . '/../config/config.php';
 						<input type="text" name="DB_USER" value="<?= obfuscate_value( htmlspecialchars( $dbUser ) ) ?>">
 					</label>
 					<label>DB Password:&nbsp;
-						<input type="password" name="DB_PASSWORD" value="<?= obfuscate_value( htmlspecialchars( $dbPass ) ) ?>">
+						<input type="password" name="DB_PASSWORD"
+						       value="<?= obfuscate_value( htmlspecialchars( $dbPass ) ) ?>">
 					</label>
 
 					<label>Apache Path:&nbsp;
@@ -183,7 +184,8 @@ require_once __DIR__ . '/../config/config.php';
 					</label>
 
 					<label>Display Apache Error Log:
-						<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
+						<input type="checkbox"
+						       name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
 					</label>
 
 					<label>Display PHP Error Log:
@@ -210,7 +212,8 @@ require_once __DIR__ . '/../config/config.php';
 			</div>
 			<div class="toggle-content">
 				<?php if ( ! $phpPathValid ): ?>
-					<p><strong>Note:</strong> PHP Error Handling & Logging will save to <code>user_config.php</code> but will not be reflected in <code>php.ini</code> (invalid PHP path).</p><br>
+					<p><strong>Note:</strong> PHP Error Handling & Logging will save to <code>user_config.php</code> but
+						will not be reflected in <code>php.ini</code> (invalid PHP path).</p><br>
 				<?php endif; ?>
 				<label>Display Errors:
 					<input type="checkbox" name="displayPhpErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
@@ -218,12 +221,12 @@ require_once __DIR__ . '/../config/config.php';
 
 				<label>Error Reporting Level:
 					<?php
-						$phpErrorLevels = [
-							E_ALL     => 'E_ALL',
-							E_ERROR   => 'E_ERROR',
-							E_WARNING => 'E_WARNING',
-							E_NOTICE  => 'E_NOTICE'
-						];
+					$phpErrorLevels = [
+						E_ALL     => 'E_ALL',
+						E_ERROR   => 'E_ERROR',
+						E_WARNING => 'E_WARNING',
+						E_NOTICE  => 'E_NOTICE'
+					];
 					?>
 					<select name="phpErrorLevel">
 						<?php foreach ( $phpErrorLevels as $value => $label ) : ?>
@@ -308,7 +311,8 @@ require_once __DIR__ . '/../config/config.php';
 		<div class="toggle-accordion">
 			<?= renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) ?>
 			<?= $apachePathValid ? '' : '&nbsp;❕' ?>
-			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
+			<?php $settingsView = true;
+			echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 		</div>
 		<div class="toggle-content">
 			<?php require_once __DIR__ . '/../partials/vhosts.php'; ?>
@@ -321,7 +325,8 @@ require_once __DIR__ . '/../config/config.php';
 		<div class="toggle-accordion">
 			<?= renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h3', 'Export Files & Database' ) ?>
 			<?= $phpPathValid ? '' : '&nbsp;❕' ?>
-			<?php $settingsView = true; echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
+			<?php $settingsView = true;
+			echo file_get_contents( __DIR__ . '/../assets/images/caret-down.svg' ); ?>
 		</div>
 		<div class="toggle-content">
 			<?php require_once __DIR__ . '/../partials/export.php'; ?>

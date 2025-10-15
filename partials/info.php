@@ -4,7 +4,6 @@
 /** @var bool $displaySystemStats */
 /** @var bool $useAjaxForStats */
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
 $features = [

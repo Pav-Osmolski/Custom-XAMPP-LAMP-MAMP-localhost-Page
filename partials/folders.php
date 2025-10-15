@@ -23,7 +23,6 @@
  * @version 1.3
  */
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
 // Load config via safe JSON reader

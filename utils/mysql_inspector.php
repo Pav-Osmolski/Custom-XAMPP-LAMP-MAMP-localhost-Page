@@ -18,7 +18,6 @@
  * @version 1.1
  */
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
 // Default to config value; override with ?fast=1 or ?fast=0 if provided
@@ -105,9 +104,9 @@ echo "\n📋 Current Processes:\n";
 $processList = $mysqli->query( "SHOW FULL PROCESSLIST" );
 while ( $row = $processList->fetch_assoc() ) {
 	echo "- [" . htmlspecialchars( (string) ( $row['Id'] ?? '' ) ) . "] "
-		. htmlspecialchars( (string) ( obfuscate_value( $row['User'] ) ?? '' ) ) . "@"
-		. htmlspecialchars( (string) ( obfuscate_value( $row['Host'] ) ?? '' ) ) . ": "
-		. htmlspecialchars( (string) ( $row['Info'] ?? '' ) ) . "\n";
+	     . htmlspecialchars( (string) ( obfuscate_value( $row['User'] ) ?? '' ) ) . "@"
+	     . htmlspecialchars( (string) ( obfuscate_value( $row['Host'] ) ?? '' ) ) . ": "
+	     . htmlspecialchars( (string) ( $row['Info'] ?? '' ) ) . "\n";
 }
 
 $mysqli->close();

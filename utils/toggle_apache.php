@@ -22,7 +22,6 @@ ob_start();
 error_reporting( E_ERROR | E_PARSE );
 ini_set( 'display_errors', 0 );
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
 header( 'Content-Type: application/json' );
@@ -35,6 +34,7 @@ function runCommand( $cmd ) {
 
 	return [ 'output' => implode( "\n", $output ), 'success' => $return_var === 0 ];
 }
+
 function findDefaultCommand( $action, $os, $apachePath ) {
 	switch ( $os ) {
 		case 'Windows':

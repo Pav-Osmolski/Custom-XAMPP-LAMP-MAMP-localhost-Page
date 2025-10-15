@@ -20,7 +20,6 @@
  * @version 1.1
  */
 
-require_once __DIR__ . '/../config/security.php';
 require_once __DIR__ . '/../config/config.php';
 
 $dockItems = read_json_array_safely( __DIR__ . '/../config/dock.json' );

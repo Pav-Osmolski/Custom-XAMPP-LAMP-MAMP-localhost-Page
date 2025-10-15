@@ -24,7 +24,7 @@
  * @version 1.1
  */
 
-define( 'CRYPTO_KEY_FILE', __DIR__ . '/../.key' );
+define( 'CRYPTO_KEY_FILE', __DIR__ . '/../../.key' );
 
 /**
  * Get or create the encryption key used for AES operations.
@@ -111,7 +111,8 @@ function csrf_get_token(): string {
 		// If headers already sent, don't try to start; rely on early bootstrap
 		if ( headers_sent() ) {
 			// No active session; return empty so the form won’t validate (safer fail)
-			error_log('[csrf_get_token] Headers already sent; session not active.');
+			error_log( '[csrf_get_token] Headers already sent; session not active.' );
+
 			return '';
 		}
 		session_start();
@@ -158,13 +159,13 @@ function csrf_verify( ?string $token ): bool {
  * @return bool
  */
 function request_is_same_origin(): bool {
-	$scheme = (! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+	$scheme = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) ? 'https' : 'http';
 	$host   = $_SERVER['HTTP_HOST'] ?? '';
 	if ( $host === '' ) {
 		return false;
 	}
-	$origin   = $_SERVER['HTTP_ORIGIN']   ?? null;
-	$referrer = $_SERVER['HTTP_REFERER']  ?? null;
+	$origin   = $_SERVER['HTTP_ORIGIN'] ?? null;
+	$referrer = $_SERVER['HTTP_REFERER'] ?? null;
 	$allowed  = $scheme . '://' . $host;
 
 	foreach ( [ $origin, $referrer ] as $h ) {
@@ -236,4 +237,60 @@ function safe_shell_exec( $cmd ) {
 	error_log( "[safe_shell_exec] Blocked command: $cmd" );
 
 	return null;
+}
+
+/**
+ * Returns a PHP define() statement with an encrypted and escaped value.
+ *
+ * The value is encrypted using encryptValue() and properly escaped for safe
+ * inclusion in generated PHP config files.
+ *
+ * @param string $name The constant name
+ * @param string $value The raw value to encrypt and define
+ *
+ * @return string PHP define() code snippet
+ */
+function defineEncrypted( string $name, string $value ): string {
+	return "define('$name', '" . addslashes( encryptValue( $value ) ) . "');\n";
+}
+
+/**
+ * Obfuscates a sensitive configuration value when demo mode is active.
+ *
+ * @param string $value The sensitive value to obfuscate.
+ *
+ * @return string The obfuscated value if demo mode is enabled, or the original value otherwise.
+ */
+function obfuscate_value( string $value ): string {
+	if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
+		return str_repeat( '*', strlen( $value ) );
+	}
+
+	return $value;
+}
+
+/**
+ * Merge a parsed <VirtualHost> block into the $serverData map.
+ *
+ * @param array<string, array<string, mixed>> $serverData
+ * @param array<string, mixed>|null $block
+ *
+ * @return void
+ */
+function collectServerBlock( array &$serverData, ?array $block ): void {
+	if ( ! is_array( $block ) || empty( $block['name'] ) ) {
+		return;
+	}
+	$name = $block['name'];
+	if ( isset( $serverData[ $name ] ) ) {
+		$serverData[ $name ]['_duplicate'] = true;
+		$block['_duplicate']               = true;
+	}
+	$serverData[ $name ] = array_merge( [
+		'valid'     => false,
+		'cert'      => '',
+		'key'       => '',
+		'certValid' => true,
+		'docRoot'   => '',
+	], $block );
 }

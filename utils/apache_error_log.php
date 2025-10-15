@@ -105,7 +105,7 @@ if ( $useAjaxForStats ) {
         </h3>
         <pre id='apache-error-log' aria-live='polite' tabindex='0'>
         	<code>"
-				 . htmlspecialchars( $logContent ) . "
+	     . htmlspecialchars( $logContent ) . "
         	</code>
         </pre>";
 }

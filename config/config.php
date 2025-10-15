@@ -29,15 +29,13 @@
  * - Misc: `$user`, `$currentPhpErrorLevel`
  *
  * Depends On:
- * - `security.php` for access control
- * - `helpers.php` for shared logic like `resolveCurrentUser()`, `buildBodyClasses()`, `loadThemes()`, etc.
+ * - `helpers.php` for access control and shared logic like `resolveCurrentUser()`, `buildBodyClasses()`, `loadThemes()`, etc.
  *
  * @author Pav
  * @license MIT
  * @version 2.3
  */
 
-require_once __DIR__ . '/security.php';
 require_once __DIR__ . '/helpers.php';
 
 // Load user-specific overrides first
