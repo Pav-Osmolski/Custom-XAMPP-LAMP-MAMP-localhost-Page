@@ -14,19 +14,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/,
+        test: /\.s[ac]ss$/i,
         use: [
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
-              url: false // Keeps your original asset URLs
+              url: false, // Keeps your original asset URLs
+              sourceMap: true
             }
           },
           {
             loader: 'sass-loader',
             options: {
-              implementation: require('sass'),
+              implementation: require('sass-embedded'),
               sassOptions: {
                 quietDeps: true
               }

@@ -1,6 +1,6 @@
 {
   "name": "pav-localhost",
-  "version": "1.0.2",
+  "version": "1.1",
   "description": "A modular Webpack setup for compiling SCSS, bundling and minifying JavaScript, and powering a dynamic custom localhost homepage",
   "scripts": {
     "build": "webpack --mode production",
@@ -8,17 +8,18 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "webpack": "^5.0.0",
-    "webpack-cli": "^4.0.0",
-    "mini-css-extract-plugin": "^2.0.0",
-    "css-loader": "^6.0.0",
-    "sass": "^1.0.0",
-    "sass-loader": "^13.0.0",
-    "css-minimizer-webpack-plugin": "^5.0.0",
-    "terser-webpack-plugin": "^5.0.0",
-    "babel-loader": "^9.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4",
+    "mini-css-extract-plugin": "^2.9.0",
+    "css-loader": "^7.1.2",
+    "sass": "^1.79.0",
+    "sass-embedded": "^1.79.0",
+    "sass-loader": "^16.0.2",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "terser-webpack-plugin": "^5.3.10",
+    "babel-loader": "^9.2.1",
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.4",
     "webpackbar": "^7.0.0"
   },
   "babel": {
