@@ -97,7 +97,7 @@ function setupExport() {
 				folderEl.disabled = true;
 
 				const filesStatus = document.getElementById( 'export-files-status' );
-				if (filesStatus) {
+				if ( filesStatus ) {
 					filesStatus.innerHTML = 'No folders defined. Add entries to <code>config/folders.json</code> to enable file exports.';
 				}
 
@@ -137,20 +137,26 @@ function setupExport() {
 	// Events
 	groupEl.addEventListener( 'change', () => {
 		const idx = parseInt( groupEl.value, 10 );
-		if ( Number.isNaN( idx ) || !groups[idx] ) {
-			folderEl.innerHTML = `<option value="">Select a group first…</option>`;
-			folderEl.disabled = true;
-			uploadsModeRow.style.display = 'none';
-			// reset radio to exclude
-			const def = document.querySelector( 'input[name="uploadsMode"][value="exclude"]' );
-			if ( def ) def.checked = true;
-			return;
-		}
-		renderFolders( folderEl, groups[idx].subfolders );
-		folderEl.disabled = false;
+		const group = Number.isNaN( idx ) ? null : groups[idx];
+
+		// Reset UI
+		folderEl.disabled = true;
+		folderEl.innerHTML = `<option value="">Select a group first…</option>`;
 		uploadsModeRow.style.display = 'none';
+
 		const def = document.querySelector( 'input[name="uploadsMode"][value="exclude"]' );
 		if ( def ) def.checked = true;
+
+		if ( !group ) return;
+
+		renderFolders( folderEl, group.subfolders );
+		folderEl.disabled = (group.subfolders.length === 0);
+
+		// Auto-select first folder and trigger its change
+		if ( group.subfolders.length > 0 ) {
+			folderEl.selectedIndex = 0;
+			folderEl.dispatchEvent( new Event( 'change' ) );
+		}
 	} );
 
 	folderEl.addEventListener( 'change', () => {
