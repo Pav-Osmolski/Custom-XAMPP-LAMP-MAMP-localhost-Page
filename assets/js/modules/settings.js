@@ -26,10 +26,10 @@ export function autoHideConfirmationMessage() {
 		const msg = document.querySelector( '.post-confirmation-container' );
 		if ( !msg ) return;
 
-		setTimeout(() => {
+		setTimeout( () => {
 			msg.style.transition = 'opacity 0.5s ease';
 			msg.style.opacity = '0';
-			setTimeout(() => msg.remove(), 500);
-		}, 3000);
+			setTimeout( () => msg.remove(), 500 );
+		}, 3000 );
 	} );
 }

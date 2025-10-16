@@ -1,5 +1,5 @@
 // assets/js/modules/folders.js
-import { enableDragSort } from './drag.js';
+import {enableDragSort} from './drag.js';
 
 export function initFoldersConfig() {
 	document.addEventListener( 'DOMContentLoaded', () => {
@@ -17,21 +17,21 @@ export function initFoldersConfig() {
 
 		function mapToRows( scMap ) {
 			if ( scMap && typeof scMap === 'object' && !Array.isArray( scMap ) ) {
-				return Object.entries( scMap ).map( ( [ match, replace ] ) => ( {
+				return Object.entries( scMap ).map( ( [ match, replace ] ) => ({
 					match: String( match ?? '' ),
 					replace: String( replace ?? '' )
-				} ) );
+				}) );
 			}
 			return []; // default if missing/invalid
 		}
 
 		function rowsToMap( rows ) {
 			const map = {};
-			rows.forEach( ( { match = '', replace = '' } ) => {
+			rows.forEach( ( {match = '', replace = ''} ) => {
 				const m = String( match ).trim();
 				const r = String( replace ).trim();
 				if ( m.length || r.length ) {
-					map[ m ] = r; // later duplicates overwrite earlier — deterministic
+					map[m] = r; // later duplicates overwrite earlier — deterministic
 				}
 			} );
 			return map;
@@ -49,10 +49,10 @@ export function initFoldersConfig() {
 				return Promise.resolve( linkTemplates );
 			}
 
-			return fetch( `${ window.BASE_URL }utils/read_config.php?file=link_templates`, { cache: 'no-store' } )
+			return fetch( `${ window.BASE_URL }utils/read_config.php?file=link_templates`, {cache: 'no-store'} )
 				.then( res => res.json() )
 				.then( data => {
-					linkTemplates = ( Array.isArray( data ) ? data : [] )
+					linkTemplates = (Array.isArray( data ) ? data : [])
 						.map( t => t && typeof t.name === 'string' ? t.name.trim() : '' )
 						.filter( Boolean );
 					linkTemplates = Array.from( new Set( linkTemplates ) );
@@ -89,7 +89,7 @@ export function initFoldersConfig() {
 					<input type="text" data-key="title" placeholder="Title" value="${ item.title || '' }">
 					<input type="text" data-key="href" placeholder="Href (optional)" value="${ item.href || '' }">
 					<input type="text" data-key="dir" placeholder="Dir (relative to HTDOCS_PATH)" value="${ item.dir || '' }">
-					<input type="text" data-key="excludeList" placeholder="Exclude List (comma-separated)" value="${ ( item.excludeList || [] ).join( ',' ) }">
+					<input type="text" data-key="excludeList" placeholder="Exclude List (comma-separated)" value="${ (item.excludeList || []).join( ',' ) }">
 					<input type="text" data-key="match" placeholder="Match Regex" value="${ item.urlRules?.match ?? '' }">
 					<input type="text" data-key="replace" placeholder="Replace Regex" value="${ item.urlRules?.replace ?? '' }">
 					<label>Link Template:
@@ -121,7 +121,7 @@ export function initFoldersConfig() {
 				if ( select ) {
 					// Find the corresponding item by matching the title currently in the li
 					const titleInLi = li.querySelector( 'input[data-key="title"]' )?.value || '';
-					const found = items.find( it => ( it.title || '' ) === titleInLi );
+					const found = items.find( it => (it.title || '') === titleInLi );
 					const val = found?.linkTemplate || '';
 					if ( val ) select.value = val;
 					select.disabled = linkTemplates.length === 0;
@@ -180,7 +180,7 @@ export function initFoldersConfig() {
 				li.querySelectorAll( '.special-case' ).forEach( row => {
 					const m = row.querySelector( '.sc-match' )?.value || '';
 					const r = row.querySelector( '.sc-replace' )?.value || '';
-					if ( m.length || r.length ) scRows.push( { match: m, replace: r } );
+					if ( m.length || r.length ) scRows.push( {match: m, replace: r} );
 				} );
 				const specialCases = rowsToMap( scRows );
 
@@ -191,7 +191,7 @@ export function initFoldersConfig() {
 					href,
 					dir,
 					excludeList,
-					urlRules: { match, replace },
+					urlRules: {match, replace},
 					linkTemplate,
 					disableLinks,
 					specialCases
@@ -250,7 +250,7 @@ export function initFoldersConfig() {
 		// init
 
 		Promise.all( [
-			fetch( `${ window.BASE_URL }utils/read_config.php?file=folders`, { cache: 'no-store' } ).then( r => r.json() ).catch( () => [] ),
+			fetch( `${ window.BASE_URL }utils/read_config.php?file=folders`, {cache: 'no-store'} ).then( r => r.json() ).catch( () => [] ),
 			fetchLinkTemplates()
 		] ).then( ( [ data ] ) => {
 			enableDragSort( '#folders-config-list' );

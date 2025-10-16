@@ -1,5 +1,5 @@
 // assets/js/modules/columns.js
-import { enableDragSort } from './drag.js';
+import {enableDragSort} from './drag.js';
 
 export function setColumnWidth( size ) {
 	localStorage.setItem( 'columnSize', size );
@@ -23,12 +23,12 @@ export function cycleColumnWidth( direction, sizes ) {
 	let nextIdx = 0;
 
 	if ( direction === 'next' ) {
-		nextIdx = ( idx + 1 ) % sizes.length;
+		nextIdx = (idx + 1) % sizes.length;
 	} else if ( direction === 'prev' ) {
-		nextIdx = ( idx - 1 + sizes.length ) % sizes.length;
+		nextIdx = (idx - 1 + sizes.length) % sizes.length;
 	}
 
-	setColumnWidth( sizes[ nextIdx ] );
+	setColumnWidth( sizes[nextIdx] );
 }
 
 export function initColumnFeatures() {
@@ -45,8 +45,8 @@ export function initColumnFeatures() {
 
 		// Width controls
 		const resetBtn = document.getElementById( 'reset-width' );
-		const prevBtn  = document.getElementById( 'prev-width' );
-		const nextBtn  = document.getElementById( 'next-width' );
+		const prevBtn = document.getElementById( 'prev-width' );
+		const nextBtn = document.getElementById( 'next-width' );
 
 		if ( resetBtn ) {
 			resetBtn.addEventListener( 'click', () => setColumnWidth( 'auto' ) );
@@ -79,7 +79,7 @@ export function initColumnFeatures() {
 
 		// Hook into the shared drag util (same pattern as dock/folders)
 		enableDragSort( '.columns', {
-			items:  '.column:not(.column-controls)',
+			items: '.column:not(.column-controls)',
 			handle: '.drag-handle'
 		} );
 

@@ -21,12 +21,12 @@ function setTheme( theme ) {
 	document.documentElement.className = '';
 
 	if ( theme !== 'default' ) {
-		document.documentElement.classList.add( `${theme}-theme` );
+		document.documentElement.classList.add( `${ theme }-theme` );
 	}
 
 	document.body.classList.remove( 'light-mode' );
 
-	if ( typeof themeTypes !== 'undefined' && themeTypes[ theme ] === 'light' ) {
+	if ( typeof themeTypes !== 'undefined' && themeTypes[theme] === 'light' ) {
 		document.body.classList.add( 'light-mode' );
 	}
 }

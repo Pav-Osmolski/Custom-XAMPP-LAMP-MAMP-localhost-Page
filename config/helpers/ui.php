@@ -298,3 +298,43 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 		echo "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $e->getMessage() . " ❌</a></span>";
 	}
 }
+
+/**
+ * Render a versioned <script> tag for an asset plus a BASE_URL bootstrap.
+ *
+ * - Figures out BASE_URL by stripping "/partials" when a partial is hit directly.
+ * - Versions the asset with filemtime() (falls back to time()).
+ * - Returns the full HTML snippet so you can `echo` it where needed.
+ *
+ * @param string $assetRel Web-relative asset path (e.g. "dist/js/script.min.js").
+ * @param string|null $projectRoot Absolute project root; defaults to dirname(__DIR__).
+ * @param string $stripSuffix Suffix to strip from SCRIPT_NAME dir (default "/partials").
+ *
+ * @return string HTML snippet defining window.BASE_URL and the <script> tag.
+ */
+function render_versioned_script_with_base( string $assetRel = 'dist/js/script.min.js', ?string $projectRoot = null, string $stripSuffix = '/partials' ): string {
+	// 1) Version from absolute path (assumes helpers live in /config or /partials tree)
+	$projectRoot = $projectRoot ?: dirname( __DIR__ );
+	$assetAbs    = rtrim( $projectRoot, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR
+	               . str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $assetRel );
+	$ver         = is_file( $assetAbs ) ? filemtime( $assetAbs ) : time();
+
+	// 2) Compute a base URL, stripping /partials when accessed directly
+	$scriptName = isset( $_SERVER['SCRIPT_NAME'] ) ? (string) $_SERVER['SCRIPT_NAME'] : '';
+	$scriptDir  = rtrim( dirname( $scriptName ), '/\\' ); // e.g. "", "/", "/site", "/site/partials"
+
+	if ( $stripSuffix !== '' && $stripSuffix[0] === '/' && preg_match( '~' . preg_quote( $stripSuffix, '~' ) . '$~', $scriptDir ) ) {
+		$baseUrl = rtrim( substr( $scriptDir, 0, - strlen( $stripSuffix ) ), '/' );
+	} else {
+		$baseUrl = $scriptDir;
+	}
+	$baseUrl = ( $baseUrl === '' ? '/' : $baseUrl . '/' ); // normalise trailing slash
+
+	$src = $baseUrl . ltrim( $assetRel, '/' );
+
+	// Build HTML (don’t override an existing BASE_URL if the host page already set it)
+	$html = '<script>window.BASE_URL = window.BASE_URL || ' . json_encode( $baseUrl ) . ';</script>' . "\n";
+	$html .= '<script src="' . htmlspecialchars( $src, ENT_QUOTES, 'UTF-8' ) . '?v=' . (int) $ver . '"></script>';
+
+	return $html;
+}

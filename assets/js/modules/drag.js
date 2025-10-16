@@ -7,7 +7,7 @@ export function enableDragSort( listSelector, opts = {} ) {
 	if ( list.dataset.sortBound === '1' ) return;
 	list.dataset.sortBound = '1';
 
-	const itemsSelector  = opts.items  || 'li';
+	const itemsSelector = opts.items || 'li';
 	const handleSelector = opts.handle || null;
 
 	let dragSrcEl = null;
@@ -23,14 +23,17 @@ export function enableDragSort( listSelector, opts = {} ) {
 		if ( isInteractive( e.target ) ) return;
 		if ( handleSelector && !e.target.closest( handleSelector ) ) return;
 		item.draggable = true;
-	}, { capture: true } );
+	}, {capture: true} );
 
 	list.addEventListener( 'dragstart', ( e ) => {
 		const item = e.target.closest( itemsSelector );
 		if ( !item || !list.contains( item ) ) return;
 		dragSrcEl = item;
 		e.dataTransfer.effectAllowed = 'move';
-		try { e.dataTransfer.setData( 'text/plain', '' ); } catch ( _ ) {}
+		try {
+			e.dataTransfer.setData( 'text/plain', '' );
+		} catch ( _ ) {
+		}
 		item.classList.add( 'dragElem' );
 	} );
 
@@ -58,7 +61,7 @@ export function enableDragSort( listSelector, opts = {} ) {
 
 		const children = Array.from( list.querySelectorAll( `:scope > ${ itemsSelector }` ) );
 		const from = children.indexOf( dragSrcEl );
-		const to   = children.indexOf( target );
+		const to = children.indexOf( target );
 
 		if ( from > -1 && to > -1 ) {
 			if ( from < to ) {
@@ -66,7 +69,7 @@ export function enableDragSort( listSelector, opts = {} ) {
 			} else {
 				target.before( dragSrcEl );
 			}
-			list.dispatchEvent( new CustomEvent( 'sorted', { bubbles: true } ) );
+			list.dispatchEvent( new CustomEvent( 'sorted', {bubbles: true} ) );
 		}
 		target.classList.remove( 'over' );
 	} );

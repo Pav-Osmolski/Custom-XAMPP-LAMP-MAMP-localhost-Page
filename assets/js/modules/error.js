@@ -1,10 +1,10 @@
 // assets/js/modules/error.js
 function initGenericErrorLog( {
-	sectionId,
-	toggleButtonId,
-	logElementId,
-	endpoint
-} ) {
+	                              sectionId,
+	                              toggleButtonId,
+	                              logElementId,
+	                              endpoint
+                              } ) {
 	document.addEventListener( 'DOMContentLoaded', () => {
 		const body = document.body;
 		const logSection = document.getElementById( sectionId );
@@ -31,18 +31,19 @@ function initGenericErrorLog( {
 		}
 
 		function fetchLog() {
-			fetch( `${ window.BASE_URL }${ endpoint }`, { cache: 'no-store' } )
+			fetch( `${ window.BASE_URL }${ endpoint }`, {cache: 'no-store'} )
 				.then( res => res.ok ? res.text() : Promise.reject() )
 				.then( displayLogContent );
 		}
 
-		fetch( `${ window.BASE_URL }${ endpoint }`, { cache: 'no-store' } )
+		fetch( `${ window.BASE_URL }${ endpoint }`, {cache: 'no-store'} )
 			.then( res => res.ok ? res.text() : Promise.reject() )
 			.then( data => {
 				displayLogContent( data );
 				setInterval( fetchLog, 3000 );
 			} )
-			.catch( () => {} );
+			.catch( () => {
+			} );
 	} );
 }
 

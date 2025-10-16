@@ -295,27 +295,7 @@ if ( $action ) {
 
 <div id="export">
 	<?php if ( empty( $settingsView ) ): ?>
-		<?php
-		// 1) Version from absolute path (partials → project root)
-		$assetRel = 'dist/js/script.min.js';
-		$assetAbs = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'script.min.js';
-		$ver      = is_file( $assetAbs ) ? filemtime( $assetAbs ) : time();
-
-		// 2) Compute a base URL that strips /partials when accessed directly
-		$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-		$scriptDir  = rtrim( dirname( $scriptName ), '/\\' );                 // e.g. '', '/', '/site', '/site/partials'
-		if ( preg_match( '~/partials$~', $scriptDir ) ) {
-			$baseUrl = rtrim( substr( $scriptDir, 0, - strlen( '/partials' ) ), '/' );
-		} else {
-			$baseUrl = $scriptDir;
-		}
-		$baseUrl = ( $baseUrl === '' ? '/' : $baseUrl . '/' );              // normalise trailing slash
-
-		$src = $baseUrl . $assetRel;
-		?>
-		<!-- Define BASE_URL for direct hits too -->
-		<script>window.BASE_URL = <?= json_encode( $baseUrl ) ?>;</script>
-		<script src="<?= htmlspecialchars( $src, ENT_QUOTES ) ?>?v=<?= (int) $ver ?>"></script>
+		<?php echo render_versioned_script_with_base( 'dist/js/script.min.js' ); ?>
 
 		<div class="heading">
 			<?= renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h2', 'Export Files & Database' ) ?>
