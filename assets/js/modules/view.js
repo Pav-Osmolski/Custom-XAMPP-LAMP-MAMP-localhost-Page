@@ -1,17 +1,24 @@
 // assets/js/modules/view.js
 export function initToggleAccordion() {
-	// Helper: force layout reflow to ensure transitions behave correctly (especially in Firefox)
-	function forceReflow( element ) {
-		void element.offsetHeight;
+	// Ensure Firefox animates collapses
+	function forceReflow( el ) {
+		void el.offsetHeight;
 	}
 
-	// Helper: check if the click happened inside a given selector
-	function isClickInside( event, selector ) {
-		return !!event.target.closest( selector );
+	function isClickInside( e, sel ) {
+		return !!e.target.closest( sel );
+	}
+
+	function firstFocusable( root ) {
+		return root.querySelector( 'a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])' );
 	}
 
 	document.addEventListener( 'DOMContentLoaded', () => {
 		document.querySelectorAll( '.toggle-content-container' ).forEach( ( container, index ) => {
+			// Guard against double init
+			if ( container.dataset.accordionInit === '1' ) return;
+			container.dataset.accordionInit = '1';
+
 			const toggle = container.querySelector( '.toggle-accordion' );
 			const content = container.querySelector( '.toggle-content' );
 			if ( !toggle || !content ) return;
@@ -19,52 +26,97 @@ export function initToggleAccordion() {
 			const collapsedHeight = parseInt( content.dataset.collapsedHeight ) || 0;
 			const accordionId = container.dataset.id || 'accordion-' + index;
 
-			// Restore state from localStorage
-			const savedState = localStorage.getItem( 'accordion_' + accordionId );
-			if ( savedState === 'open' ) {
-				container.classList.add( 'open' );
+			// Initial state (restore + ARIA + hidden)
+			const saved = localStorage.getItem( 'accordion_' + accordionId );
+			const startOpen = saved === 'open';
+			container.classList.toggle( 'open', startOpen );
+			toggle.setAttribute( 'aria-expanded', startOpen ? 'true' : 'false' );
+
+			if ( startOpen ) {
+				// must be visible to measure
+				content.hidden = false;
 				content.style.height = content.scrollHeight + 'px';
 				requestAnimationFrame( () => {
 					content.style.height = 'auto';
 				} );
 			} else {
-				container.classList.remove( 'open' );
 				content.style.height = collapsedHeight + 'px';
+				content.hidden = true; // keyboard users won't tab into closed panel
 			}
 
-			// Toggle click
+			function openPanel() {
+				// unhiding BEFORE measuring is vital
+				content.hidden = false;
+				container.classList.add( 'open' );
+				toggle.setAttribute( 'aria-expanded', 'true' );
+
+				// animate from collapsed -> target -> auto
+				content.style.height = collapsedHeight + 'px';
+				requestAnimationFrame( () => {
+					const target = content.scrollHeight;
+					content.style.height = target + 'px';
+					const onEnd = ( e ) => {
+						if ( e.target !== content || e.propertyName !== 'height' ) return;
+						content.style.height = 'auto';
+						content.removeEventListener( 'transitionend', onEnd );
+					};
+					content.addEventListener( 'transitionend', onEnd );
+				} );
+
+				localStorage.setItem( 'accordion_' + accordionId, 'open' );
+			}
+
+			function closePanel() {
+				container.classList.remove( 'open' );
+				toggle.setAttribute( 'aria-expanded', 'false' );
+
+				// animate current -> collapsed, THEN hide for tab order
+				content.style.height = content.scrollHeight + 'px';
+				forceReflow( content );
+				requestAnimationFrame( () => {
+					content.style.height = collapsedHeight + 'px';
+					const onEnd = ( e ) => {
+						if ( e.target !== content || e.propertyName !== 'height' ) return;
+						content.hidden = true; // remove from tab order after animation
+						content.removeEventListener( 'transitionend', onEnd );
+					};
+					content.addEventListener( 'transitionend', onEnd );
+				} );
+
+				localStorage.setItem( 'accordion_' + accordionId, 'closed' );
+			}
+
+			function togglePanel() {
+				const willOpen = !container.classList.contains( 'open' );
+				willOpen ? openPanel() : closePanel();
+			}
+
+			// Mouse/touch
 			toggle.addEventListener( 'click', ( event ) => {
 				event.stopPropagation();
+				// Ignore clicks on tooltip icon
+				if ( isClickInside( event, '.tooltip-icon' ) ) return;
+				togglePanel();
+			} );
 
-				// Prevent toggling if clicking inside .tooltip-icon
-				if ( isClickInside( event, '.tooltip-icon' ) ) {
-					return;
-				}
-
-				const isOpen = container.classList.toggle( 'open' );
-				localStorage.setItem( 'accordion_' + accordionId, isOpen ? 'open' : 'closed' );
-
-				if ( isOpen ) {
-					content.style.height = content.scrollHeight + 'px';
-					const onTransitionEnd = () => {
-						content.style.height = 'auto';
-						content.removeEventListener( 'transitionend', onTransitionEnd );
-					};
-					content.addEventListener( 'transitionend', onTransitionEnd );
-				} else {
-					content.style.height = content.scrollHeight + 'px';
-					forceReflow( content ); // Ensure Firefox animates the collapse properly
-					requestAnimationFrame( () => {
-						content.style.height = collapsedHeight + 'px';
-					} );
+			// Keyboard: Space/Enter toggle; ArrowDown jumps into open panel
+			toggle.addEventListener( 'keydown', ( e ) => {
+				if ( e.key === ' ' || e.key === 'Enter' ) {
+					e.preventDefault();
+					togglePanel();
+				} else if ( e.key === 'ArrowDown' ) {
+					if ( container.classList.contains( 'open' ) && !content.hidden ) {
+						const target = firstFocusable( content );
+						if ( target ) target.focus();
+					}
 				}
 			} );
 		} );
 
-		// Recalculate heights on window resize
+		// Keep heights sane on resize
 		window.addEventListener( 'resize', () => {
 			document.querySelectorAll( '.toggle-content-container.open .toggle-content' ).forEach( ( content ) => {
-				if ( content.style.height !== 'auto' ) {
+				if ( !content.hidden && content.style.height !== 'auto' ) {
 					content.style.height = content.scrollHeight + 'px';
 				}
 			} );
@@ -113,7 +165,7 @@ export function initViewToggles() {
 			// Lazy load for Apache and MySQL views
 			if ( key === 'apache' || key === 'mysql' ) {
 				const target = views[key];
-				if ( !target.dataset.loaded ) {
+				if ( target && !target.dataset.loaded ) {
 					// To use a spinning emoji, add the class "emoji" to "loader" and insert your emoji within the <span>
 					target.innerHTML = '<div class="loader"><span class="spinner" role="img" aria-label="Loading"></span></div>';
 					const url = `utils/${ key }_inspector.php`;

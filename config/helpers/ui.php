@@ -78,6 +78,76 @@ function loadThemes( string $themeDir ): array {
 }
 
 /**
+ * Render the opening markup for an accordion section and configure ARIA wiring.
+ *
+ * Prints:
+ * - <div class="toggle-content-container" data-id="…">
+ * -   <div class="toggle-accordion" id="accordion-{$id}-btn" role="button"
+ * -        aria-expanded="false|true" aria-controls="panel-{$id}" tabindex="0">
+ * -       {$headingHtml}
+ * -       <span class="icon" aria-hidden="true">{caret svg}</span>
+ * -   </div>
+ * -   <div class="toggle-content" id="panel-{$id}" role="region"
+ * -        aria-labelledby="accordion-{$id}-btn">
+ *
+ * Options:
+ * - 'disabled'  => bool (adds .disabled to container)
+ * - 'expanded'  => bool (initial aria-expanded; JS may override)
+ * - 'caretPath' => string (path to caret SVG)
+ * - 'caretClass'=> string (extra class on the <span class="icon …">)
+ * - 'settings'  => bool (sets $GLOBALS['settingsView']=true and defines SETTINGS_VIEW)
+ *
+ * @param string $id
+ * @param string $headingHtml
+ * @param array $opts
+ *
+ * @return void
+ */
+function renderAccordionSectionStart( string $id, string $headingHtml, array $opts = [] ): void {
+	$isSettings = ! empty( $opts['settings'] );
+	if ( $isSettings ) {
+		$GLOBALS['settingsView'] = true;
+		if ( ! defined( 'SETTINGS_VIEW' ) ) {
+			define( 'SETTINGS_VIEW', true );
+		}
+	}
+
+	$disabled    = ! empty( $opts['disabled'] );
+	$expanded    = ! empty( $opts['expanded'] );
+	$caretPath   = isset( $opts['caretPath'] ) ? (string) $opts['caretPath'] : __DIR__ . '/../assets/images/caret-down.svg';
+	$caretClass  = isset( $opts['caretClass'] ) ? (string) $opts['caretClass'] : '';
+	$containerCl = 'toggle-content-container' . ( $disabled ? ' disabled' : '' );
+
+	// Load caret SVG (decorative)
+	$caretSvg = '';
+	if ( is_file( $caretPath ) && is_readable( $caretPath ) ) {
+		$svg = file_get_contents( $caretPath );
+		// ensure decorative: strip any accidental focusability
+		$svg      = preg_replace( '/(<svg\b)([^>]*)(>)/i', '$1$2 focusable="false" aria-hidden="true"$3', $svg, 1 );
+		$caretSvg = '<span class="icon' . ( $caretClass ? ' ' . htmlspecialchars( $caretClass ) : '' ) . '" aria-hidden="true">' . $svg . '</span>';
+	}
+
+	$idEsc = htmlspecialchars( $id, ENT_QUOTES, 'UTF-8' );
+
+	echo '<div class="' . $containerCl . '" data-id="' . $idEsc . '">';
+	echo '  <div class="toggle-accordion" id="accordion-' . $idEsc . '-btn" role="button" aria-expanded="' . ( $expanded ? 'true' : 'false' ) . '" aria-controls="panel-' . $idEsc . '" tabindex="0">';
+	echo $headingHtml;
+	echo $caretSvg; // decorative caret wrapped correctly
+	echo '  </div>';
+	echo '  <div class="toggle-content" id="panel-' . $idEsc . '" role="region" aria-labelledby="accordion-' . $idEsc . '-btn">';
+}
+
+/**
+ * Close the accordion panel and container.
+ *
+ * @return void
+ */
+function renderAccordionSectionEnd(): void {
+	echo '  </div>'; // .toggle-content
+	echo '</div>';   // .toggle-content-container
+}
+
+/**
  * Get default tooltip definitions.
  *
  * @return array<string, string>

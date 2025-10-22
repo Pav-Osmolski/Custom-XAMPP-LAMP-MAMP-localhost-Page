@@ -2,8 +2,8 @@
 /**
  * Polyfills
  *
- * Currently provides a PHP 8+ compatibility polyfill for str_starts_with().
- * Only declared if the native function does not exist (PHP < 8.0).
+ * Currently provides PHP 8+ compatibility polyfills.
+ * Only declared if the native functions do not exist (PHP < 8.0).
  *
  * @author Pav
  * @license MIT

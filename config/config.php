@@ -17,7 +17,7 @@
  * Assumptions:
  * - Constants `DB_USER` and `DB_PASSWORD` are encrypted and must be decrypted
  * - `toggle_apache.php` is optional and affects `$apacheToggle`
- * - External helpers from `helpers.php` handle rendering, detection, and theming
+ * - External helpers from `helpers.php` handle security, rendering, detection, and theming
  *
  * Global Outputs:
  * - Paths: `APACHE_PATH`, `HTDOCS_PATH`, `PHP_PATH`

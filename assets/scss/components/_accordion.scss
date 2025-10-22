@@ -8,7 +8,7 @@
     transition: background-color 0.3s ease;
 
     &.open {
-        .toggle-accordion > svg {
+        .toggle-accordion .icon > svg {
             transform: rotate(-180deg);
         }
     }
@@ -28,7 +28,7 @@
                     color: unset;
                 }
 
-                > svg {
+                .icon > svg {
                     fill: var(--text-color);
                 }
             }
@@ -49,7 +49,7 @@
             transition: color 0.3s;
         }
 
-        > svg {
+        .icon > svg {
             position: absolute;
             width: 48px;
             height: 48px;
@@ -66,7 +66,7 @@
                 color: var(--hover-color);
             }
 
-            > svg {
+            .icon > svg {
                 fill: var(--hover-color);
             }
         }
