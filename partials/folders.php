@@ -70,7 +70,7 @@ $globalErrors  = [];
             <button id="next-width" type="button" aria-label="Increase column width"><span aria-hidden="true">+</span></button>
         </div>
         <h2>Document Folders</h2>
-        <div class="columns max-md" role="list" aria-describedby="drag-help">
+        <div class="columns max-md" role="list">
             <?php foreach ( $foldersConfigData as $column ): ?>
                 <?php
                 if ( ! is_array( $column ) ) {
@@ -93,7 +93,7 @@ $globalErrors  = [];
                 $folders = $dir ? list_subdirs( $dir ) : [];
                 ?>
                 <div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>" role="listitem">
-                    <div class="drag-handle" type="button" aria-label="Reorder column <?= htmlspecialchars( $title ) ?>" aria-describedby="drag-help"><?php echo $hamburgerSvg; ?></div>
+                    <div class="drag-handle" role="button" tabindex="0" aria-label="Reorder column <?= htmlspecialchars( $title ) ?>" aria-describedby="drag-help"><?php echo $hamburgerSvg; ?></div>
                     <h3>
                         <?php if ( $href !== '' ): ?>
                             <a href="<?= htmlspecialchars( $href ) ?>"><?= htmlspecialchars( $title ) ?></a>
@@ -133,6 +133,7 @@ $globalErrors  = [];
                     </ul>
                 </div>
             <?php endforeach; ?>
+            <p id="drag-help" class="sr-only">Drag the handle to reorder columns.</p>
         </div>
 
         <?php if ( ! empty( $globalErrors ) ): ?>
