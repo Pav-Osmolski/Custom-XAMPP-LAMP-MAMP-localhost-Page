@@ -41,7 +41,9 @@ header {
 	position: relative;
 
 	span {
-		display: block;
-		z-index: 1;
+		&:not(.status) {
+			display: block;
+			z-index: 1;
+		}
 	}
 }

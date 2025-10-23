@@ -339,12 +339,12 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 	}
 
 	if ( $apacheVersion && preg_match( '/Server version: Apache\/([\d.]+)/', $apacheVersion, $matches ) ) {
-		echo '<span class="apache-info">Apache: <a href="#" id="toggle-apache-inspector">' . $matches[1] . ' ✔️</a></span>';
+		echo '<span class="apache-info">Apache: <a href="#" id="toggle-apache-inspector" role="button" aria-expanded="false" aria-controls="apache-inspector">' . $matches[1] . '</a> <span class="status" aria-hidden="true">✔️</span></span>';
 	} else {
 		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) && stripos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false ) {
-			echo '<span class="apache-unknown-info">Apache: <a href="#" id="toggle-apache-inspector">Version unknown ⚠️</a></span>';
+			echo '<span class="apache-unknown-info">Apache: <a href="#" id="toggle-apache-inspector" role="button" aria-expanded="false" aria-controls="apache-inspector">Version unknown</a> <span class="status" aria-hidden="true">⚠️</span></span>';
 		} else {
-			echo '<span class="apache-error-info">Apache: <a href="#" id="toggle-apache-inspector">Not detected ❌</a></span>';
+			echo '<span class="apache-error-info">Apache: <a href="#" id="toggle-apache-inspector" role="button" aria-expanded="false" aria-controls="apache-inspector">Not detected</a> <span class="status" aria-hidden="true">❌</span></span>';
 		}
 	}
 
@@ -354,18 +354,18 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 	} else {
 		$isThreadSafe = ( ZEND_THREAD_SAFE ) ? 'TS' : 'NTS';
 		$isFastCGI    = ( strpos( PHP_SAPI, 'cgi-fcgi' ) !== false ) ? 'FastCGI' : 'Non-FastCGI';
-		echo "<span class='php-info'>PHP: <a href='#' id='toggle-phpinfo'>{$phpVersion} {$isThreadSafe} {$isFastCGI}</a> ✔️</span>";
+		echo "<span class='php-info'>PHP: <a href='#' id='toggle-phpinfo' role='button' aria-expanded='false' aria-controls='phpinfo-panel'>{$phpVersion} {$isThreadSafe} {$isFastCGI}</a> <span class='status' aria-hidden='true'>✔️</span></span>";
 	}
 
 	try {
 		$mysqli = new mysqli( DB_HOST, $dbUser, $dbPass );
 		if ( $mysqli->connect_error ) {
-			throw new Exception( "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $mysqli->connect_error . "</a></span>" );
+			throw new Exception( "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector' role='button' aria-expanded='false' aria-controls='mysql-inspector'>" . $mysqli->connect_error . "</a></span>" );
 		}
-		echo "<span class='mysql-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $mysqli->server_info . " ✔️</a></span>";
+		echo "<span class='mysql-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $mysqli->server_info . "</a> <span class='status' aria-hidden='true'>✔️</span></span>";
 		$mysqli->close();
 	} catch ( Exception $e ) {
-		echo "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $e->getMessage() . " ❌</a></span>";
+		echo "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $e->getMessage() . "</a> <span class='status' aria-hidden='true'>❌</span></span>";
 	}
 }
 

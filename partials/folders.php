@@ -48,7 +48,7 @@ $globalErrors  = [];
 ?>
 
 <?php if ( empty( $foldersConfigData ) || empty( $templatesByName ) ) : ?>
-    <div id="folders-view" class="visible">
+    <div id="folders-view" class="visible" aria-labelledby="folders-view-heading">
         <h2>Document Folders</h2>
         <div class="columns max-md">
             <div class="column">
@@ -64,13 +64,13 @@ $globalErrors  = [];
     </div>
 <?php else : ?>
     <div id="folders-view" class="visible">
-        <div class="column-controls">
-            <button id="reset-width">X</button>
-            <button id="prev-width">−</button>
-            <button id="next-width">+</button>
+        <div class="column-controls" role="group" aria-label="Column width controls">
+            <button id="reset-width" type="button" aria-label="Reset column width"><span aria-hidden="true">X</span></button>
+            <button id="prev-width" type="button" aria-label="Decrease column width"><span aria-hidden="true">−</span></button>
+            <button id="next-width" type="button" aria-label="Increase column width"><span aria-hidden="true">+</span></button>
         </div>
         <h2>Document Folders</h2>
-        <div class="columns max-md">
+        <div class="columns max-md" role="list" aria-describedby="drag-help">
             <?php foreach ( $foldersConfigData as $column ): ?>
                 <?php
                 if ( ! is_array( $column ) ) {
@@ -92,8 +92,8 @@ $globalErrors  = [];
 
                 $folders = $dir ? list_subdirs( $dir ) : [];
                 ?>
-                <div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>">
-                    <div class="drag-handle"><?php echo $hamburgerSvg; ?></div>
+                <div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>" role="listitem">
+                    <div class="drag-handle" type="button" aria-label="Reorder column <?= htmlspecialchars( $title ) ?>" aria-describedby="drag-help"><?php echo $hamburgerSvg; ?></div>
                     <h3>
                         <?php if ( $href !== '' ): ?>
                             <a href="<?= htmlspecialchars( $href ) ?>"><?= htmlspecialchars( $title ) ?></a>

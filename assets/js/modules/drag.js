@@ -1,11 +1,13 @@
 // assets/js/modules/drag.js
+const _initialisedLists = new WeakSet();
+
 export function enableDragSort( listSelector, opts = {} ) {
 	const list = document.querySelector( listSelector );
 	if ( !list ) return;
 
-	// Prevent double-initialising the same list
-	if ( list.dataset.sortBound === '1' ) return;
-	list.dataset.sortBound = '1';
+	// Prevent double-initialising the same list (internal, not HTML-bound)
+	if ( _initialisedLists.has( list ) ) return;
+	_initialisedLists.add( list );
 
 	const itemsSelector = opts.items || 'li';
 	const handleSelector = opts.handle || null;
