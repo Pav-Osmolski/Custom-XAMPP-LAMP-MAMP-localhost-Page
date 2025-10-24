@@ -34,6 +34,7 @@ Please feel free to fork and make your own changes!
 
 - **Instant Project Search** – Live filter through all your local folders with ease
 - **Flexible Column Layout** – Draggable, resizable, and fully customisable folder views
+- **Inclusive UX** – Designed so sighted, low-vision, and non-mouse users all get the same power
 - **Real-Time Clock** – Because knowing the time is still a thing
 - **Environment Snapshot** – Instantly see which versions of Apache, PHP, and MySQL you're running
 - **Smart Apache Control** – Safely restart the active Apache instance based on your OS and setup

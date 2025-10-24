@@ -125,12 +125,14 @@
 		}
 	}
 
-	.dock {
+	.dock-list {
 		gap: 15px;
 
-		a {
-			span {
-				font-size: 16px;
+		.dock-item {
+			a {
+				span {
+					font-size: 16px;
+				}
 			}
 		}
 

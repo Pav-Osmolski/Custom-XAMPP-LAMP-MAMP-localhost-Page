@@ -24,13 +24,34 @@ require_once __DIR__ . '/../config/config.php';
 
 $dockItems = read_json_array_safely( __DIR__ . '/../config/dock.json' );
 ?>
-<div class="dock">
-	<?php foreach ( $dockItems as $item ): ?>
-		<a href="<?= htmlspecialchars( $item['url'] ) ?>" target="_blank">
-			<?php if ( ! empty( $item['label'] ) ): ?>
-				<span><?= htmlspecialchars( $item['label'] ) ?></span>
-			<?php endif; ?>
-			<img src="<?= htmlspecialchars( $item['icon'] ) ?>" alt="<?= htmlspecialchars( $item['alt'] ) ?>">
-		</a>
-	<?php endforeach; ?>
-</div>
+<nav class="dock" aria-label="Quick launch">
+	<ul class="dock-list">
+		<?php foreach ( $dockItems as $item ):
+			$label = isset( $item['label'] ) ? trim( $item['label'] ) : '';
+			$alt = isset( $item['alt'] ) ? trim( $item['alt'] ) : '';
+			$name = $label !== '' ? $label : $alt; // fallback if no label
+			$opens = '(opens in a new tab)';
+			?>
+			<li class="dock-item">
+				<a
+						href="<?= htmlspecialchars( $item['url'] ) ?>"
+						target="_blank"
+						rel="noopener noreferrer"
+					<?php if ( $label === '' ): // no visible text -> name the link ?>
+						aria-label="<?= htmlspecialchars( $name . $opens ) ?>"
+					<?php endif; ?>
+				>
+					<img
+							src="<?= htmlspecialchars( $item['icon'] ) ?>"
+							alt=""
+							aria-hidden="true"
+					>
+					<?php if ( $label !== '' ): ?>
+						<span class="dock-label"><?= htmlspecialchars( $label ) ?></span>
+						<span class="sr-only"><?= $opens ?></span>
+					<?php endif; ?>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</nav>

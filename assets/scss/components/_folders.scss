@@ -16,7 +16,7 @@
 		font-weight: bold;
 	}
 
-	ul {
+	.columns ul {
 		list-style: none;
 		padding: 0;
 		line-height: 1.2;
@@ -139,7 +139,7 @@
 		gap: 0.5rem;
 		padding: 1rem;
 		position: relative;
-		cursor: move;
+		cursor: grab;
 
 		input {
 			padding: 0.5rem;

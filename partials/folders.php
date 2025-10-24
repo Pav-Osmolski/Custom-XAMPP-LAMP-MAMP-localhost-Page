@@ -93,7 +93,7 @@ $globalErrors  = [];
                 $folders = $dir ? list_subdirs( $dir ) : [];
                 ?>
                 <div class="column" id="<?php echo 'column_' . ( ++$columnCounter ); ?>" role="listitem">
-                    <div class="drag-handle" role="button" tabindex="0" aria-label="Reorder column <?= htmlspecialchars( $title ) ?>" aria-describedby="drag-help"><?php echo $hamburgerSvg; ?></div>
+                    <button class="drag-handle reset" aria-label="Reorder column <?= htmlspecialchars( $title ) ?>" aria-describedby="drag-help" data-drag-allow><?php echo $hamburgerSvg; ?></button>
                     <h3>
                         <?php if ( $href !== '' ): ?>
                             <a href="<?= htmlspecialchars( $href ) ?>"><?= htmlspecialchars( $title ) ?></a>

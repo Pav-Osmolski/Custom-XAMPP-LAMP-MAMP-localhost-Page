@@ -5,25 +5,40 @@ export function enableDragSort( listSelector, opts = {} ) {
 	const list = document.querySelector( listSelector );
 	if ( !list ) return;
 
-	// Prevent double-initialising the same list (internal, not HTML-bound)
 	if ( _initialisedLists.has( list ) ) return;
 	_initialisedLists.add( list );
 
 	const itemsSelector = opts.items || 'li';
 	const handleSelector = opts.handle || null;
 
+	// Configurable "interactive" rules
+	const interactiveSelector = opts.interactiveSelector || 'input, select, textarea, button, a, [contenteditable], .no-drag';
+	const allowInsideHandle = opts.allowInsideHandle || '[data-drag-allow]'; // whitelist inside handle
+	const allowHandleInteractive = opts.allowHandleInteractive ?? true; // allow whitelisted interactives inside handle
+
 	let dragSrcEl = null;
+	let dragging = false;
 
 	function isInteractive( el ) {
-		return !!el.closest( 'input, select, textarea, button, a, [contenteditable=""], .no-drag' );
+		return !!el.closest( interactiveSelector );
 	}
 
-	// Enable "just-in-time" draggable, but only if we’re on a valid item (and, if set, on its handle)
 	list.addEventListener( 'pointerdown', ( e ) => {
 		const item = e.target.closest( itemsSelector );
 		if ( !item || !list.contains( item ) ) return;
-		if ( isInteractive( e.target ) ) return;
-		if ( handleSelector && !e.target.closest( handleSelector ) ) return;
+
+		const isHandleHit = handleSelector ? !!e.target.closest( handleSelector ) : true;
+		if ( handleSelector && !isHandleHit ) return;
+
+		const interactiveHit = isInteractive( e.target );
+
+		// If we hit an interactive element…
+		if ( interactiveHit ) {
+			// …but it's inside the handle and on the allowlist, let it start drag
+			const allowed = allowHandleInteractive && isHandleHit && e.target.closest( allowInsideHandle );
+			if ( !allowed ) return;
+		}
+
 		item.draggable = true;
 	}, {capture: true} );
 
@@ -31,6 +46,8 @@ export function enableDragSort( listSelector, opts = {} ) {
 		const item = e.target.closest( itemsSelector );
 		if ( !item || !list.contains( item ) ) return;
 		dragSrcEl = item;
+		dragging = true;
+
 		e.dataTransfer.effectAllowed = 'move';
 		try {
 			e.dataTransfer.setData( 'text/plain', '' );
@@ -51,9 +68,7 @@ export function enableDragSort( listSelector, opts = {} ) {
 
 	list.addEventListener( 'dragleave', ( e ) => {
 		const item = e.target.closest( itemsSelector );
-		if ( item && list.contains( item ) ) {
-			item.classList.remove( 'over' );
-		}
+		if ( item && list.contains( item ) ) item.classList.remove( 'over' );
 	} );
 
 	list.addEventListener( 'drop', ( e ) => {
@@ -66,11 +81,8 @@ export function enableDragSort( listSelector, opts = {} ) {
 		const to = children.indexOf( target );
 
 		if ( from > -1 && to > -1 ) {
-			if ( from < to ) {
-				target.after( dragSrcEl );
-			} else {
-				target.before( dragSrcEl );
-			}
+			if ( from < to ) target.after( dragSrcEl );
+			else target.before( dragSrcEl );
 			list.dispatchEvent( new CustomEvent( 'sorted', {bubbles: true} ) );
 		}
 		target.classList.remove( 'over' );
@@ -80,9 +92,16 @@ export function enableDragSort( listSelector, opts = {} ) {
 		const item = e.target.closest( itemsSelector );
 		if ( item && list.contains( item ) ) {
 			item.classList.remove( 'dragElem' );
-			item.draggable = false; // return inputs to normal behaviour
+			item.draggable = false;
 		}
 		Array.from( list.querySelectorAll( itemsSelector ) ).forEach( el => el.classList.remove( 'over' ) );
 		dragSrcEl = null;
+		dragging = false;
 	} );
+
+	// Suppress accidental click activation after a drag
+	list.addEventListener( 'click', ( e ) => {
+		if ( !dragging ) return;
+		if ( handleSelector && e.target.closest( handleSelector ) ) e.preventDefault();
+	}, true );
 }

@@ -51,6 +51,11 @@ button {
 	transition: all 0.3s;
 	user-select: none;
 
+	&.reset { //Reset button style for non-form related buttons
+		background: transparent !important;
+		border: none;
+	}
+
 	&:hover {
 		background: var(--text-color);
 		color: var(--header-background-color);
