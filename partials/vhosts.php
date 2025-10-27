@@ -169,7 +169,14 @@ require_once __DIR__ . '/../config/config.php';
 					<td data-label="SSL"><?= $info['ssl'] ? '<span class="lock">🔒</span>' : '<span class="empty">—</span>' ?></td>
 					<td data-label="Cert">
 						<?php if ( $info['ssl'] ) : ?>
-							<?= $info['certValid'] ? '<span class="tick">✔️</span>' : '<span class="cross">❌</span> <button data-generate-cert="' . htmlspecialchars( $host ) . '">Generate Cert</button>' ?>
+							<?= $info['certValid']
+								? '<span class="tick">✔️</span>'
+								: (
+								( defined( 'DEMO_MODE' ) && DEMO_MODE )
+									? '<span class="cross">❌</span>'
+									: '<span class="cross">❌</span> <button data-generate-cert="' . htmlspecialchars( $host ) . '">Generate Cert</button>'
+								)
+							?>
 						<?php else : ?>
 							<span class="empty">—</span>
 						<?php endif; ?>

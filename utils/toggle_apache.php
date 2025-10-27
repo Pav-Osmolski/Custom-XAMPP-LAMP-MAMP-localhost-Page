@@ -15,7 +15,7 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.0
+ * @version 1.1
  */
 
 ob_start();
@@ -121,6 +121,16 @@ function findDefaultCommand( $action, $os, $apachePath ) {
 if ( ! in_array( $action, [ 'restart' ] ) ) {
 	ob_end_clean();
 	echo json_encode( [ 'success' => false, 'message' => 'Invalid action' ] );
+	exit;
+}
+
+if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
+	http_response_code( 403 );
+	ob_end_clean();
+	echo json_encode( [
+		'success' => false,
+		'message' => 'Apache control is disabled in demo mode'
+	] );
 	exit;
 }
 

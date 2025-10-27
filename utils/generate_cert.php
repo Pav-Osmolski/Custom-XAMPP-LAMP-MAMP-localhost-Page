@@ -11,7 +11,7 @@
  *
  * @author Pav
  * @license MIT
- * @version 1.0
+ * @version 1.1
  */
 
 require_once __DIR__ . '/../config/config.php';
@@ -21,6 +21,11 @@ header( 'Content-Type: text/plain' );
 if ( empty( $_GET['name'] ) ) {
 	http_response_code( 400 );
 	exit( 'Missing domain name.' );
+}
+
+if ( defined( 'DEMO_MODE' ) && DEMO_MODE ) {
+	http_response_code( 403 );
+	exit( 'Certificate generation is disabled in demo mode.' );
 }
 
 $domain           = preg_replace( '/[^a-zA-Z0-9.-]/', '', $_GET['name'] );
