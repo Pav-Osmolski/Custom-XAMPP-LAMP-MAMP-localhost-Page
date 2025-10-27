@@ -51,6 +51,30 @@ function buildBodyClasses( string $theme, bool $displayHeader, bool $displayFoot
 }
 
 /**
+ * Build page class string when viewing partials independently.
+ *
+ * When `$settingsView` is empty, this helper returns a string of CSS classes
+ * that should be added to the page container. At this time only the class
+ * "page-view" is returned, but using an array internally allows for future
+ * extensibility if additional classes are ever required.
+ *
+ * @param mixed $settingsView The view state or flag to determine if the page is
+ *                            being rendered as a standalone partial.
+ *
+ * @return string The generated space-separated CSS class string.
+ */
+function buildPageViewClasses( $settingsView ): string {
+	if ( empty( $settingsView ) ) {
+		$classes   = [];
+		$classes[] = 'page-view';
+
+		return implode( ' ', $classes );
+	}
+
+	return '';
+}
+
+/**
  * Load theme names and types from SCSS metadata.
  *
  * @param string $themeDir

@@ -116,7 +116,7 @@ if ( ! is_array( $in ) ) {
 	submit_fail( 'Failed to parse inputs.' );
 }
 
-// Normalise paths (using your helper if available)
+// Normalise paths (using helper if available)
 if ( function_exists( 'normalise_path' ) ) {
 	foreach ( [ 'APACHE_PATH', 'HTDOCS_PATH', 'PHP_PATH', 'php_ini_path' ] as $k ) {
 		if ( isset( $in[ $k ] ) && is_string( $in[ $k ] ) ) {

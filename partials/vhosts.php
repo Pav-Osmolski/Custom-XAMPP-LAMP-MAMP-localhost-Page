@@ -25,11 +25,7 @@
 
 require_once __DIR__ . '/../config/config.php';
 
-if ( empty( $settingsView ) ) {
-	$classes = [];
-	$classes[] = 'page-view';
-	$pageClasses = implode( ' ', $classes );
-}
+$pageClasses = buildPageViewClasses( $settingsView ?? null );
 ?>
 <div id="vhosts-manager" class="<?= $pageClasses ?>">
 	<?php if ( empty( $settingsView ) ): ?>

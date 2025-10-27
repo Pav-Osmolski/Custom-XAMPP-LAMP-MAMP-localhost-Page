@@ -28,3 +28,4 @@ require_once __DIR__ . '/helpers/booleans.php';
 require_once __DIR__ . '/helpers/system.php';
 require_once __DIR__ . '/helpers/ui.php';
 require_once __DIR__ . '/helpers/export.php';
+require_once __DIR__ . '/helpers/apache.php';

@@ -18,8 +18,11 @@
 /** @var string $defaultTooltipMessage */
 /** @var string $dbUser */
 /** @var string $dbPass */
+/** @var bool $phpPathValid */
 
 require_once __DIR__ . '/../config/config.php';
+
+$pageClasses = buildPageViewClasses( $settingsView ?? null );
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $action = $_GET['action'] ?? $_POST['action'] ?? null;
@@ -290,12 +293,6 @@ if ( $action ) {
 		echo json_encode( [ 'ok' => false, 'error' => $e->getMessage() ] );
 		exit;
 	}
-}
-
-if ( empty( $settingsView ) ) {
-	$classes = [];
-	$classes[] = 'page-view';
-	$pageClasses = implode( ' ', $classes );
 }
 ?>
 

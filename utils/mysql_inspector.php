@@ -18,6 +18,9 @@
  * @version 1.1
  */
 
+/** @var string $dbUser */
+/** @var string $dbPass */
+
 require_once __DIR__ . '/../config/config.php';
 
 // Default to config value; override with ?fast=1 or ?fast=0 if provided

@@ -120,6 +120,7 @@ $currentPhpErrorLevel = ini_get( 'error_reporting' );
 // Finalise computed environment values using helper functions
 $user = ( defined( 'DEMO_MODE' ) && DEMO_MODE ) ? 'demo' : resolveCurrentUser();
 
+// Class list for the <body> based on the UI options set by user_config.php
 $bodyClasses = buildBodyClasses(
 	$theme,
 	$displayHeader,
@@ -131,9 +132,12 @@ $bodyClasses = buildBodyClasses(
 	$displayPhpErrorLog
 );
 
+// Query available themes directly from assets
 [ $themeOptions, $themeTypes ] = loadThemes( __DIR__ . '/../assets/scss/themes/' );
 
+// Set the current theme
 $currentTheme = $theme;
 
+// Initialise Tooltips
 $tooltips              = getDefaultTooltips();
 $defaultTooltipMessage = getDefaultTooltipMessage();

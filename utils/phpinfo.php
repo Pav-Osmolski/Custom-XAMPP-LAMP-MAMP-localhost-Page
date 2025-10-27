@@ -3,7 +3,6 @@
  * PHP Info Display
  *
  * Outputs the content of `phpinfo()` into a div without styling or layout junk.
- * Useful for embedding inside custom dashboards (e.g. XAMPP/MAMP panels).
  *
  * Sanitisation:
  * - Removes everything outside the `<body>` tag
