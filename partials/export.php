@@ -305,64 +305,111 @@ if ( $action ) {
 	<?php if ( $phpPathValid ) { ?>
 		<div class="export-grid">
 			<!-- Files export -->
-			<div class="export-card">
-				<h3>Files</h3>
-				<p>Select a group and subfolder to export as a compressed archive. WordPress uploads are excluded by
+			<div class="export-card" role="region" aria-labelledby="export-files-title">
+				<h3 id="export-files-title">Files</h3>
+				<p id="export-files-help">Select a group and subfolder to export as a compressed archive. WordPress
+					uploads are excluded by
 					default.</p>
 				<?php renderSeparatorLine( 'small' ) ?>
-				<form id="export-files-form">
+				<form id="export-files-form" method="post" aria-describedby="export-files-help export-files-status" novalidate>
 					<input type="hidden" name="csrf" value="<?= htmlspecialchars( csrf_get_token(), ENT_QUOTES ) ?>">
 					<div class="row">
 						<label for="export-group">Group:</label>
-						<select id="export-group" name="group" required></select>
+						<select
+								id="export-group"
+								name="group"
+								required
+								aria-required="true"
+								aria-controls="export-folder"
+						></select>
 					</div>
-					<div class="row">
+					<div class="row" id="export-folder-row">
 						<label for="export-folder">Subfolder:</label>
-						<select id="export-folder" name="folder" required disabled>
-							<option value="">Select a group first…</option>
+						<select
+								id="export-folder"
+								name="folder"
+								required
+								disabled
+								aria-required="true"
+						>
+							<option value="">Select a subfolder…</option>
 						</select>
 					</div>
 					<div class="row" id="uploads-mode-row" style="display:none">
-						<label>Media:</label>
-						<div class="radio-group">
-							<label><input type="radio" name="uploadsMode" value="exclude" checked> Exclude
-								uploads</label>
-							<label><input type="radio" name="uploadsMode" value="include"> Include uploads</label>
-							<label><input type="radio" name="uploadsMode" value="only"> Export uploads only</label>
-						</div>
+						<fieldset class="radio-group" aria-describedby="uploads-mode-desc">
+							<legend>Media:</legend>
+							<p id="uploads-mode-desc" class="sr-only">Choose how WordPress uploads should be
+								handled.</p>
+							<label>
+								<input type="radio" name="uploadsMode" value="exclude" checked>
+								Exclude uploads
+							</label>
+							<label>
+								<input type="radio" name="uploadsMode" value="include">
+								Include uploads
+							</label>
+							<label>
+								<input type="radio" name="uploadsMode" value="only">
+								Export uploads only
+							</label>
+						</fieldset>
 					</div>
 					<?php renderSeparatorLine( 'small' ) ?>
 					<div>
-						<button class="button" type="submit">Create Archive</button>
-						<small id="export-files-status" class="muted"></small>
+						<button class="button" type="submit" aria-describedby="export-files-submit-desc">Create
+							Archive
+						</button>
+						<span id="export-files-submit-desc" class="sr-only">This will create a compressed archive based on your selections.</span>
+						<small
+								id="export-files-status"
+								class="muted"
+								role="status"
+								aria-live="polite"
+								aria-atomic="true"
+						></small>
 					</div>
 					<br>
 				</form>
 			</div>
 
 			<!-- Database export -->
-			<div class="export-card">
-				<h3>Database</h3>
-				<p>Choose a database to dump into a compressed archive.</p>
+			<div class="export-card" role="region" aria-labelledby="export-db-title">
+				<h3 id="export-db-title">Database</h3>
+				<p id="export-db-help">Choose a database to dump into a compressed archive.</p>
 				<?php renderSeparatorLine( 'small' ) ?>
-				<form id="export-db-form">
+				<form id="export-db-form" method="post" aria-describedby="export-db-help export-db-status" novalidate>
 					<input type="hidden" name="csrf" value="<?= htmlspecialchars( csrf_get_token(), ENT_QUOTES ) ?>">
 					<div class="row">
 						<label for="export-db">Database:</label>
-						<select id="export-db" name="db" required>
+						<select
+								id="export-db"
+								name="db"
+								required
+								aria-required="true"
+						>
 							<option value="">Loading…</option>
 						</select>
 					</div>
 					<?php renderSeparatorLine( 'small' ) ?>
 					<div>
-						<button class="button" type="submit">Export Database</button>
-						<small id="export-db-status" class="muted"></small>
+						<button class="button" type="submit" aria-describedby="export-db-submit-desc">Export Database
+						</button>
+						<span id="export-db-submit-desc" class="sr-only">This will create a compressed dump of the selected database.</span>
+
+						<small
+								id="export-db-status"
+								class="muted"
+								role="status"
+								aria-live="polite"
+								aria-atomic="true"
+						></small>
 					</div>
 					<?php renderSeparatorLine( 'small' ) ?>
 				</form>
 			</div>
 		</div>
 	<?php } else { ?>
-		<p><strong>Note:</strong> The <code>PHP Path</code> is not valid. Please ensure your PHP setup is correct.</p>
+		<p role="alert"><strong>Note:</strong> The <code>PHP Path</code> is not valid. Please ensure your PHP setup is
+			correct.</p>
 	<?php } ?>
 </div>
