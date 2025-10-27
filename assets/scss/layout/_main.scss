@@ -68,6 +68,11 @@ section {
 	animation: fadeIn 1.5s ease-in;
 }
 
+.page-view { //Used when relevant partials are viewed directly
+	margin: 20px 0 0 !important;
+	padding: 20px !important;
+}
+
 table {
 	width: auto;
 	border-collapse: collapse;

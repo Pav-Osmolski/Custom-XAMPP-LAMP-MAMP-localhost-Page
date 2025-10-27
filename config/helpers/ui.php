@@ -424,41 +424,78 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 }
 
 /**
- * Render a versioned <script> tag for an asset plus a BASE_URL bootstrap.
+ * Render versioned CSS/JS tags plus a single BASE_URL bootstrap.
  *
- * - Figures out BASE_URL by stripping "/partials" when a partial is hit directly.
- * - Versions the asset with filemtime() (falls back to time()).
- * - Returns the full HTML snippet so you can `echo` it where needed.
+ * - BASE_URL is computed by stripping a suffix from SCRIPT_NAME's directory (default "/partials").
+ * - Each asset gets a version query from filemtime(), falling back to time().
+ * - Pass null for $cssRel or $jsRel to skip that asset.
+ * - Optional $jsAttrs lets you add attributes like ["defer" => true, "crossorigin" => "anonymous"].
  *
- * @param string $assetRel Web-relative asset path (e.g. "dist/js/script.min.js").
+ * @param string|null $cssRel Web-relative CSS path, or null to skip. Default "dist/css/style.min.css".
+ * @param string|null $jsRel Web-relative JS path, or null to skip.  Default "dist/js/script.min.js".
  * @param string|null $projectRoot Absolute project root; defaults to dirname(__DIR__).
- * @param string $stripSuffix Suffix to strip from SCRIPT_NAME dir (default "/partials").
+ * @param string $stripSuffix Suffix to strip from SCRIPT_NAME dir when computing BASE_URL.
+ * @param array $jsAttrs Key/value map of JS attributes. Boolean true renders key only.
  *
- * @return string HTML snippet defining window.BASE_URL and the <script> tag.
+ * @return string HTML snippet defining window.BASE_URL once, then the tags requested.
  */
-function render_versioned_script_with_base( string $assetRel = 'dist/js/script.min.js', ?string $projectRoot = null, string $stripSuffix = '/partials' ): string {
-	// 1) Version from absolute path (assumes helpers live in /config or /partials tree)
+function render_versioned_assets_with_base(
+	?string $cssRel = 'dist/css/style.min.css',
+	?string $jsRel = 'dist/js/script.min.js',
+	?string $projectRoot = null,
+	string $stripSuffix = '/partials',
+	array $jsAttrs = []
+): string {
 	$projectRoot = $projectRoot ?: dirname( __DIR__ );
-	$assetAbs    = rtrim( $projectRoot, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR
-	               . str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $assetRel );
-	$ver         = is_file( $assetAbs ) ? filemtime( $assetAbs ) : time();
 
-	// 2) Compute a base URL, stripping /partials when accessed directly
+	// Compute BASE_URL once
 	$scriptName = isset( $_SERVER['SCRIPT_NAME'] ) ? (string) $_SERVER['SCRIPT_NAME'] : '';
-	$scriptDir  = rtrim( dirname( $scriptName ), '/\\' ); // e.g. "", "/", "/site", "/site/partials"
+	$scriptDir  = rtrim( dirname( $scriptName ), '/\\' );
 
 	if ( $stripSuffix !== '' && $stripSuffix[0] === '/' && preg_match( '~' . preg_quote( $stripSuffix, '~' ) . '$~', $scriptDir ) ) {
 		$baseUrl = rtrim( substr( $scriptDir, 0, - strlen( $stripSuffix ) ), '/' );
 	} else {
 		$baseUrl = $scriptDir;
 	}
-	$baseUrl = ( $baseUrl === '' ? '/' : $baseUrl . '/' ); // normalise trailing slash
+	$baseUrl = ( $baseUrl === '' ? '/' : $baseUrl . '/' );
 
-	$src = $baseUrl . ltrim( $assetRel, '/' );
-
-	// Build HTML (don’t override an existing BASE_URL if the host page already set it)
 	$html = '<script>window.BASE_URL = window.BASE_URL || ' . json_encode( $baseUrl ) . ';</script>' . "\n";
-	$html .= '<script src="' . htmlspecialchars( $src, ENT_QUOTES, 'UTF-8' ) . '?v=' . (int) $ver . '"></script>';
+
+	// Helper: build abs path and version
+	$versionFor = static function ( string $rel ) use ( $projectRoot ): int {
+		$abs = rtrim( $projectRoot, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR
+		       . str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $rel );
+
+		return is_file( $abs ) ? (int) filemtime( $abs ) : time();
+	};
+
+	// CSS
+	if ( $cssRel !== null && $cssRel !== '' ) {
+		$href = $baseUrl . ltrim( $cssRel, '/' );
+		$ver  = $versionFor( $cssRel );
+		$html .= '<link rel="stylesheet" href="' . htmlspecialchars( $href, ENT_QUOTES, 'UTF-8' ) . '?v=' . $ver . '">' . "\n";
+	}
+
+	// JS
+	if ( $jsRel !== null && $jsRel !== '' ) {
+		$src = $baseUrl . ltrim( $jsRel, '/' );
+		$ver = $versionFor( $jsRel );
+
+		// Serialise JS attributes
+		$attrStr = '';
+		foreach ( $jsAttrs as $k => $v ) {
+			if ( is_bool( $v ) ) {
+				if ( $v ) {
+					$attrStr .= ' ' . htmlspecialchars( (string) $k, ENT_QUOTES, 'UTF-8' );
+				}
+			} else {
+				$attrStr .= ' ' . htmlspecialchars( (string) $k, ENT_QUOTES, 'UTF-8' )
+				            . '="' . htmlspecialchars( (string) $v, ENT_QUOTES, 'UTF-8' ) . '"';
+			}
+		}
+
+		$html .= '<script src="' . htmlspecialchars( $src, ENT_QUOTES, 'UTF-8' ) . '?v=' . $ver . '"' . $attrStr . '></script>' . "\n";
+	}
 
 	return $html;
 }

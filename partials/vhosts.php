@@ -24,10 +24,16 @@
 /** @var string $defaultTooltipMessage */
 
 require_once __DIR__ . '/../config/config.php';
+
+if ( empty( $settingsView ) ) {
+	$classes = [];
+	$classes[] = 'page-view';
+	$pageClasses = implode( ' ', $classes );
+}
 ?>
-<div id="vhosts-manager">
+<div id="vhosts-manager" class="<?= $pageClasses ?>">
 	<?php if ( empty( $settingsView ) ): ?>
-		<?php echo render_versioned_script_with_base( 'dist/js/script.min.js' ); ?>
+		<?php echo render_versioned_assets_with_base(); ?>
 
 		<div class="heading">
 			<?= renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h2', 'Virtual Hosts Manager' ) ?>

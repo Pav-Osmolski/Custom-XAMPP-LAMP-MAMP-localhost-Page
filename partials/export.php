@@ -291,11 +291,17 @@ if ( $action ) {
 		exit;
 	}
 }
+
+if ( empty( $settingsView ) ) {
+	$classes = [];
+	$classes[] = 'page-view';
+	$pageClasses = implode( ' ', $classes );
+}
 ?>
 
-<div id="export">
+<div id="export" class="<?= $pageClasses ?>">
 	<?php if ( empty( $settingsView ) ): ?>
-		<?php echo render_versioned_script_with_base( 'dist/js/script.min.js' ); ?>
+		<?php echo render_versioned_assets_with_base(); ?>
 
 		<div class="heading">
 			<?= renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h2', 'Export Files & Database' ) ?>
