@@ -30,6 +30,11 @@ if ( isset( $_GET['fast'] ) ) {
 	$fastMode = filter_var( $_GET['fast'], FILTER_VALIDATE_BOOLEAN );
 }
 
+// Force enable fast mode in demo environments
+if ( defined( 'DEMO_MODE' ) && DEMO_MODE === true ) {
+	$fastMode = true;
+}
+
 $start = microtime( true );
 
 echo '<h2>MySQL Inspector</h2>';

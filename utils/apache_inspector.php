@@ -28,6 +28,11 @@ if ( isset( $_GET['fast'] ) ) {
 	$fastMode = filter_var( $_GET['fast'], FILTER_VALIDATE_BOOLEAN );
 }
 
+// Force enable fast mode in demo environments
+if ( defined( 'DEMO_MODE' ) && DEMO_MODE === true ) {
+	$fastMode = true;
+}
+
 // SYSTEM INFO
 $os   = PHP_OS_FAMILY;
 $arch = ( PHP_INT_SIZE === 8 ) ? '64-bit' : '32-bit';

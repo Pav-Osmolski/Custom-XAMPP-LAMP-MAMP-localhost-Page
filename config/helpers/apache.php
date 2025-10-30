@@ -1,6 +1,6 @@
 <?php
 /**
- * Apache Inspector helpers
+ * Apache Inspector, Toggle Apache and Virtual Hosts Manager helpers
  *
  * Helper functions for inspecting Apache: detecting binaries/config, versions, uptime,
  * virtual hosts, environment variables, and related diagnostics.
@@ -407,4 +407,30 @@ function findDefaultCommand( $action, $os, $apachePath ) {
 		default:
 			return '';
 	}
+}
+
+/**
+ * Merge a parsed <VirtualHost> block into the $serverData map.
+ *
+ * @param array<string, array<string, mixed>> $serverData Accumulator keyed by vhost name.
+ * @param array<string, mixed>|null $block Parsed vhost block to merge.
+ *
+ * @return void
+ */
+function collectServerBlock( array &$serverData, ?array $block ): void {
+	if ( ! is_array( $block ) || empty( $block['name'] ) ) {
+		return;
+	}
+	$name = $block['name'];
+	if ( isset( $serverData[ $name ] ) ) {
+		$serverData[ $name ]['_duplicate'] = true;
+		$block['_duplicate']               = true;
+	}
+	$serverData[ $name ] = array_merge( [
+		'valid'     => false,
+		'cert'      => '',
+		'key'       => '',
+		'certValid' => true,
+		'docRoot'   => '',
+	], $block );
 }
