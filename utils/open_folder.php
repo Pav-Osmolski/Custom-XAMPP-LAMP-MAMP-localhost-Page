@@ -1,0 +1,59 @@
+<?php
+/**
+ * Folder Opener API Endpoint
+ *
+ * Accepts a POST request with a JSON payload containing a `path`,
+ * and attempts to open the folder using the system's default file explorer.
+ *
+ * Supports:
+ * - Windows: via `start`
+ * - macOS (Darwin): via `open`
+ * - Linux: via `xdg-open`
+ *
+ * Requires a valid and existing absolute path.
+ *
+ * Usage (POST JSON): { "path": "C:/xampp/htdocs" }
+ *
+ * @package AMPBoard
+ * @author  Pawel Osmolski
+ * @version 1.0
+ * @license GPL-3.0-or-later https://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+header( 'Content-Type: application/json' );
+
+if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
+	http_response_code( 405 );
+	echo json_encode( [ 'error' => 'Invalid request method.' ] );
+	exit;
+}
+
+$data = json_decode( file_get_contents( 'php://input' ), true );
+
+if ( ! isset( $data['path'] ) || ! is_string( $data['path'] ) || ! file_exists( $data['path'] ) ) {
+	http_response_code( 400 );
+	echo json_encode( [ 'error' => 'Invalid or missing folder path.' ] );
+	exit;
+}
+
+$rawPath = $data['path'];
+$path    = str_replace( '/', DIRECTORY_SEPARATOR, $rawPath );
+
+$os = PHP_OS_FAMILY;
+
+try {
+	if ( $os === 'Windows' ) {
+		pclose( popen( "start \"\" $path", 'r' ) );
+	} elseif ( $os === 'Darwin' ) {
+		safe_shell_exec( "open $path" );
+	} elseif ( $os === 'Linux' ) {
+		safe_shell_exec( "xdg-open $path" );
+	} else {
+		throw new Exception( "Unsupported OS: $os" );
+	}
+
+	echo json_encode( [ 'success' => true, 'message' => "Opened: {$data['path']}" ] );
+} catch ( Exception $e ) {
+	http_response_code( 500 );
+	echo json_encode( [ 'error' => $e->getMessage() ] );
+}

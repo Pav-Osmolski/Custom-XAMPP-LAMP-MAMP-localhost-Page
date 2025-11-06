@@ -1,0 +1,190 @@
+@use '../utils/variables' as *;
+@use '../utils/mixins' as *;
+
+/* Media */
+@include respond($break-xl) {
+	header {
+		h1 {
+			font-size: 1.5625rem;
+		}
+	}
+}
+
+@include respond($break-lg) {
+	header {
+		h1 {
+			display: none;
+		}
+	}
+	p, label {
+		font-size: .9375rem;
+	}
+	table code {
+		font-size: .8rem;
+	}
+	fieldset {
+		width: auto;
+	}
+	p {
+		&.description {
+			width: auto;
+		}
+	}
+	.columns {
+		flex-direction: column;
+		max-width: none !important;
+		width: 100%;
+	}
+	body.clock-inactive.search-inactive header {
+		justify-content: flex-end;
+	}
+	body.system-monitor-active.error-log-active .error-log-section {
+		padding-right: 20px;
+	}
+	body.system-monitor-active .system-monitor {
+		position: static;
+		width: 100%;
+		margin: -90px auto 90px auto;
+		border-radius: 0;
+		align-items: center;
+	}
+	.column-controls {
+		display: none;
+	}
+	.background-logos {
+		svg {
+			opacity: 0;
+		}
+	}
+	#dock-config-editor {
+		#dock-list {
+			display: flex;
+			flex-direction: column;
+
+			.dock-item {
+				flex-direction: column;
+
+				input {
+					max-width: none !important;
+				}
+			}
+		}
+	}
+	#link-templates-config {
+		.template-item {
+			flex-direction: column;
+			align-items: center;
+
+			input {
+				&.template-name {
+					max-width: none;
+				}
+			}
+			.remove-template {
+				align-self: center;
+			}
+		}
+	}
+	.template-html-wrapper {
+		width: 100%;
+	}
+	#vhosts-table {
+		width: 100%;
+		border: 1px solid var(--border-color);
+
+		code {
+			flex: auto;
+			text-align: right;
+		}
+
+		thead {
+			display: none;
+		}
+
+		tbody {
+			tr {
+				display: block;
+				padding: 1rem;
+				background: var(--header-background-color);
+
+				td {
+					display: flex;
+					justify-content: space-between;
+					align-items: baseline;
+					flex-wrap: wrap;
+					border-bottom: none;
+
+					&:last-child {
+						border-bottom: 1px solid var(--border-color);
+					}
+
+					&::before {
+						content: attr(data-label);
+						font-weight: bold;
+						flex: 1;
+						margin-right: 1rem;
+						color: var(--text-color);
+					}
+				}
+			}
+		}
+	}
+}
+
+@include respond($break-md) {
+	.server-info {
+		&:before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -30px;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(to right, transparent 0px, var(--header-background-color) 40px);
+			pointer-events: none;
+		}
+
+		span {
+			&[class^="mysql-"] {
+				max-width: 210px; //MySQL info tends to be very, very long
+			}
+		}
+	}
+
+	.dock-list {
+		gap: 15px;
+
+		.dock-item {
+			a {
+				span {
+					font-size: 1rem;
+				}
+			}
+		}
+
+		img {
+			width: 50px;
+			height: 50px;
+		}
+	}
+}
+
+@include respond($break-sm) {
+	body.search-inactive header {
+		justify-content: flex-end;
+	}
+
+	header {
+		.search-bar {
+			margin-top: -30px;
+			font-size: .875rem;
+		}
+
+		.clock {
+			position: absolute;
+			top: 49px;
+			left: 20px;
+			font-size: 1.5em;
+		}
+	}
+}

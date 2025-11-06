@@ -1,0 +1,95 @@
+/* macOS-style Dock */
+.dock-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 40px;
+	padding: 10px;
+	user-select: none;
+
+	.dock-item {
+		position: relative;
+		display: flex;
+		gap: 0;
+		margin: 0;
+		transition: transform .3s ease-in-out;
+
+		&:hover {
+			transform: scale(1.3);
+		}
+
+		a {
+			line-height: 1; //Prevent dock-label from jumping during transition
+		}
+
+		span { //To overlay text for each dock icon
+			position: absolute;
+			bottom: 8px;
+			right: 0;
+			color: var(--text-color);
+			font-size: 1.125rem;
+			text-transform: uppercase;
+			text-shadow: -1px -1px 0 var(--header-background-color), 1px -1px 0 var(--header-background-color), -1px 1px 0 var(--header-background-color), 1px 1px 0 var(--header-background-color);
+			user-select: none;
+		}
+	}
+
+	img {
+		width: 60px;
+		height: 60px;
+		border-radius: var(--container-border-radius);
+	}
+}
+
+/* Dock Configuration Styles */
+#dock-config-editor {
+	margin-top: 1rem;
+
+	#dock-list {
+		list-style: none;
+		padding: 0;
+
+		.dock-item {
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+			margin-bottom: .5rem;
+			padding: .5rem;
+			border-radius: var(--container-border-radius);
+			cursor: grab;
+
+			input {
+				flex: 1;
+				padding: .3rem;
+				font-size: .9rem;
+				max-width: none;
+
+				&[placeholder="Label"] {
+					max-width: 150px;
+				}
+
+				&[placeholder="Icon"] {
+					max-width: 300px;
+				}
+
+				&[placeholder="Alt Text"] {
+					max-width: 150px;
+				}
+			}
+
+			button.remove {
+				background: var(--hover-color);
+				border: none;
+				padding: .3rem .6rem;
+				cursor: pointer;
+				font-size: .9rem;
+				border-radius: var(--button-border-radius);
+
+				&:hover {
+					background: var(--text-color);
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "label": "",
+        "url": "https://jira.atlassian.com/",
+        "icon": "./assets/images/Jira.png",
+        "alt": "Jira"
+    },
+    {
+        "label": "TXT",
+        "url": "https://jira.atlassian.com/",
+        "icon": "./assets/images/Jira.png",
+        "alt": "Jira"
+    },
+    {
+        "label": "",
+        "url": "https://jira.atlassian.com/wiki/",
+        "icon": "./assets/images/Confluence.png",
+        "alt": "Confluence"
+    },
+    {
+        "label": "",
+        "url": "https://github.com/",
+        "icon": "./assets/images/GitHub.png",
+        "alt": "GitHub"
+    },
+    {
+        "label": "",
+        "url": "https://bitbucket.org/",
+        "icon": "./assets/images/Bitbucket.png",
+        "alt": "Bitbucket"
+    }
+]

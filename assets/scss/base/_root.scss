@@ -1,0 +1,33 @@
+/* Root variables for default theme */
+$theme-name: 'Default';
+$theme-type: 'Dark';
+
+:root {
+	--font-main: 'Ubuntu', sans-serif;
+	--font-editor: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+	--background-image: url(../../assets/images/background.jpg);
+	--background-color: #121212e8;
+	--light-mode-bg-overlay: #e7e6f0d9;
+	--text-color: #e0dde8;
+	--header-background-color: #1d1c1fe8;
+	--border-color: #444;
+	--disabled-color: #444444bf;
+	--link-color: #4672c9;
+	--hover-color: #f15e83;
+	--input-bg: #1d1c1f;
+	--input-text: #e0dde8;
+	--input-placeholder: #888;
+	--button-text: #e0dde8;
+	--error-bg: #5f162a;
+	--container-border-radius: 10px;
+	--button-border-radius: 7px;
+	--input-border-radius: 5px;
+	--box-shadow: rgba(0, 0, 0, 0.2);
+	--scrollbar-primary: #4672c9;
+	--scrollbar-secondary: #1d1c1f;
+	--syntax-text: #c8cdc6;
+	--syntax-pun: #949494;
+	--syntax-tag: #43a6d2;
+	--syntax-attr: #4071a1;
+	--syntax-value: #9699e7;
+}

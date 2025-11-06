@@ -1,0 +1,9 @@
+@use 'variables' as *;
+
+/* Utilities */
+
+@each $class, $width in $column-widths {
+  .#{$class} {
+    max-width: $width;
+  }
+}

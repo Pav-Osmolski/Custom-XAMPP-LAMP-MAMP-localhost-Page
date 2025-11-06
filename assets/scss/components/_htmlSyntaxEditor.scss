@@ -1,0 +1,47 @@
+/* HTML Syntax Editor */
+.template-html-wrapper {
+	flex: 1 1 auto;
+	min-width: 0;
+	position: relative;
+
+	.template-html {
+		font-family: var(--font-editor);
+		font-size: .75rem;
+		line-height: 1.4;
+		tab-size: 2;
+		white-space: pre-wrap;
+		padding: 5px;
+		border: 1px solid var(--border-color);
+		border-radius: var(--input-border-radius);
+		background: var(--input-bg);
+		color: var(--syntax-text);
+		min-height: 80px;
+		overflow-wrap: break-word;
+
+		&:empty::before {
+			content: attr(placeholder);
+			opacity: .4;
+			pointer-events: none;
+		}
+	}
+}
+
+/* Syntax colours */
+.syntax-highlight {
+	.pun, .tag, .attr, .value {
+		transition: color .3s;
+	}
+
+	.pun {
+		color: var(--syntax-pun);
+	}
+	.tag {
+		color: var(--syntax-tag);
+	}
+	.attr {
+		color: var(--syntax-attr);
+	}
+	.value {
+		color: var(--syntax-value);
+	}
+}

@@ -1,0 +1,26 @@
+$theme-name: 'Dracula';
+$theme-type: 'Dark';
+
+:root.dracula-theme {
+	--background-color: #282a36e8;
+	--background-overlay: #44475aa9;
+	--hue-angle: 25deg;
+	--text-color: #f8f8f2;
+	--header-background-color: #44475ae8;
+	--border-color: #6272a4;
+	--disabled-color: #6272a4bf;
+	--link-color: #8be9fd;
+	--hover-color: #ff79c6;
+	--input-bg: #272835;
+	--input-text: #f8f8f2;
+	--input-placeholder: #6272a4;
+	--button-text: #f8f8f2;
+	--error-bg: #ff5555;
+	--scrollbar-primary: #bd93f9;
+	--scrollbar-secondary: #44475a;
+	--syntax-text: #f8f8f2;
+	--syntax-pun: #f8f8f2;
+	--syntax-tag: #ff79c6;
+	--syntax-attr: #50fa7b;
+	--syntax-value: #f1fa8c;
+}

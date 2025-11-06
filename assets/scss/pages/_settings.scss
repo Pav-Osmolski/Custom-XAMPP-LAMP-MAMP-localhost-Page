@@ -1,0 +1,72 @@
+/* Settings */
+#settings-view {
+	h3 {
+		position: relative;
+		display: -webkit-inline-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	form > p {
+		font-size: .9rem;
+	}
+}
+
+#clear-settings-wrapper {
+	position: relative;
+}
+
+.user-settings {
+	position: relative;
+	margin-top: 5px;
+}
+
+.ui-features {
+	display: flex;
+	max-width: 450px;
+	flex-wrap: wrap;
+	flex-direction: row;
+	gap: 0 30px;
+	margin-top: 5px;
+}
+
+#link-templates-list {
+	padding: 0 .5rem;
+}
+
+.background-logos {
+	position: absolute;
+	right: 0;
+	top: 10px;
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+
+	svg {
+		height: 140px;
+		width: auto;
+		opacity: .3;
+		flex: none;
+		transition: opacity .3s ease;
+	}
+}
+
+.post-confirmation-container {
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    animation: fadeIn 1s ease-out;
+    user-select: none;
+
+	.post-confirmation-message {
+		background-color: var(--header-background-color);
+		border: 1px solid var(--border-color);
+		border-radius: var(--container-border-radius);
+		padding: 15px;
+		font-weight: 300;
+	}
+}
