@@ -3,6 +3,7 @@ $theme-type: 'Light';
 
 :root.overcast-theme {
 	--background-color: #f0f0f0e8;
+	--logo-hue-angle: -40deg;
 	--text-color: #2a3246;
 	--header-background-color: #dfdde6;
 	--border-color: #626798;
@@ -13,9 +14,9 @@ $theme-type: 'Light';
 	--error-bg: #ffa9c0;
 	--scrollbar-primary: #237493;
 	--scrollbar-secondary: #dfdde6;
-    --syntax-text: #1f211f;
-    --syntax-pun: #434343;
-    --syntax-tag: #286783;
-    --syntax-attr: #213a53;
-    --syntax-value: #57599b;
+	--syntax-text: #1f211f;
+	--syntax-pun: #434343;
+	--syntax-tag: #286783;
+	--syntax-attr: #213a53;
+	--syntax-value: #57599b;
 }

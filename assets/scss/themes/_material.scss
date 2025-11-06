@@ -1,0 +1,28 @@
+$theme-name: 'Material';
+$theme-type: 'Dark';
+
+:root.material-theme {
+	--background-color: #263238e8;
+	--background-overlay: #32373bd9;
+	--bg-hue-angle: 320deg;
+	--logo-hue-angle: -60deg;
+	--logo-grayscale: 60%;
+	--text-color: #CCD4E7;
+	--header-background-color: #314349e8;
+	--border-color: #455a64;
+	--disabled-color: #78909cbf;
+	--link-color: #18baab;
+	--hover-color: #658594;
+	--input-bg: #1f272c;
+	--input-text: #ecefff;
+	--input-placeholder: #90a4ae;
+	--button-text: #ffffff;
+	--error-bg: #ff5370;
+	--scrollbar-primary: #2F9E95;
+	--scrollbar-secondary: #263238;
+	--syntax-text: #CCD4E7;
+	--syntax-pun: #9EDEFD;
+	--syntax-tag: #f07178;
+	--syntax-attr: #ffcb6b;
+	--syntax-value: #c3e88d;
+}

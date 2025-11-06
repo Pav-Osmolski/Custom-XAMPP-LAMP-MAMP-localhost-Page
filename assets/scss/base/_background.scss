@@ -13,7 +13,7 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        filter: hue-rotate(var(--hue-angle));
+        filter: hue-rotate(var(--bg-hue-angle)) grayscale(var(--bg-grayscale));
         z-index: -2;
     }
 

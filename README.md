@@ -1,4 +1,4 @@
-# ⚡ AMPBoard — Modern Localhost Dashboard for Apache, MySQL & PHP
+# ⚡ AMPBoard — Modern Localhost and Remote Dashboard for Apache, MySQL & PHP
 
 ![Version](https://img.shields.io/github/v/release/Pav-Osmolski/AMPBoard)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-7.1--8.3-blue)
@@ -9,8 +9,10 @@
 ![Modular JS](https://img.shields.io/badge/JavaScript-ES6%20Modules-yellow)
 ![Last Commit](https://img.shields.io/github/last-commit/Pav-Osmolski/AMPBoard)
 
-**AMPBoard** is a modern, modular localhost dashboard for developers working with XAMPP, LAMP, or MAMP stacks.
-It replaces the plain Apache index page with a responsive, feature-rich control panel that displays your local projects, monitors system stats, and manages Apache & MySQL — all from one sleek interface.
+**AMPBoard** is a modern, modular dashboard for developers using Apache, MySQL, and PHP — whether on localhost or remote servers.
+It replaces the plain Apache index page with a responsive, feature-rich control panel that displays your projects, monitors system stats, and manages Apache & MySQL — all from one sleek interface.
+
+Advanced Apache specific tools like Vhosts Management, Restart Apache, Inspector and Log Viewer, require server-level access when deployed remotely.
 
 ✅ Requires **PHP 7.1+**  
 ✅ Works on **Windows, macOS, and Linux**  
@@ -23,8 +25,6 @@ It is intended to be used with AMP stacks such as:
 - [WAMP](https://www.wampserver.com/en/)
 - [LAMP](https://www.digitalocean.com/community/tutorials/how-to-install-lamp-stack-on-ubuntu)
 - [MAMP & MAMP PRO](https://www.mamp.info/)
-
-Please feel free to fork and make your own changes!
 
 ## 📚 Table of Contents
 
@@ -39,22 +39,22 @@ Please feel free to fork and make your own changes!
 - **Instant Project Search** – Live filter through all your local folders with ease
 - **Flexible Column Layout** – Draggable, resizable, and fully customisable folder views
 - **Inclusive UX** – Designed so sighted, low-vision, and non-mouse users all get the same power
-- **Real-Time Clock** – Because knowing the time is still a thing
 - **Environment Snapshot** – Instantly see which versions of Apache, PHP, and MySQL you're running
 - **Smart Apache Control** – Safely restart the active Apache instance based on your OS and setup
 - **Live System Monitoring** – AJAX-powered CPU, memory, and disk usage at a glance
 - **Apache and MySQL Inspector** – Inspect configuration and uptime for Apache and MySQL servers
+- **Reusable Link Templates** – Define and reuse HTML templates across folder listings
 - **Quick Config Panel** – Update paths, ports, and settings without breaking a sweat
 - **PHP Error Management** – Toggle error display and logging on the fly
 - **Virtual Hosts Overview** – View and validate active VHosts, with SSL certificate management
 - **Apache and PHP Error Log Toggle** – One-click access to the latest server logs
-- **Export Files & Database** – Export folders as ZIP; include/only WP uploads; exclude junk
+- **Export Files & Database** – Export folders as ZIP or 7-Zip; include/only WP uploads; exclude junk
 - **Security** – CSRF on POST, path checks, safe fallbacks; no secrets persisted
 - **Open Folder from UI** – Instantly launch projects in your file explorer from the browser
 - **Custom Dock** – macOS-style dock with editable shortcuts to your key tools and sites
-- **Reusable Link Templates** – Define and reuse HTML templates across folder listings
+- **Real-Time Clock** – Because knowing the time is still a thing
 - **Responsive Interface** – Sleek, modern design that adapts to all screen sizes
-- **Theme Switcher** – Five themes, one destiny. Pick your favourite
+- **Theme Switcher** – Seven themes, one destiny. Pick your favourite
 - **Demo Mode** – Disables exports and obfuscates credentials for demonstrative purposes
 - **Low-Stress Local Dev** – Designed to stay out of your way 🧘 so you can focus on building
 

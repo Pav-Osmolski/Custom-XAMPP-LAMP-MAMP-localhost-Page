@@ -3,11 +3,15 @@ $theme-name: 'Default';
 $theme-type: 'Dark';
 
 :root {
-	--font-main: 'Ubuntu', sans-serif;
-	--font-editor: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+	--font-main: 'Ubuntu', sans-serif; /* Main body font */
+	--font-editor: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace; /* <code>, <pre> and HTML Editor font */
 	--background-image: url(../../assets/images/background.jpg);
 	--background-color: #121212e8;
 	--light-mode-bg-overlay: #e7e6f0d9;
+	--bg-hue-angle: 0deg;
+	--bg-grayscale: 0%;
+	--logo-hue-angle: -7deg;
+	--logo-grayscale: 0%;
 	--text-color: #e0dde8;
 	--header-background-color: #1d1c1fe8;
 	--border-color: #444;
@@ -25,9 +29,9 @@ $theme-type: 'Dark';
 	--box-shadow: rgba(0, 0, 0, 0.2);
 	--scrollbar-primary: #4672c9;
 	--scrollbar-secondary: #1d1c1f;
-	--syntax-text: #c8cdc6;
-	--syntax-pun: #949494;
-	--syntax-tag: #43a6d2;
-	--syntax-attr: #4071a1;
-	--syntax-value: #9699e7;
+    --syntax-text: #b8bcb6; /* Text - HTML Editor */
+    --syntax-pun: #949494; /* Punctuation - HTML Editor */
+    --syntax-tag: #149ad4; /* Tag - HTML Editor */
+    --syntax-attr: #2777b0; /* Attribute - HTML Editor */
+    --syntax-value: #5084ea; /* Value - HTML Editor */
 }

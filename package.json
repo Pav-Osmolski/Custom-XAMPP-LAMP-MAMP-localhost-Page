@@ -1,7 +1,7 @@
 {
   "name": "AMPBoard",
   "version": "1.2",
-  "description": "A modular Webpack setup for compiling SCSS, bundling and minifying JavaScript, and powering a dynamic custom localhost homepage",
+  "description": "A modular Webpack setup for compiling SCSS, bundling and minifying JavaScript, and powering a dynamic localhost dashboard",
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --watch"

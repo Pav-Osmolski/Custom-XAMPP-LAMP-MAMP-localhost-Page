@@ -16,15 +16,29 @@ header {
 	z-index: 1000;
 
 	h1 {
+		display: flex;
+		align-items: center;
+		gap: 5px;
 		color: var(--link-color);
 		margin: 0;
 		font-family: var(--font-main);
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		min-width: 200px;
+
+		span {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		img {
+			width: auto;
+			height: 2rem;
+			display: inline;
+			vertical-align: -0.15em;
+			filter: hue-rotate(var(--logo-hue-angle)) grayscale(var(--logo-grayscale));
+		}
 	}
 
 	.clock {

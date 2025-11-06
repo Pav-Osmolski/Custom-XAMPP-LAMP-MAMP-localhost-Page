@@ -37,13 +37,13 @@ $dockItems = read_json_array_safely( __DIR__ . '/../config/dock.json' );
 						target="_blank"
 						rel="noopener noreferrer"
 					<?php if ( $label === '' ): // no visible text -> name the link ?>
-						aria-label="<?= htmlspecialchars( $name . $opens ) ?>"
+						aria-label="<?= htmlspecialchars( $name . ' ' . $opens ) ?>"
 					<?php endif; ?>
 				>
 					<img
-							src="<?= htmlspecialchars( $item['icon'] ) ?>"
-							alt=""
-							aria-hidden="true"
+						src="<?= htmlspecialchars( $item['icon'] ) ?>"
+						alt="<?= $label === '' ? htmlspecialchars( $alt ) : '' ?>"
+						<?php if ( $label !== '' ): ?>aria-hidden="true"<?php endif; ?>
 					>
 					<?php if ( $label !== '' ): ?>
 						<span class="dock-label"><?= htmlspecialchars( $label ) ?></span>

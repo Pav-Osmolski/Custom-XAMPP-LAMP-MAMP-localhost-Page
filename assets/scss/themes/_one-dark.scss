@@ -1,0 +1,27 @@
+$theme-name: 'One Dark';
+$theme-type: 'Dark';
+
+:root.one-dark-theme {
+	--background-color: #282c34e8;
+	--background-overlay: #282b33d9;
+	--logo-hue-angle: -30deg;
+	--logo-grayscale: 40%;
+	--text-color: #abb2bf;
+	--header-background-color: #24282fe8;
+	--border-color: #3b4048;
+	--disabled-color: #5c6370bf;
+	--link-color: #61aeef;
+	--hover-color: #c678dd;
+	--input-bg: #21252b;
+	--input-text: #abb2bf;
+	--input-placeholder: #5c6370;
+	--button-text: #e6efff;
+	--error-bg: #5a1f27;
+	--scrollbar-primary: #5c6370;
+	--scrollbar-secondary: #21252b;
+	--syntax-text: #979FAD;
+	--syntax-pun: #abb2bf;
+	--syntax-tag: #e06c75;
+	--syntax-attr: #E5C17C;
+	--syntax-value: #98c379;
+}
