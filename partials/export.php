@@ -15,7 +15,7 @@
  *
  * @package AMPBoard
  * @author  Pawel Osmolski
- * @version 1.0
+ * @version 1.1
  * @license GPL-3.0-or-later https://www.gnu.org/licenses/gpl-3.0.html
  */
 

@@ -3,8 +3,32 @@
  * UI helpers
  *
  * @author  Pawel Osmolski
- * @version 1.0
+ * @version 1.1
  */
+
+/**
+ * Determine the theme color scheme (light or dark) based on the SCSS theme file.
+ *
+ * @param string $theme The name of the theme (used to locate its SCSS file).
+ *
+ * @return string Returns 'light' or 'dark' depending on the $theme-type in the SCSS file.
+ */
+function getThemeColorScheme( string $theme ): string {
+	$themeFile     = __DIR__ . '/../../assets/scss/themes/_' . $theme . '.scss';
+	$defaultScheme = 'dark';
+
+	if ( $theme === 'default' || ! file_exists( $themeFile ) ) {
+		return $defaultScheme;
+	}
+
+	$scssContent = file_get_contents( $themeFile );
+
+	if ( preg_match( '#\$theme-type\s*:\s*[\'"]Light[\'"]#i', $scssContent ) ) {
+		return 'light';
+	}
+
+	return 'dark';
+}
 
 /**
  * Generate dynamic <body> class string based on UI settings and theme.
@@ -45,12 +69,8 @@ function buildBodyClasses( string $theme, bool $displayHeader, bool $displayFoot
 		$classes[] = 'error-log-active';
 	}
 
-	$themeFile = __DIR__ . '/../../assets/scss/themes/_' . $theme . '.scss';
-	if ( $theme !== 'default' && file_exists( $themeFile ) ) {
-		if ( preg_match( '#\$theme-type\s*:\s*[\'"]Light[\'"]#i', file_get_contents( $themeFile ) ) ) {
-			$classes[] = 'light-mode';
-		}
-	}
+	$themeColorScheme = getThemeColorScheme( $theme );
+	$classes[]        = ( $themeColorScheme === 'light' ) ? 'light-mode' : 'dark-mode';
 
 	return implode( ' ', $classes );
 }

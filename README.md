@@ -1,4 +1,4 @@
-# ⚡ AMPBoard — Modern Localhost and Remote Dashboard for Apache, MySQL & PHP
+# AMPBoard — Modern Localhost and Remote Dashboard for Apache, MySQL & PHP
 
 ![Version](https://img.shields.io/github/v/release/Pav-Osmolski/AMPBoard)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-7.1--8.3-blue)
@@ -9,10 +9,15 @@
 ![Modular JS](https://img.shields.io/badge/JavaScript-ES6%20Modules-yellow)
 ![Last Commit](https://img.shields.io/github/last-commit/Pav-Osmolski/AMPBoard)
 
+<p align="center">
+    <img src="/assets/favicon/AMPBoard.ico" alt="AMPBoard Logo" />
+</p>
+
 **AMPBoard** is a modern, modular dashboard for developers using Apache, MySQL, and PHP — whether on localhost or remote servers.
 It replaces the plain Apache index page with a responsive, feature-rich control panel that displays your projects, monitors system stats, and manages Apache & MySQL — all from one sleek interface.
 
-Advanced Apache specific tools like Vhosts Management, Restart Apache, Inspector and Log Viewer, require server-level access when deployed remotely.
+> [!NOTE]
+> Advanced Apache specific tools like Vhosts Management, Restart Apache, Inspector and Log Viewer, require server-level access when deployed remotely.
 
 ✅ Requires **PHP 7.1+**  
 ✅ Works on **Windows, macOS, and Linux**  

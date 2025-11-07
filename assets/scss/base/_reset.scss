@@ -41,6 +41,6 @@ select {
 
 /* Basic focus visibility for accessibility */
 :focus-visible {
-	outline: 2px solid Highlight;
+	outline: 2px solid var(--link-color);
 	outline-offset: 2px;
 }

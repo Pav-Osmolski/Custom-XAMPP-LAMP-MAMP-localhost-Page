@@ -16,7 +16,7 @@
  * - A horizontal dock bar with anchor elements linking to external tools or resources
  *
  * @author  Pawel Osmolski
- * @version 1.1
+ * @version 1.2
  */
 
 require_once __DIR__ . '/../config/config.php';
