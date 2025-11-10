@@ -495,7 +495,7 @@ function render_versioned_assets_with_base(
 	?string $cssRel = 'dist/css/style.min.css',
 	?string $jsRel = 'dist/js/script.min.js',
 	?string $projectRoot = null,
-	string $stripSuffix = '/partials',
+	string $stripSuffix = '/utils',
 	array $jsAttrs = []
 ): string {
 	$projectRoot = $projectRoot ?: dirname( __DIR__ );

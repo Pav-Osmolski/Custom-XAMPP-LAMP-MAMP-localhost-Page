@@ -194,7 +194,7 @@ $pageClasses = buildPageViewClasses( $settingsView ?? null );
 		<div id="vhost-empty-msg" style="display: none; padding: 1em;">No matching entries found.</div>
 		<?php
 	} else {
-		echo '<p><strong>Warning:</strong> The <code>httpd-vhosts.conf</code> file was not found at <code>' . htmlspecialchars( $vhostsPath ) . '</code>. Please ensure your Apache setup is correct and virtual hosts are enabled.</p>';
+		echo '<p><strong>Warning:</strong> The <code>httpd-vhosts.conf</code> file was not found at <code>' . obfuscate_value( htmlspecialchars( $vhostsPath ) ) . '</code>. Please ensure your Apache setup is correct and virtual hosts are enabled.</p>';
 	}
 	?>
 </div>

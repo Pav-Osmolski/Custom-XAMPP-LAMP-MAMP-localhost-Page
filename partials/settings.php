@@ -22,8 +22,8 @@
  *
  * Dependencies:
  * - `config.php` for helpers, theme detection, display flags, path constants, tooltip data, access control
- * - `partials/vhosts.php` for virtual host listing
- * - `partials/export.php` for export features
+ * - `utils/vhosts_manager.php` for virtual host listing
+ * - `utils/export_files.php` for export features
  *
  * Outputs:
  * - Dynamic HTML form with grouped setting panels
@@ -35,7 +35,7 @@
  * - Sensitive values are obfuscated for display via `obfuscate_value()`
  *
  * @author  Pawel Osmolski
- * @version 2.3
+ * @version 2.4
  */
 
 /**
@@ -378,12 +378,12 @@ require_once __DIR__ . '/../config/config.php';
 		]
 	);
 	?>
-	<?php require_once __DIR__ . '/../partials/vhosts.php'; ?>
+	<?php require_once __DIR__ . '/../utils/vhosts_manager.php'; ?>
 	<?php renderAccordionSectionEnd(); ?>
 
 	<?php renderSeparatorLine(); ?>
 
-	<!-- Export -->
+	<!-- Export Files -->
 	<?php
 	$exportHeading = renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h3', 'Export Files & Database' ) . ( $phpPathValid ? '' : ' &nbsp;❕' );
 
@@ -398,7 +398,7 @@ require_once __DIR__ . '/../config/config.php';
 		]
 	);
 	?>
-	<?php require_once __DIR__ . '/../partials/export.php'; ?>
+	<?php require_once __DIR__ . '/../utils/export_files.php'; ?>
 	<?php renderAccordionSectionEnd(); ?>
 
 	<?php renderSeparatorLine(); ?>

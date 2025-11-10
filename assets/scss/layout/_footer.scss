@@ -26,21 +26,20 @@ footer {
 
 	.footer-links {
 		display: flex;
+		flex-wrap: wrap;
 		flex-direction: row;
+		column-gap: 20px;
 		list-style: none;
+		justify-content: center;
 
 		li {
 			position: relative;
-			padding: 0 .25rem;
 
-			&::after {
+			&:not(:last-child)::after {
 				content: "|";
 				position: absolute;
-				right: -3px;
-			}
-
-			&:last-child::after {
-				content: "";
+				width: 20px; // Matches the column-gap to center align the pipe
+				//right: -12px;
 			}
 		}
 	}
@@ -52,7 +51,6 @@ footer {
 
 	a {
 		font-weight: bold;
-		margin: 0 5px;
 	}
 }
 

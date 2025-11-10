@@ -286,7 +286,7 @@ function getApacheEnvVars() {
  */
 function getIniFilesInfo() {
 	return [
-		'Loaded php.ini'     => php_ini_loaded_file() ?: 'N/A',
+		'Loaded php.ini'     => obfuscate_value( php_ini_loaded_file() ) ?: 'N/A',
 		'Scanned .ini files' => php_ini_scanned_files() ?: 'N/A'
 	];
 }

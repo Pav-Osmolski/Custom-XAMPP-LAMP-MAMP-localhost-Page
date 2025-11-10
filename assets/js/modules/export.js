@@ -25,7 +25,7 @@ function setupExport() {
 
 	// Helpers
 	function refreshCsrf() {
-		return fetch( `${ window.BASE_URL }partials/export.php?action=token`, {credentials: 'same-origin'} )
+		return fetch( `${ window.BASE_URL }utils/export_files.php?action=token`, {credentials: 'same-origin'} )
 			.then( r => r.json() )
 			.then( d => {
 				if ( d.ok && d.token ) {
@@ -84,7 +84,7 @@ function setupExport() {
 	// Initial loads
 	refreshCsrf();
 
-	fetch( `${ window.BASE_URL }partials/export.php?action=scan`, {credentials: 'same-origin'} )
+	fetch( `${ window.BASE_URL }utils/export_files.php?action=scan`, {credentials: 'same-origin'} )
 		.then( r => r.json() )
 		.then( data => {
 			if ( !data.ok ) {
@@ -125,7 +125,7 @@ function setupExport() {
 			folderEl.disabled = true;
 		} );
 
-	fetch( `${ window.BASE_URL }partials/export.php?action=dbs`, {credentials: 'same-origin'} )
+	fetch( `${ window.BASE_URL }utils/export_files.php?action=dbs`, {credentials: 'same-origin'} )
 		.then( r => r.json() )
 		.then( data => {
 			if ( !data.ok ) {
@@ -190,7 +190,7 @@ function setupExport() {
 		form.append( 'action', 'zip' );
 		form.append( 'engine', getArchiveEngine() ); // php | external
 
-		fetch( `${ window.BASE_URL }partials/export.php`, {
+		fetch( `${ window.BASE_URL }utils/export_files.php`, {
 			method: 'POST',
 			body: form,
 			credentials: 'same-origin'
@@ -223,7 +223,7 @@ function setupExport() {
 		form.append( 'action', 'dumpdb' );
 		form.append( 'engine', getArchiveEngine() ); // php | external
 
-		fetch( `${ window.BASE_URL }partials/export.php`, {
+		fetch( `${ window.BASE_URL }utils/export_files.php`, {
 			method: 'POST',
 			body: form,
 			credentials: 'same-origin'
