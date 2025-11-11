@@ -3,7 +3,7 @@
  * UI helpers
  *
  * @author  Pawel Osmolski
- * @version 1.1
+ * @version 1.4
  */
 
 /**
@@ -88,7 +88,7 @@ function buildBodyClasses( string $theme, bool $displayHeader, bool $displayFoot
  *
  * @return string The generated space-separated CSS class string.
  */
-function buildPageViewClasses( $settingsView ): string {
+function buildPageViewClasses( mixed $settingsView ): string {
 	if ( empty( $settingsView ) ) {
 		$classes   = [];
 		$classes[] = 'page-view';
@@ -124,6 +124,67 @@ function loadThemes( string $themeDir ): array {
 	}
 
 	return [ $themeOptions, $themeTypes ];
+}
+
+/**
+ * Render a width control button group for a resizable UI element.
+ *
+ * Outputs a `.width-controls` group wired to the JS width logic via
+ * `data-width-for`. The target element should expose the same key via
+ * `data-width-key`.
+ *
+ * Example:
+ *   // Echo inline (function echoes):
+ *   <?php renderWidthControls( 'width_settings', 'Accordion', 'accordion-controls', true ); ?>
+ *
+ *   // Return then print (short echo):
+ *   <?= renderWidthControls( 'width_columns', 'Column', 'column-controls' ); ?>
+ *
+ * @param string $widthKey Unique key that matches the target's data-width-key.
+ * @param string $contextLabel Human label for the target (e.g. "Accordion", "Column").
+ * @param string $extraClasses Additional wrapper classes (e.g. "accordion-controls").
+ * @param bool $echo Whether to echo the HTML (true) or return it (false). Default false.
+ *
+ * @return string The generated HTML markup.
+ */
+function renderWidthControls( $widthKey, $contextLabel, $extraClasses = '', $echo = false ): string {
+	$widthKey     = htmlspecialchars( (string) $widthKey, ENT_QUOTES, 'UTF-8' );
+	$contextLabel = htmlspecialchars( (string) $contextLabel, ENT_QUOTES, 'UTF-8' );
+	$wrapperClass = trim( $extraClasses . ' width-controls' );
+
+	$groupLabel    = htmlspecialchars( $contextLabel . ' width controls', ENT_QUOTES, 'UTF-8' );
+	$resetLabel    = htmlspecialchars( 'Reset ' . $contextLabel . ' width', ENT_QUOTES, 'UTF-8' );
+	$decreaseLabel = htmlspecialchars( 'Decrease ' . $contextLabel . ' width', ENT_QUOTES, 'UTF-8' );
+	$increaseLabel = htmlspecialchars( 'Increase ' . $contextLabel . ' width', ENT_QUOTES, 'UTF-8' );
+
+	// Unique IDs per group (avoid duplicates if multiple groups exist)
+	$idPrefix = preg_replace( '/[^a-zA-Z0-9_-]/', '-', strtolower( $widthKey ) );
+	$resetId  = $idPrefix . '-reset-width';
+	$prevId   = $idPrefix . '-prev-width';
+	$nextId   = $idPrefix . '-next-width';
+
+	$html = <<<HTML
+<div class="{$wrapperClass}"
+     role="group"
+     aria-label="{$groupLabel}"
+     data-width-for="{$widthKey}">
+	<button id="{$resetId}" class="width-btn width-reset" type="button" data-action="reset" aria-label="{$resetLabel}">
+		<span aria-hidden="true">X</span>
+	</button>
+	<button id="{$prevId}" class="width-btn width-prev" type="button" data-action="decrease" aria-label="{$decreaseLabel}">
+		<span aria-hidden="true">−</span>
+	</button>
+	<button id="{$nextId}" class="width-btn width-next" type="button" data-action="increase" aria-label="{$increaseLabel}">
+		<span aria-hidden="true">+</span>
+	</button>
+</div>
+HTML;
+
+	if ( $echo ) {
+		echo $html;
+	}
+
+	return $html;
 }
 
 /**
@@ -321,59 +382,6 @@ function renderSeparatorLine( string $extraClass = '' ): void {
 }
 
 /**
- * Normalise MySQL-family version strings from mysqli->server_info.
- *
- * Examples:
- * - "10.11.7-MariaDB-1:10.11.7+maria~deb11-log"  -> "10.11.7-MariaDB"
- * - "8.0.36-0.el9"                               -> "8.0.36"
- * - "5.7.42-cll-lve"                             -> "5.7.42"
- * - "8.0.36-28"          (Percona)               -> "8.0.36-Percona"
- * - "8.0.33-ndb-8.0.33"  (MySQL Cluster)         -> "8.0.33-ndb"
- * - "5.7.mysql_aurora.2.11.1" (Aurora)           -> "Aurora MySQL 5.7 (2.11.1)"
- *
- * @param string $serverInfo
- *
- * @return string
- */
-function normaliseDbServerInfo( string $serverInfo ): string {
-	$info = trim( $serverInfo );
-
-	// Aurora MySQL: 5.7.mysql_aurora.2.11.1 or 8.0.32.amazon_aurora.3.04.0
-	if ( preg_match( '/^(?<base>\d+\.\d+)\.(?:mysql_aurora|amazon_aurora)\.(?<track>[\d.]+)/i', $info, $m ) ) {
-		return "Aurora MySQL {$m['base']} ({$m['track']})";
-	}
-
-	// MySQL NDB Cluster: 8.0.33-ndb-8.0.33  -> keep "8.0.33-ndb"
-	if ( preg_match( '/^(?<ver>\d+(?:\.\d+){1,3})-ndb(?:-[\d.]+)?/i', $info, $m ) ) {
-		return "{$m['ver']}-ndb";
-	}
-
-	// Percona: 8.0.36-28[-anything] -> "8.0.36-Percona"
-	// Heuristic: version-<release>, and version_comment will say Percona, but we infer here.
-	if ( stripos( $info, 'percona' ) !== false || preg_match( '/^\d+(?:\.\d+){1,3}-\d+(?:-[A-Za-z0-9_.-]+)?$/', $info ) ) {
-		if ( preg_match( '/^(?<ver>\d+(?:\.\d+){1,3})-\d+/', $info, $m ) ) {
-			return "{$m['ver']}-Percona";
-		}
-	}
-
-	// MariaDB: keep "X.Y[.Z]-MariaDB" and drop packaging/log tails.
-	if ( stripos( $info, 'MariaDB' ) !== false ) {
-		if ( preg_match( '/^(?<ver>\d+(?:\.\d+){1,3})-MariaDB\b/i', $info, $m ) ) {
-			return "{$m['ver']}-MariaDB";
-		}
-	}
-
-	// Plain MySQL with distro clutter (Debian, Ubuntu, EL, Amazon, CloudLinux, -log, etc.)
-	// Keep leading X.Y[.Z], optionally a short edition token like -ndb handled earlier.
-	if ( preg_match( '/^(?<ver>\d+(?:\.\d+){1,3})\b/i', $info, $m ) ) {
-		return $m['ver'];
-	}
-
-	// Fallback
-	return $info;
-}
-
-/**
  * Outputs detected versions of Apache, PHP, and MySQL with UI badges.
  *
  * Assumes constants APACHE_PATH and DB_HOST are defined.
@@ -463,15 +471,22 @@ function renderServerInfo( string $dbUser, string $dbPass ): void {
 	}
 
 	try {
-		$mysqli = new mysqli( DB_HOST, $dbUser, $dbPass );
+		$mysqli = getMysqliConnection( [ 'strictMode' => false ] );
+
 		if ( $mysqli->connect_error ) {
-			throw new Exception( "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector' role='button' aria-expanded='false' aria-controls='mysql-inspector'>" . $mysqli->connect_error . "</a></span>" );
+			// Throw plain text only — no HTML here
+			throw new Exception( $mysqli->connect_error );
 		}
+
 		$prettyMySql = normaliseDbServerInfo( $mysqli->server_info );
 		echo "<span class='mysql-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>{$prettyMySql}</a> <span class='status' aria-hidden='true'>✔️</span></span>";
+
 		$mysqli->close();
+
 	} catch ( Exception $e ) {
-		echo "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector'>" . $e->getMessage() . "</a> <span class='status' aria-hidden='true'>❌</span></span>";
+		$msg = htmlspecialchars( $e->getMessage(), ENT_QUOTES, 'UTF-8' );
+
+		echo "<span class='mysql-error-info'>MySQL: <a href='#' id='toggle-mysql-inspector' role='button' aria-expanded='false' aria-controls='mysql-inspector'>{$msg}</a> <span class='status' aria-hidden='true'>❌</span></span>";
 	}
 }
 

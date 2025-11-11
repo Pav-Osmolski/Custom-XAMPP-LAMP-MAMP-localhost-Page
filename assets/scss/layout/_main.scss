@@ -160,6 +160,29 @@ table {
 	}
 }
 
+/* Width Controls */
+.width-controls {
+	position: absolute;
+	top: 40px;
+	right: 20px;
+	user-select: none;
+	z-index: 1;
+
+	button {
+		padding: 5px;
+		margin-left: 5px;
+		width: 23px;
+		font-size: .9rem;
+	}
+}
+
+.width-resizable {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 2000px;
+	transition: max-width .3s ease;
+}
+
 /* Unique theme type settings */
 .light-mode {
 	.emoji {

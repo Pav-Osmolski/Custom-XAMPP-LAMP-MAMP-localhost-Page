@@ -15,7 +15,7 @@
  *
  * @package AMPBoard
  * @author  Pawel Osmolski
- * @version 1.1
+ * @version 1.2
  * @license GPL-3.0-or-later https://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -41,13 +41,10 @@ $start = microtime( true );
 echo '<h2>MySQL Inspector</h2>';
 echo '<pre>';
 
-mysqli_report( MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT );
-
 try {
-	$mysqli = new mysqli( DB_HOST, $dbUser, $dbPass );
-	$mysqli->set_charset( 'utf8mb4' );
-} catch ( mysqli_sql_exception $e ) {
-	exit( "❌ MySQL connection failed:\n" . htmlspecialchars( $e->getMessage() ) . "\n" );
+	$mysqli = getMysqliConnection(); // strictMode defaults to true
+} catch ( Exception $e ) {
+	exit( "❌ " . htmlspecialchars( $e->getMessage() ) . "\n" );
 }
 
 echo "✅ Connected to MySQL server\n";

@@ -32,7 +32,7 @@
  * - `helpers.php` for access control and shared logic like `resolveCurrentUser()`, `buildBodyClasses()`, `loadThemes()`, etc.
  *
  * @author  Pawel Osmolski
- * @version 2.3
+ * @version 2.4
  */
 
 require_once __DIR__ . '/helpers.php';
@@ -104,15 +104,18 @@ foreach ( $defaults as $key => $value ) {
 	}
 }
 
+// Decrypt current DB User and Password
+$dbUser = getDecrypted( 'DB_USER' );
+$dbPass = getDecrypted( 'DB_PASSWORD' );
+
 // Check for valid paths and files
 $apachePathValid = file_exists( APACHE_PATH );
 $htdocsPathValid = file_exists( HTDOCS_PATH );
 $phpPathValid    = file_exists( PHP_PATH );
 $apacheToggle    = file_exists( __DIR__ . '/../utils/toggle_apache.php' );
-
-// Decrypt current DB User and Password
-$dbUser = getDecrypted( 'DB_USER' );
-$dbPass = getDecrypted( 'DB_PASSWORD' );
+$mySqlHostValid  = checkMysqlCredentialsStatus( 'host' );
+$mySqlUserValid  = checkMysqlCredentialsStatus( 'user' );
+$mySqlPassValid  = checkMysqlCredentialsStatus( 'pass' );
 
 // Get current PHP Error Level
 $currentPhpErrorLevel = ini_get( 'error_reporting' );

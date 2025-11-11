@@ -35,7 +35,7 @@
  * - Sensitive values are obfuscated for display via `obfuscate_value()`
  *
  * @author  Pawel Osmolski
- * @version 2.4
+ * @version 2.6
  */
 
 /**
@@ -86,7 +86,7 @@ require_once __DIR__ . '/../config/config.php';
 	<div class="heading">
 		<?= renderHeadingTooltip( 'user_config', $tooltips, $defaultTooltipMessage, 'h2', 'User Configuration' ) ?>
 	</div>
-
+	<?= renderWidthControls( 'width_settings', 'Accordion', 'accordion-controls' ); ?>
 	<?php if ( defined( 'DEMO_MODE' ) && DEMO_MODE ): ?>
 		<div class="demo-mode" role="alert">
 			<p><strong>Demo Mode:</strong> Saving is disabled and credentials are obfuscated in this environment.</p>
@@ -94,336 +94,345 @@ require_once __DIR__ . '/../config/config.php';
 		</div>
 	<?php endif; ?>
 
-	<form method="post" action="" accept-charset="UTF-8" autocomplete="off">
-		<input type="hidden" name="csrf" value="<?= htmlspecialchars( csrf_get_token() ) ?>">
+	<div class="settings width-resizable" data-width-key="width_settings">
+		<form method="post" action="" accept-charset="UTF-8" autocomplete="off">
+			<input type="hidden" name="csrf" value="<?= htmlspecialchars( csrf_get_token() ) ?>">
 
-		<?php
-		// Database & Paths
-		renderAccordionSectionStart(
-			'user-settings',
-			renderHeadingTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h3', 'Database & Paths' ),
-			[
-				'expanded'  => false,
-				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-			]
-		);
-		?>
-		<div class="background-logos">
-			<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/Apache.svg', 'Apache2' ); ?>
-			<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/MariaDB.svg', 'MariaDB1' ); ?>
-			<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/PHP.svg', 'PHP2' ); ?>
-		</div>
-		<div class="user-settings">
-			<label>DB Host:&nbsp;
-				<input type="text" name="DB_HOST" value="<?= obfuscate_value( DB_HOST ) ?>">
-			</label>
-			<label>DB User:&nbsp;
-				<input type="text" name="DB_USER" value="<?= obfuscate_value( htmlspecialchars( $dbUser ) ) ?>">
-			</label>
-			<label>DB Password:&nbsp;
-				<input type="password" name="DB_PASSWORD" value="<?= obfuscate_value( htmlspecialchars( $dbPass ) ) ?>">
-			</label>
+			<?php
+			// Database & Paths
+			renderAccordionSectionStart(
+				'user-settings',
+				renderHeadingTooltip( 'user_settings', $tooltips, $defaultTooltipMessage, 'h3', 'Database & Paths' ),
+				[
+					'expanded'  => false,
+					'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+				]
+			);
+			?>
+			<div class="background-logos">
+				<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/Apache.svg', 'Apache2' ); ?>
+				<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/MariaDB.svg', 'MariaDB1' ); ?>
+				<?php echo injectSvgWithUniqueIds( __DIR__ . '/../assets/images/PHP.svg', 'PHP2' ); ?>
+			</div>
+			<div class="user-settings">
+				<label>DB Host:&nbsp;
+					<input type="text" name="DB_HOST" value="<?= obfuscate_value( DB_HOST ) ?>">
+					<?= checkMysqlCredentialsStatus( 'host' ) ? '✔️' : '❌' ?>
+				</label>
+				<label>DB User:&nbsp;
+					<input type="text" name="DB_USER" value="<?= obfuscate_value( htmlspecialchars( $dbUser ) ) ?>">
+					<?= checkMysqlCredentialsStatus( 'user' ) ? '✔️' : '❌' ?>
+				</label>
+				<label>DB Password:&nbsp;
+					<input type="password" name="DB_PASSWORD"
+					       value="<?= obfuscate_value( htmlspecialchars( $dbPass ) ) ?>">
+					<?= checkMysqlCredentialsStatus( 'pass' ) ? '✔️' : '❌' ?>
+				</label>
 
-			<label>Apache Path:&nbsp;
-				<input type="text" name="APACHE_PATH" value="<?= obfuscate_value( APACHE_PATH ) ?>">
-				<?= $apachePathValid ? '✔️' : '❌' ?>
-			</label>
+				<label>Apache Path:&nbsp;
+					<input type="text" name="APACHE_PATH" value="<?= obfuscate_value( APACHE_PATH ) ?>">
+					<?= $apachePathValid ? '✔️' : '❌' ?>
+				</label>
 
-			<label>HTDocs Path:&nbsp;
-				<input type="text" name="HTDOCS_PATH" value="<?= obfuscate_value( HTDOCS_PATH ) ?>">
-				<?= $htdocsPathValid ? '✔️' : '❌' ?>
-			</label>
+				<label>HTDocs Path:&nbsp;
+					<input type="text" name="HTDOCS_PATH" value="<?= obfuscate_value( HTDOCS_PATH ) ?>">
+					<?= $htdocsPathValid ? '✔️' : '❌' ?>
+				</label>
 
-			<label>PHP Path:&nbsp;
-				<input type="text" name="PHP_PATH" value="<?= obfuscate_value( PHP_PATH ) ?>">
-				<?= $phpPathValid ? '✔️' : '❌' ?>
-			</label>
+				<label>PHP Path:&nbsp;
+					<input type="text" name="PHP_PATH" value="<?= obfuscate_value( PHP_PATH ) ?>">
+					<?= $phpPathValid ? '✔️' : '❌' ?>
+				</label>
 
-			<label>
-				<input type="checkbox"
-				       name="apacheFastMode" <?= isset( $apacheFastMode ) && $apacheFastMode ? 'checked' : '' ?>>
-				Fast Mode for Apache Inspector
-			</label>
+				<label>
+					<input type="checkbox"
+					       name="apacheFastMode" <?= isset( $apacheFastMode ) && $apacheFastMode ? 'checked' : '' ?>>
+					Fast Mode for Apache Inspector
+				</label>
 
-			<label>
-				<input type="checkbox"
-				       name="mysqlFastMode" <?= isset( $mysqlFastMode ) && $mysqlFastMode ? 'checked' : '' ?>>
-				Fast Mode for MySQL Inspector
-			</label><br>
+				<label>
+					<input type="checkbox"
+					       name="mysqlFastMode" <?= isset( $mysqlFastMode ) && $mysqlFastMode ? 'checked' : '' ?>>
+					Fast Mode for MySQL Inspector
+				</label><br>
 
+				<button type="submit">Save Settings</button>
+				<br><br>
+			</div>
+			<?php renderAccordionSectionEnd(); ?>
+
+			<?php renderSeparatorLine(); ?>
+
+			<?php
+			// User Interface
+			renderAccordionSectionStart(
+				'user-interface',
+				renderHeadingTooltip( 'user_interface', $tooltips, $defaultTooltipMessage, 'h3', 'User Interface' ),
+				[
+					'expanded'  => false,
+					'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+				]
+			);
+			?>
+			<div class="ui-features">
+				<label class="select">Theme:
+					<select id="theme-selector" name="theme" aria-label="Select Theme">
+						<?php foreach ( $themeOptions as $id => $label ) : ?>
+							<option value="<?= $id ?>" <?= $currentTheme === $id ? 'selected="selected"' : '' ?>>
+								<?= htmlspecialchars( $label ) ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+
+				<label>Display Header:
+					<input type="checkbox" name="displayHeader" <?= $displayHeader ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display Footer:
+					<input type="checkbox" name="displayFooter" <?= $displayFooter ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display Clock:
+					<input type="checkbox" name="displayClock" <?= $displayClock ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display Search:
+					<input type="checkbox" name="displaySearch" <?= $displaySearch ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display Tooltips:
+					<input type="checkbox" name="displayTooltips" <?= $displayTooltips ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display System Stats:
+					<input type="checkbox" name="displaySystemStats" <?= $displaySystemStats ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display Apache Error Log:
+					<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
+				</label>
+
+				<label>Display PHP Error Log:
+					<input type="checkbox" name="displayPhpErrorLog" <?= $displayPhpErrorLog ? 'checked' : '' ?>>
+				</label>
+
+				<label>Use AJAX for Stats and Error log:
+					<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
+				</label><br>
+			</div>
+			<br>
 			<button type="submit">Save Settings</button>
 			<br><br>
-		</div>
-		<?php renderAccordionSectionEnd(); ?>
+			<?php renderAccordionSectionEnd(); ?>
 
-		<?php renderSeparatorLine(); ?>
+			<?php renderSeparatorLine(); ?>
 
-		<?php
-		// User Interface
-		renderAccordionSectionStart(
-			'user-interface',
-			renderHeadingTooltip( 'user_interface', $tooltips, $defaultTooltipMessage, 'h3', 'User Interface' ),
-			[
-				'expanded'  => false,
-				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-			]
-		);
-		?>
-		<div class="ui-features">
-			<label class="select">Theme:
-				<select id="theme-selector" name="theme" aria-label="Select Theme">
-					<?php foreach ( $themeOptions as $id => $label ) : ?>
-						<option value="<?= $id ?>" <?= $currentTheme === $id ? 'selected="selected"' : '' ?>>
-							<?= htmlspecialchars( $label ) ?>
-						</option>
+			<?php
+			// PHP Error Handling & Logging (disabled when PHP path invalid)
+			$phpErrorHeading = renderHeadingTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) . ( $phpPathValid ? '' : ' &nbsp;❕' );
+
+			renderAccordionSectionStart(
+				'php-error',
+				$phpErrorHeading,
+				[
+					'disabled'  => ! $phpPathValid,
+					'expanded'  => false,
+					'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+				]
+			);
+			?>
+			<?php if ( ! $phpPathValid ): ?>
+				<p><strong>Warning:</strong> PHP Error Handling & Logging will save to <code>user_config.php</code> but
+					will
+					not be reflected in <code>php.ini</code> (invalid PHP path).</p><br>
+			<?php endif; ?>
+
+			<label>Display Errors:
+				<input type="checkbox" name="displayPhpErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
+			</label>
+
+			<label>Error Reporting Level:
+				<?php
+				$phpErrorLevels = [
+					E_ALL     => 'E_ALL',
+					E_ERROR   => 'E_ERROR',
+					E_WARNING => 'E_WARNING',
+					E_NOTICE  => 'E_NOTICE'
+				];
+				?>
+				<select name="phpErrorLevel">
+					<?php foreach ( $phpErrorLevels as $value => $label ) : ?>
+						<option value="<?= $label ?>" <?= $currentPhpErrorLevel == $value ? 'selected' : '' ?>><?= $label ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
 
-			<label>Display Header:
-				<input type="checkbox" name="displayHeader" <?= $displayHeader ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display Footer:
-				<input type="checkbox" name="displayFooter" <?= $displayFooter ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display Clock:
-				<input type="checkbox" name="displayClock" <?= $displayClock ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display Search:
-				<input type="checkbox" name="displaySearch" <?= $displaySearch ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display Tooltips:
-				<input type="checkbox" name="displayTooltips" <?= $displayTooltips ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display System Stats:
-				<input type="checkbox" name="displaySystemStats" <?= $displaySystemStats ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display Apache Error Log:
-				<input type="checkbox" name="displayApacheErrorLog" <?= $displayApacheErrorLog ? 'checked' : '' ?>>
-			</label>
-
-			<label>Display PHP Error Log:
-				<input type="checkbox" name="displayPhpErrorLog" <?= $displayPhpErrorLog ? 'checked' : '' ?>>
-			</label>
-
-			<label>Use AJAX for Stats and Error log:
-				<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
+			<label>Log Errors:
+				<input type="checkbox" name="logPhpErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
 			</label><br>
-		</div>
-		<br>
-		<button type="submit">Save Settings</button>
-		<br><br>
+
+			<button type="submit">Save Settings</button>
+			<br><br>
+			<?php renderAccordionSectionEnd(); ?>
+
+			<?php renderSeparatorLine(); ?>
+
+			<?php
+			// Folders Configuration
+			renderAccordionSectionStart(
+				'folders-config',
+				renderHeadingTooltip( 'folders', $tooltips, $defaultTooltipMessage, 'h3', 'Folders Configuration' ),
+				[
+					'expanded'  => false,
+					'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+				]
+			);
+			?>
+			<div id="folders-config">
+				<ul id="folders-config-list" class="draggable-list"><!-- Generated by folders.js --></ul>
+				<button type="button" id="add-folder-column">➕ Add Folder Column</button>
+			</div>
+			<input type="hidden" id="folders_json_input" name="folders_json">
+			<br>
+			<button type="submit">Save Settings</button>
+			<br><br>
+			<?php renderAccordionSectionEnd(); ?>
+
+			<?php renderSeparatorLine(); ?>
+
+			<?php
+			// Folder Link Templates
+			renderAccordionSectionStart(
+				'link-templates-config',
+				renderHeadingTooltip( 'link_templates', $tooltips, $defaultTooltipMessage, 'h3', 'Folder Link Templates' ),
+				[
+					'expanded'  => false,
+					'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+				]
+			);
+			?>
+			<div id="link-templates-config">
+				<p id="link-templates-help">
+					Build your folder link templates with plain HTML. Use
+					<code>{urlName}</code> wherever the site name should appear — in text
+					or in attributes.<br>
+					<!-- Currently supported variables: <code>{urlName}</code>.<br> -->
+					Example:
+					<code>&lt;li class='folder-item'&gt;&lt;a href='https://local.{urlName}.com'&gt;{urlName}&lt;/a&gt;&lt;/li&gt;</code>.<br>
+					Tips: Tab to indent, Shift+Tab to outdent, Enter preserves current indent.
+				</p>
+				<p id="editor-instructions" class="sr-only">
+					When inside the editor, press Tab to insert a tab character. Press Escape, then Tab to move focus
+					out of the editor.
+				</p>
+
+				<?php renderSeparatorLine( 'small' ) ?>
+
+				<ul
+						id="link-templates-list"
+						class="template-list"
+						aria-describedby="link-templates-help"
+						aria-live="polite"
+				><!-- Generated by linkTemplates.js --></ul>
+				<button type="button" id="add-link-template">➕ Add Link Template</button>
+			</div>
+			<input type="hidden" id="link_templates_json_input" name="link_templates_json" value="">
+			<br>
+			<button type="submit">Save Settings</button>
+			<br><br>
+			<?php renderAccordionSectionEnd(); ?>
+
+			<?php renderSeparatorLine(); ?>
+
+			<?php
+			// Dock Configuration
+			renderAccordionSectionStart(
+				'dock-config',
+				renderHeadingTooltip( 'dock', $tooltips, $defaultTooltipMessage, 'h3', 'Dock Configuration' ),
+				[
+					'expanded'  => false,
+					'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+				]
+			);
+			?>
+			<div id="dock-config-editor">
+				<ul id="dock-list"><!-- Generated by dock.js --></ul>
+				<button type="button" id="add-dock-item">➕ Add Dock Item</button>
+			</div>
+			<input type="hidden" id="dock_json_input" name="dock_json">
+			<br>
+			<button type="submit">Save Settings</button>
+			<br><br>
+			<?php renderAccordionSectionEnd(); ?>
+
+		</form>
+
+		<?php renderSeparatorLine(); ?>
+
+		<!-- vHosts Manager -->
+		<?php
+		$vhostsHeading = renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) . ( $apachePathValid ? '' : ' &nbsp;❕' );
+
+		renderAccordionSectionStart(
+			'vhosts-manager',
+			$vhostsHeading,
+			[
+				'disabled'  => ! $apachePathValid,
+				'expanded'  => false,
+				'settings'  => true,
+				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+			]
+		);
+		?>
+		<?php require_once __DIR__ . '/../utils/vhosts_manager.php'; ?>
 		<?php renderAccordionSectionEnd(); ?>
 
 		<?php renderSeparatorLine(); ?>
 
+		<!-- Export Files -->
 		<?php
-		// PHP Error Handling & Logging (disabled when PHP path invalid)
-		$phpErrorHeading = renderHeadingTooltip( 'php_error', $tooltips, $defaultTooltipMessage, 'h3', 'PHP Error Handling & Logging' ) . ( $phpPathValid ? '' : ' &nbsp;❕' );
+		$exportHeading = renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h3', 'Export Files & Database' ) . ( $phpPathValid ? '' : ' &nbsp;❕' );
 
 		renderAccordionSectionStart(
-			'php-error',
-			$phpErrorHeading,
+			'export',
+			$exportHeading,
 			[
 				'disabled'  => ! $phpPathValid,
 				'expanded'  => false,
+				'settings'  => true,
 				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
 			]
 		);
 		?>
-		<?php if ( ! $phpPathValid ): ?>
-			<p><strong>Warning:</strong> PHP Error Handling & Logging will save to <code>user_config.php</code> but will
-				not be reflected in <code>php.ini</code> (invalid PHP path).</p><br>
-		<?php endif; ?>
-
-		<label>Display Errors:
-			<input type="checkbox" name="displayPhpErrors" <?= ini_get( 'display_errors' ) ? 'checked' : '' ?>>
-		</label>
-
-		<label>Error Reporting Level:
-			<?php
-			$phpErrorLevels = [
-				E_ALL     => 'E_ALL',
-				E_ERROR   => 'E_ERROR',
-				E_WARNING => 'E_WARNING',
-				E_NOTICE  => 'E_NOTICE'
-			];
-			?>
-			<select name="phpErrorLevel">
-				<?php foreach ( $phpErrorLevels as $value => $label ) : ?>
-					<option value="<?= $label ?>" <?= $currentPhpErrorLevel == $value ? 'selected' : '' ?>><?= $label ?></option>
-				<?php endforeach; ?>
-			</select>
-		</label>
-
-		<label>Log Errors:
-			<input type="checkbox" name="logPhpErrors" <?= ini_get( 'log_errors' ) ? 'checked' : '' ?>>
-		</label><br>
-
-		<button type="submit">Save Settings</button>
-		<br><br>
+		<?php require_once __DIR__ . '/../utils/export_files.php'; ?>
 		<?php renderAccordionSectionEnd(); ?>
 
 		<?php renderSeparatorLine(); ?>
 
-		<?php
-		// Folders Configuration
-		renderAccordionSectionStart(
-			'folders-config',
-			renderHeadingTooltip( 'folders', $tooltips, $defaultTooltipMessage, 'h3', 'Folders Configuration' ),
-			[
-				'expanded'  => false,
-				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-			]
-		);
-		?>
-		<div id="folders-config">
-			<ul id="folders-config-list" class="draggable-list"><!-- Generated by folders.js --></ul>
-			<button type="button" id="add-folder-column">➕ Add Folder Column</button>
+		<!-- Apache Control -->
+		<div class="apache-control">
+			<div class="heading">
+				<?= renderHeadingTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Control' ) ?>
+			</div>
+			<?php if ( $apacheToggle && $apachePathValid ): ?>
+				<button id="restart-apache-button">Restart Apache</button>
+				<?php renderSeparatorLine( 'small' ) ?>
+				<div id="apache-status-message" role="status" aria-live="polite"></div>
+			<?php else: ?>
+				<p>Apache control
+					unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p>
+				<br>
+				<button disabled id="restart-apache-button">Restart Apache</button>
+				<?php renderSeparatorLine( 'small' ) ?>
+			<?php endif; ?>
 		</div>
-		<input type="hidden" id="folders_json_input" name="folders_json">
-		<br>
-		<button type="submit">Save Settings</button>
-		<br><br>
-		<?php renderAccordionSectionEnd(); ?>
 
-		<?php renderSeparatorLine(); ?>
-
-		<?php
-		// Folder Link Templates
-		renderAccordionSectionStart(
-			'link-templates-config',
-			renderHeadingTooltip( 'link_templates', $tooltips, $defaultTooltipMessage, 'h3', 'Folder Link Templates' ),
-			[
-				'expanded'  => false,
-				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-			]
-		);
-		?>
-		<div id="link-templates-config">
-			<p id="link-templates-help">
-				Build your folder link templates with plain HTML. Use
-				<code>{urlName}</code> wherever the site name should appear — in text
-				or in attributes.<br>
-				<!-- Currently supported variables: <code>{urlName}</code>.<br> -->
-				Example:
-				<code>&lt;li class='folder-item'&gt;&lt;a href='https://local.{urlName}.com'&gt;{urlName}&lt;/a&gt;&lt;/li&gt;</code>.<br>
-				Tips: Tab to indent, Shift+Tab to outdent, Enter preserves current indent.
-			</p>
-			<p id="editor-instructions" class="sr-only">
-				When inside the editor, press Tab to insert a tab character. Press Escape, then Tab to move focus out of the editor.
-			</p>
-
-			<?php renderSeparatorLine( 'small' ) ?>
-
-			<ul
-					id="link-templates-list"
-					class="template-list"
-					aria-describedby="link-templates-help"
-					aria-live="polite"
-			><!-- Generated by linkTemplates.js --></ul>
-			<button type="button" id="add-link-template">➕ Add Link Template</button>
+		<div id="clear-settings-wrapper">
+			<div class="heading">
+				<?= renderHeadingTooltip( 'clear_storage', $tooltips, $defaultTooltipMessage, 'h2', 'Reset Settings' ) ?>
+			</div>
+			<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
 		</div>
-		<input type="hidden" id="link_templates_json_input" name="link_templates_json" value="">
-		<br>
-		<button type="submit">Save Settings</button>
-		<br><br>
-		<?php renderAccordionSectionEnd(); ?>
-
-		<?php renderSeparatorLine(); ?>
-
-		<?php
-		// Dock Configuration
-		renderAccordionSectionStart(
-			'dock-config',
-			renderHeadingTooltip( 'dock', $tooltips, $defaultTooltipMessage, 'h3', 'Dock Configuration' ),
-			[
-				'expanded'  => false,
-				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-			]
-		);
-		?>
-		<div id="dock-config-editor">
-			<ul id="dock-list"><!-- Generated by dock.js --></ul>
-			<button type="button" id="add-dock-item">➕ Add Dock Item</button>
-		</div>
-		<input type="hidden" id="dock_json_input" name="dock_json">
-		<br>
-		<button type="submit">Save Settings</button>
-		<br><br>
-		<?php renderAccordionSectionEnd(); ?>
-
-	</form>
-
-	<?php renderSeparatorLine(); ?>
-
-	<!-- vHosts Manager -->
-	<?php
-	$vhostsHeading = renderHeadingTooltip( 'vhosts_manager', $tooltips, $defaultTooltipMessage, 'h3', 'Virtual Hosts Manager' ) . ( $apachePathValid ? '' : ' &nbsp;❕' );
-
-	renderAccordionSectionStart(
-		'vhosts-manager',
-		$vhostsHeading,
-		[
-			'disabled'  => ! $apachePathValid,
-			'expanded'  => false,
-			'settings'  => true,
-			'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-		]
-	);
-	?>
-	<?php require_once __DIR__ . '/../utils/vhosts_manager.php'; ?>
-	<?php renderAccordionSectionEnd(); ?>
-
-	<?php renderSeparatorLine(); ?>
-
-	<!-- Export Files -->
-	<?php
-	$exportHeading = renderHeadingTooltip( 'export', $tooltips, $defaultTooltipMessage, 'h3', 'Export Files & Database' ) . ( $phpPathValid ? '' : ' &nbsp;❕' );
-
-	renderAccordionSectionStart(
-		'export',
-		$exportHeading,
-		[
-			'disabled'  => ! $phpPathValid,
-			'expanded'  => false,
-			'settings'  => true,
-			'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
-		]
-	);
-	?>
-	<?php require_once __DIR__ . '/../utils/export_files.php'; ?>
-	<?php renderAccordionSectionEnd(); ?>
-
-	<?php renderSeparatorLine(); ?>
-
-	<!-- Apache Control -->
-	<div class="apache-control">
-		<div class="heading">
-			<?= renderHeadingTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Control' ) ?>
-		</div>
-		<?php if ( $apacheToggle && $apachePathValid ): ?>
-			<button id="restart-apache-button">Restart Apache</button>
-			<?php renderSeparatorLine( 'small' ) ?>
-			<div id="apache-status-message" role="status" aria-live="polite"></div>
-		<?php else: ?>
-			<p>Apache control
-				unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p><br>
-			<button disabled id="restart-apache-button">Restart Apache</button>
-			<?php renderSeparatorLine( 'small' ) ?>
-		<?php endif; ?>
-	</div>
-
-	<div id="clear-settings-wrapper">
-		<div class="heading">
-			<?= renderHeadingTooltip( 'clear_storage', $tooltips, $defaultTooltipMessage, 'h2', 'Reset Settings' ) ?>
-		</div>
-		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
 	</div>
 </div>

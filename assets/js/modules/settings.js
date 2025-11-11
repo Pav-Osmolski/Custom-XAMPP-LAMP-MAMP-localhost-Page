@@ -1,5 +1,5 @@
 // assets/js/modules/settings.js
-const STORAGE_PREFIXES = [ 'theme', 'columnOrder', 'columnSize', 'accordion_' ];
+const STORAGE_PREFIXES = [ 'theme', 'columnOrder', 'accordion_', 'width_' ];
 
 export function initClearStorageButton() {
 	document.addEventListener( 'DOMContentLoaded', () => {
