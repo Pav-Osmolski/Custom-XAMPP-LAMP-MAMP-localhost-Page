@@ -132,14 +132,12 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | File                     | Description |
 |--------------------------|-------------|
 | `dock.php`               | Renders the customizable macOS-style dock. |
-| `export.php`             | UI + JSON endpoints to export files or DB with CSRF and WP uploads options. |
 | `folders.php`            | Dynamically scans and lists local project folders. |
 | `footer.php`             | Displays the page footer with navigation links and a humorous quote. |
 | `header.php`             | Shared header banner with greeting, search bar, clock, and server info. |
 | `info.php`               | Displays system information like PHP, Apache, and MySQL versions. |
 | `settings.php`           | The settings interface for configuring paths, theme, folders, dock, and logs. |
 | `submit.php`             | Handles the saving of user-configured settings. |
-| `vhosts.php`             | Lists and validates Apache virtual hosts, including SSL and hosts file checks. |
 
 ---
 
@@ -149,6 +147,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 |--------------------------|-------------|
 | `apache_error_log.php`   | Fetches and returns Apache error log entries via AJAX. |
 | `apache_inspector.php`   | Detects Apache installation details like version, modules, and config paths. |
+| `export_files.php`       | UI + JSON endpoints to export files or DB with CSRF and WP uploads options. |
 | `generate_cert.php`      | Generates SSL certificates. |
 | `mysql_inspector.php`    | Fetches MySQL version, uptime, configuration, and connection status. |
 | `open_folder.php`        | Opens a specified folder path in the system file explorer (cross-platform). |
@@ -157,6 +156,7 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 | `read_config.php`        | Read-only endpoint for whitelisted UI JSON over GET. |
 | `system_stats.php`       | Provides live server stats (CPU, memory, disk) using AJAX. |
 | `toggle_apache.php`      | Safely restarts the currently running Apache instance. |
+| `vhosts_manager.php`     | Lists and validates Apache virtual hosts, including SSL and hosts file checks. |
 
 ---
 
