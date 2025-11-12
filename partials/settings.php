@@ -411,28 +411,49 @@ require_once __DIR__ . '/../config/config.php';
 		<?php renderSeparatorLine(); ?>
 
 		<!-- Apache Control -->
-		<div class="apache-control">
-			<div class="heading">
-				<?= renderHeadingTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Control' ) ?>
-			</div>
-			<?php if ( $apacheToggle && $apachePathValid ): ?>
-				<button id="restart-apache-button">Restart Apache</button>
-				<?php renderSeparatorLine( 'small' ) ?>
-				<div id="apache-status-message" role="status" aria-live="polite"></div>
-			<?php else: ?>
-				<p>Apache control
-					unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p>
-				<br>
-				<button disabled id="restart-apache-button">Restart Apache</button>
-				<?php renderSeparatorLine( 'small' ) ?>
-			<?php endif; ?>
-		</div>
+		<?php
+		$apacheControlHeading = renderHeadingTooltip( 'apache_control', $tooltips, $defaultTooltipMessage, 'h3', 'Apache Control' ) . ( $apachePathValid ? '' : ' &nbsp;❕' );
 
-		<div id="clear-settings-wrapper">
-			<div class="heading">
-				<?= renderHeadingTooltip( 'clear_storage', $tooltips, $defaultTooltipMessage, 'h2', 'Reset Settings' ) ?>
-			</div>
-			<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
-		</div>
+		renderAccordionSectionStart(
+			'apache-control',
+			$apacheControlHeading,
+			[
+				'disabled'  => ! $apachePathValid,
+				'expanded'  => false,
+				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+			]
+		);
+		?>
+		<?php if ( $apacheToggle && $apachePathValid ): ?>
+			<?php renderSeparatorLine( 'small' ) ?>
+			<button id="restart-apache-button">Restart Apache</button>
+			<?php renderSeparatorLine(); ?>
+			<div id="apache-status-message" role="status" aria-live="polite"></div>
+		<?php else: ?>
+			<p>Apache control
+				unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p>
+			<br>
+			<button disabled id="restart-apache-button">Restart Apache</button>
+			<?php renderSeparatorLine(); ?>
+		<?php endif; ?>
+		<?php renderAccordionSectionEnd(); ?>
+
+		<?php renderSeparatorLine(); ?>
+
+		<!-- Settings Management -->
+		<?php
+		renderAccordionSectionStart(
+			'settings-management',
+			renderHeadingTooltip( 'clear_storage', $tooltips, $defaultTooltipMessage, 'h3', 'Settings Management' ),
+			[
+				'expanded'  => false,
+				'caretPath' => __DIR__ . '/../assets/images/caret-down.svg',
+			]
+		);
+		?>
+		<?php renderSeparatorLine( 'small' ) ?>
+		<button id="clear-local-storage" class="button warning">🧹 Clear Local Storage</button>
+		<?php renderSeparatorLine(); ?>
+		<?php renderAccordionSectionEnd(); ?>
 	</div>
 </div>
