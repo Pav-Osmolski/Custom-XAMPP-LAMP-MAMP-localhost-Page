@@ -430,9 +430,19 @@ require_once __DIR__ . '/../config/config.php';
 			<?php renderSeparatorLine(); ?>
 			<div id="apache-status-message" role="status" aria-live="polite"></div>
 		<?php else: ?>
-			<p>Apache control
-				unavailable<?= ! $apachePathValid ? ' (invalid Apache path)' : ' (toggle_apache.php missing)' ?></p>
-			<br>
+			<p><strong>Warning:</strong> Apache control unavailable.
+				<?php
+				if ( ! $apachePathValid ) {
+					if ( ! empty( APACHE_PATH ) ) {
+						echo ' The Apache path <code>' . obfuscate_value( APACHE_PATH ) . '</code> is invalid.';
+					} else {
+						echo ' The Apache path is not set.';
+					}
+				} else {
+					echo ' The <code>toggle_apache.php</code> utility is missing.';
+				}
+				?>
+			</p><br>
 			<button disabled id="restart-apache-button">Restart Apache</button>
 			<?php renderSeparatorLine(); ?>
 		<?php endif; ?>

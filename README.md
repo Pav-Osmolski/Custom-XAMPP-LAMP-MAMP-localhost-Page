@@ -187,11 +187,8 @@ These scripts are automatically used by `utils/generate_cert.php` to generate se
 
 | File                     | Description |
 |--------------------------|-------------|
-| `Ubuntu-Regular.woff2`   | Regular variant. |
-| `Ubuntu-Bold.woff2`      | Bold variant. |
-| `Ubuntu-Light.woff2`     | Light variant. |
-| `Ubuntu-Medium.woff2`    | Medium variant. |
-| `css2.css`               | `@font-face` rules for Ubuntu. |
+| `fira-code/`             | Fira Code font family. Used for `<code>` elements and the HTML Editor. |
+| `ubuntu/`                | Ubuntu font family. Main `<body>` font. |
 
 ---
 

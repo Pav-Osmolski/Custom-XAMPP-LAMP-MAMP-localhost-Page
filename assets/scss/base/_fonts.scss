@@ -1,18 +1,20 @@
 /* Fonts */
-@font-face {
-  font-family: 'Ubuntu';
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-  src: url('../../assets/fonts/Ubuntu-Regular.woff2') format('woff2');
-}
 
+/* Main <body> font - Ubuntu */
 @font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url('../../assets/fonts/Ubuntu-Light.woff2') format('woff2');
+  src: url('../../assets/fonts/ubuntu/Ubuntu-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url('../../assets/fonts/ubuntu/Ubuntu-Regular.woff2') format('woff2');
 }
 
 @font-face {
@@ -20,7 +22,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('../../assets/fonts/Ubuntu-Medium.woff2') format('woff2');
+  src: url('../../assets/fonts/ubuntu/Ubuntu-Medium.woff2') format('woff2');
 }
 
 @font-face {
@@ -28,5 +30,38 @@
   font-style: normal;
   font-weight: bold;
   font-display: swap;
-  src: url('../../assets/fonts/Ubuntu-Bold.woff2') format('woff2');
+  src: url('../../assets/fonts/ubuntu/Ubuntu-Bold.woff2') format('woff2');
+}
+
+/* <code> and HTML Editor - Fira Code */
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../../assets/fonts/fira-code/FiraCode-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url('../../assets/fonts/fira-code/FiraCode-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../assets/fonts/fira-code/FiraCode-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: url('../../assets/fonts/fira-code/FiraCode-Bold.woff2') format('woff2');
 }
