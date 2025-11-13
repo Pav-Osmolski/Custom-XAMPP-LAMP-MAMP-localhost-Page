@@ -19,8 +19,11 @@
  * - Error or warning messages for invalid or empty directories
  *
  * @author  Pawel Osmolski
- * @version 1.4
+ * @version 1.5
  */
+
+/** @var string[] $tooltips */
+/** @var string $defaultTooltipMessage */
 
 require_once __DIR__ . '/../config/config.php';
 

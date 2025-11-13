@@ -14,9 +14,9 @@
  * @return void
  *
  * @author  Pawel Osmolski
- * @version 1.0
+ * @version 1.1
  */
-function log_command( $command, $context = '' ) {
+function log_command( string $command, string $context = '' ): void {
 	$logDir  = __DIR__ . '/../logs';
 	$logFile = $logDir . '/localhost-page.log';
 

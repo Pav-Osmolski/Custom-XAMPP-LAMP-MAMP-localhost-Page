@@ -8,6 +8,7 @@
  */
 
 /** @var string $user */
+/** @var string $theme */
 /** @var bool $displayHeader */
 /** @var bool $displayFooter */
 /** @var bool $useAjaxForStats */

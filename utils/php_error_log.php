@@ -7,7 +7,7 @@
  *
  * @package AMPBoard
  * @author  Pawel Osmolski
- * @version 1.3
+ * @version 1.4
  * @license GPL-3.0-or-later https://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -29,7 +29,7 @@ if ( ! $logFile || ! file_exists( $logFile ) ) {
 	$logContent = tail_log( $logFile );
 }
 
-function tail_log( $file, $lines = 25 ) {
+function tail_log( $file, $lines = 25 ): string {
 	$data = [];
 	$fp   = fopen( $file, 'r' );
 	if ( ! $fp ) {

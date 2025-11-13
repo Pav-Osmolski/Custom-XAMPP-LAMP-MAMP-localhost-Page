@@ -26,6 +26,12 @@
 	}
 }
 
+.template-textarea {
+	font-family: var(--font-editor);
+	font-size: .75rem;
+	color: var(--syntax-text);
+}
+
 /* Syntax colours */
 .syntax-highlight {
 	.pun, .tag, .attr, .value {
