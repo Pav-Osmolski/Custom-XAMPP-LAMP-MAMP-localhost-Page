@@ -264,18 +264,20 @@ function renderAccordionSectionEnd(): void {
  */
 function getDefaultTooltips(): array {
 	return [
-		'docu_folders'   => 'Displays your document folders as columns, based on the configured folder settings and link templates.',
-		'user_config'    => 'Adjust default settings, paths, and overrides for your Apache, MySQL and PHP environment.',
-		'user_settings'  => 'Set your database credentials, Apache configuration, HTDocs directory, and PHP executable path.',
-		'user_interface' => 'Toggle visual and interactive elements like themes, layouts, and visibility of dashboard components.',
-		'php_error'      => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
-		'folders'        => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
-		'link_templates' => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
-		'dock'           => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
-		'apache_control' => 'Restart the Apache server.',
-		'vhosts_manager' => 'Browse, check, and open virtual hosts with cert and DNS validation.',
-		'export'         => 'Create an archive of site files or a database. Pick a subfolder, optionally include or export only wp-content/uploads, and apply your exclude list.',
-		'clear_storage'  => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
+		'document_folders' => 'Displays your document folders as columns, based on the configured folder settings and link templates.',
+		'user_config'      => 'Adjust default settings, paths, and overrides for your Apache, MySQL and PHP environment.',
+		'user_settings'    => 'Set your database credentials, Apache configuration, HTDocs directory, and PHP executable path.',
+		'user_interface'   => 'Toggle visual and interactive elements like themes, layouts, and visibility of dashboard components.',
+		'php_error'        => 'Configure how PHP displays or logs errors, including toggling error reporting levels and defining log output behavior for development or production use.',
+		'folders'          => 'Manage which folders appear in each column, their titles, filters, and link behaviour.',
+		'link_templates'   => 'Define how each folder\'s website links should appear by customising the HTML templates used per column.',
+		'dock'             => 'Manage the items displayed in the dock, including their order, icons, and link targets.',
+		'apache_control'   => 'Restart the Apache server.',
+		'vhosts_manager'   => 'Browse, check, and open virtual hosts with cert and DNS validation.',
+		'export'           => 'Create an archive of site files or a database. Pick a subfolder, optionally include or export only wp-content/uploads, and apply your exclude list.',
+		'apache_inspector' => 'Inspect your Apache setup, including loaded modules, configuration files, environment details, ports in use, and the current runtime status.',
+		'mysql_inspector'  => 'Check your MySQL server status, active databases, connection settings, and environment details to diagnose connectivity or configuration issues.',
+		'clear_storage'    => 'This will reset saved UI settings (theme, Column Order and Column Size etc.) stored in your browser’s local storage.'
 	];
 }
 

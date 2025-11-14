@@ -6,7 +6,7 @@ export function initSystemMonitoring() {
 
 		if ( !systemStatsSection ) return;
 
-		const ajaxEnabled = body.getAttribute( 'data-ajax-enabled' ) === 'true';
+		const ajaxEnabled = body.getAttribute( 'data-ajax-stats-enabled' ) === 'true';
 		if ( !ajaxEnabled ) return;
 
 		const cpuElem = document.getElementById( 'cpu-load' );

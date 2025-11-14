@@ -46,15 +46,19 @@ if ( array_filter( array_column( $features, 'enabled' ) ) ): ?>
 		$regionId = $key === 'stats' ? 'system-monitor' : $feature['log_id'];
 		?>
 
-		<?php if ( $useAjaxForStats ): ?>
-
 		<?php if ( $key === 'stats' ): ?>
-			<div id="<?= $id ?>" class="<?= $class ?>" role="region" aria-labelledby="<?= $titleId ?>">
-				<h3 id="<?= $titleId ?>"><?= htmlspecialchars( $feature['title'] ) ?></h3>
-				<p>CPU Load: <span id="cpu-load" aria-live="polite">N/A</span></p>
-				<p>RAM Usage: <span id="memory-usage" aria-live="polite">N/A</span></p>
-				<p>Disk Space: <span id="disk-space" aria-live="polite">N/A</span></p>
-			</div>
+			<?php if ( $useAjaxForStats ): ?>
+				<div id="<?= $id ?>" class="<?= $class ?>" role="region" aria-labelledby="<?= $titleId ?>">
+					<h3 id="<?= $titleId ?>"><?= htmlspecialchars( $feature['title'] ) ?></h3>
+					<p>CPU Load: <span id="cpu-load" aria-live="polite">N/A</span></p>
+					<p>RAM Usage: <span id="memory-usage" aria-live="polite">N/A</span></p>
+					<p>Disk Space: <span id="disk-space" aria-live="polite">N/A</span></p>
+				</div>
+			<?php else: ?>
+				<section id="<?= $id ?>" class="<?= $class ?>" role="region" aria-labelledby="<?= $titleId ?>">
+					<?php include __DIR__ . $feature['php_include']; ?>
+				</section>
+			<?php endif; ?>
 		<?php else: ?>
 			<section id="<?= $id ?>" class="<?= $class ?>" aria-labelledby="<?= $titleId ?>">
 				<h3 id="<?= $titleId ?>">
@@ -71,11 +75,6 @@ if ( array_filter( array_column( $features, 'enabled' ) ) ): ?>
 			</section>
 		<?php endif; ?>
 
-	<?php else: ?>
-		<section id="<?= $id ?>" class="<?= $class ?>" role="region" aria-labelledby="<?= $titleId ?>">
-			<?php include __DIR__ . $feature['php_include']; ?>
-		</section>
-	<?php endif;
-	endforeach; ?>
+	<?php endforeach; ?>
 
 <?php endif; ?>

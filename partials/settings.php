@@ -35,7 +35,7 @@
  * - Sensitive values are obfuscated for display via `obfuscate_value()`
  *
  * @author  Pawel Osmolski
- * @version 2.6
+ * @version 2.7
  */
 
 /**
@@ -49,7 +49,8 @@
  * @var bool $displayApacheErrorLog UI flag to show Apache error log
  * @var bool $displayPhpErrorLog UI flag to show PHP error log
  * @var bool $displaySystemStats UI flag to show system stats
- * @var bool $useAjaxForStats UI flag to fetch stats and logs via AJAX
+ * @var bool $useAjaxForStats UI flag to fetch stats via AJAX
+ * @var bool $useAjaxForErrorLog UI flag to fetch error logs via AJAX
  * @var bool $apacheToggle True if Apache restart endpoint is available
  * @var bool $apachePathValid Validation state for Apache path
  * @var bool $htdocsPathValid Validation state for HTDocs path
@@ -217,8 +218,12 @@ require_once __DIR__ . '/../config/config.php';
 					<input type="checkbox" name="displayPhpErrorLog" <?= $displayPhpErrorLog ? 'checked' : '' ?>>
 				</label>
 
-				<label>Use AJAX for Stats and Error log:
+				<label>Use AJAX for Stats:
 					<input type="checkbox" name="useAjaxForStats" <?= $useAjaxForStats ? 'checked' : '' ?>>
+				</label>
+
+				<label>Use AJAX for Error log:
+					<input type="checkbox" name="useAjaxForErrorLog" <?= $useAjaxForErrorLog ? 'checked' : '' ?>>
 				</label><br>
 			</div>
 			<br>

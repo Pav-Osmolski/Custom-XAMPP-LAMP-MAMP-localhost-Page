@@ -52,7 +52,7 @@ $globalErrors  = [];
 <?php if ( empty( $foldersConfigData ) || empty( $templatesByName ) ) : ?>
 	<div id="folders-view" class="visible" aria-labelledby="folders-view-heading">
 		<div class="heading">
-			<?= renderHeadingTooltip( 'docu_folders', $tooltips, $defaultTooltipMessage, 'h2', 'Document Folders' ) ?>
+			<?= renderHeadingTooltip( 'document_folders', $tooltips, $defaultTooltipMessage, 'h2', 'Document Folders' ) ?>
 		</div>
 		<div class="columns max-md">
 			<div class="column">
@@ -73,7 +73,7 @@ $globalErrors  = [];
 	<div id="folders-view" class="visible">
 		<?= renderWidthControls( 'width_columns', 'Column', 'column-controls' ); ?>
 		<div class="heading">
-			<?= renderHeadingTooltip( 'docu_folders', $tooltips, $defaultTooltipMessage, 'h2', 'Document Folders' ) ?>
+			<?= renderHeadingTooltip( 'document_folders', $tooltips, $defaultTooltipMessage, 'h2', 'Document Folders' ) ?>
 		</div>
 		<div class="columns width-resizable" role="list" data-width-key="width_columns">
 			<?php foreach ( $foldersConfigData as $column ): ?>

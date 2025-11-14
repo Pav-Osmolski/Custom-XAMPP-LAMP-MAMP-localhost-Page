@@ -17,7 +17,7 @@
  * - Redirect with 303 on success
  *
  * @author  Pawel Osmolski
- * @version 2.6
+ * @version 2.7
  */
 
 /** @var string $foldersJson */
@@ -90,6 +90,7 @@ $defs = [
 	'displayApacheErrorLog' => FILTER_DEFAULT,
 	'displayPhpErrorLog'    => FILTER_DEFAULT,
 	'useAjaxForStats'       => FILTER_DEFAULT,
+	'useAjaxForErrorLog'    => FILTER_DEFAULT,
 
 	// PHP error handling
 	'displayPhpErrors'      => FILTER_DEFAULT,
@@ -135,6 +136,7 @@ $displaySystemStats    = normalise_bool( $in['displaySystemStats'] ?? null );
 $displayApacheErrorLog = normalise_bool( $in['displayApacheErrorLog'] ?? null );
 $displayPhpErrorLog    = normalise_bool( $in['displayPhpErrorLog'] ?? null );
 $useAjaxForStats       = normalise_bool( $in['useAjaxForStats'] ?? null );
+$useAjaxForErrorLog    = normalise_bool( $in['useAjaxForErrorLog'] ?? null );
 
 $displayPhpErrors      = normalise_bool( $in['displayPhpErrors'] ?? null );
 $logPhpErrors          = normalise_bool( $in['logPhpErrors'] ?? null );
@@ -244,6 +246,7 @@ $user_config .= "\$displaySystemStats = {$displaySystemStats};\n";
 $user_config .= "\$displayApacheErrorLog = {$displayApacheErrorLog};\n";
 $user_config .= "\$displayPhpErrorLog = {$displayPhpErrorLog};\n";
 $user_config .= "\$useAjaxForStats = {$useAjaxForStats};\n";
+$user_config .= "\$useAjaxForErrorLog = {$useAjaxForErrorLog};\n";
 
 // Performance flags and theme
 $user_config .= "\$apacheFastMode = {$apacheFastMode};\n";

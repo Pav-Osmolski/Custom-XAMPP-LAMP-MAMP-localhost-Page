@@ -24,7 +24,7 @@
  * - Flags: `$apachePathValid`, `$htdocsPathValid`, `$phpPathValid`, `$apacheToggle`
  * - DB: `$dbUser`, `$dbPass`
  * - UI: `$theme`, `$currentTheme`, `$bodyClasses`, `$tooltips`, `$defaultTooltipMessage`
- * - Toggles: `$displayHeader`, `$displayFooter`, `$displayClock`, `$displaySearch`, `$displayTooltips`, `$displaySystemStats`, `$displayApacheErrorLog`, `$displayPhpErrorLog`, `$useAjaxForStats`
+ * - Toggles: `$displayHeader`, `$displayFooter`, `$displayClock`, `$displaySearch`, `$displayTooltips`, `$displaySystemStats`, `$displayApacheErrorLog`, `$displayPhpErrorLog`, `$useAjaxForStats`, `$useAjaxForErrorLog`
  * - Themes: `$themeOptions`, `$themeTypes`
  * - Misc: `$user`, `$currentPhpErrorLevel`
  *
@@ -32,7 +32,7 @@
  * - `helpers.php` for access control and shared logic like `resolveCurrentUser()`, `buildBodyClasses()`, `loadThemes()`, etc.
  *
  * @author  Pawel Osmolski
- * @version 2.4
+ * @version 2.5
  */
 
 require_once __DIR__ . '/helpers.php';
@@ -96,6 +96,7 @@ $defaults = [
 	'displayApacheErrorLog' => true,
 	'displayPhpErrorLog'    => true,
 	'useAjaxForStats'       => true,
+	'useAjaxForErrorLog'    => true,
 ];
 
 foreach ( $defaults as $key => $value ) {

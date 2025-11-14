@@ -38,8 +38,11 @@ if ( defined( 'DEMO_MODE' ) && DEMO_MODE === true ) {
 
 $start = microtime( true );
 
-echo '<h2>MySQL Inspector</h2>';
-echo '<pre>';
+echo '
+<div class="heading">
+    ' . renderHeadingTooltip( 'mysql_inspector', $tooltips, $defaultTooltipMessage, 'h2', 'MySQL Inspector' ) . '
+</div>
+<pre>';
 
 try {
 	$mysqli = getMysqliConnection(); // strictMode defaults to true

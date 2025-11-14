@@ -37,8 +37,12 @@ if ( defined( 'DEMO_MODE' ) && DEMO_MODE === true ) {
 // SYSTEM INFO
 $os   = PHP_OS_FAMILY;
 $arch = ( PHP_INT_SIZE === 8 ) ? '64-bit' : '32-bit';
-echo '<h2>Apache Inspector</h2>';
-echo "<pre>";
+
+echo '
+<div class="heading">
+    ' . renderHeadingTooltip( 'apache_inspector', $tooltips, $defaultTooltipMessage, 'h2', 'Apache Inspector' ) . '
+</div>
+<pre>';
 echo "🖥️ Operating System: $os ($arch)\n";
 echo "🚀 Fast Mode: " . ( $fastMode ? 'Enabled (some checks skipped)' : 'Disabled (full inspection)' ) . "\n";
 

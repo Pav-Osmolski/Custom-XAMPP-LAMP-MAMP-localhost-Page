@@ -21,7 +21,7 @@ function initGenericErrorLog( {
 			this.setAttribute( 'aria-expanded', !isVisible );
 		} );
 
-		if ( body.getAttribute( 'data-ajax-enabled' ) !== 'true' ) return;
+		if ( body.getAttribute( 'data-ajax-error-log-enabled' ) !== 'true' ) return;
 
 		function displayLogContent( data ) {
 			const isEmpty = data.trim() === '';

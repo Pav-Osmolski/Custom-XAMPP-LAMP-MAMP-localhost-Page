@@ -36,7 +36,7 @@ require_once __DIR__ . '/config/bootstrap.php';
 	</script>
 	<script src="dist/js/script.min.js?v=<?= filemtime( 'dist/js/script.min.js' ); ?>"></script>
 </head>
-<body<?= $useAjaxForStats ? ' data-ajax-enabled="true"' : '' ?> class="<?= $bodyClasses ?>">
+<body<?= $useAjaxForStats ? ' data-ajax-stats-enabled="true"' : '' ?><?= $useAjaxForErrorLog ? ' data-ajax-error-log-enabled="true"' : '' ?> class="<?= $bodyClasses ?>">
 <div class="container">
 	<?php $displayHeader && require_once __DIR__ . '/partials/header.php'; ?>
 	<main role="main">
